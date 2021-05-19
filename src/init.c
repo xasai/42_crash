@@ -15,15 +15,15 @@ void	term_capability_data_init(void)
 	term_type = getenv("TERM");
 	if (0 == term_type)
 	{
-		//exit message "Specify terminal type within env variable 'TERM'"
+		exit_message("Specify terminal type within env variable 'TERM'", 1);
 	}
 	ret = tgetent(NULL, term_type);
 	if (ret < 0)
 	{
-		;// exit message "Could not access termcap database"
+		exit_message("Could not access termcap database", 1);
 	}
 	else if (0 == ret)
 	{
-		;// exit message "Term type is not defined"
+		exit_message("Your terminal type is not defined", 1);
 	}
 }
