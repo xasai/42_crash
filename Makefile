@@ -1,13 +1,13 @@
 ##########################################################################################
 NAME :=	minishell
 
-SRCPATH := src/
+SRCPATH := src
 SRC := $(shell find $(SRCPATH) -name *.c)
 
-VPATH := $(SRCPATH)
+VPATH := $(SRCPATH) 
 
-OBJPATH := obj/
-OBJDIR := $(subst $(SRCPATH), $(OBJPATH), $(shell find $(SRCPATH)* -type d))
+OBJPATH := obj
+OBJDIR := $(subst $(SRCPATH), $(OBJPATH), $(shell find $(SRCPATH) -type d))
 OBJ := $(subst $(SRCPATH), $(OBJPATH), $(SRC:.c=.o))
 
 
@@ -24,16 +24,21 @@ CFLAGS := -g3 -Wall -Wextra -Werror --std=c99# 			#/ ____|  / ____|  / ____|
 														 #\_____|  \____|  \_____|
 ############################################################################################
 
-all: $(NAME)
+all: echo $(NAME)
+
+echo:
+	@echo $(OBJDIR)
+	@echo $(OBJ)
+	@echo $(SRC)
 
 $(NAME): $(LIBFT) $(OBJPATH) $(OBJ)
 	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
 
-$(OBJPATH)%.o: %.c
+$(OBJPATH)/%.o: %.c
 	$(CC) $(INC) $(CFLAGS) -c $< -o $@
 
 $(OBJPATH):
-	mkdir -p $(OBJPATH) $(OBJDIR)
+	mkdir -p $(OBJDIR)
 
 $(LIBFT):
 	make -C $(dir $(LIBFT))
