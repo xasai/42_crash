@@ -10,6 +10,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <errno.h>
+# include <string.h>
 
 # include <stdint.h>
 # include <limits.h>
@@ -32,6 +33,7 @@ struct termios	termios_init(void);
 **			EXIT.c
 */
 void			exit_message(char *message, uint8_t code);
+void			print_errno(void);
 
 /*
 **		 	READLINE/READLINE.c

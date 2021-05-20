@@ -43,6 +43,7 @@ struct termios termios_init(void)
 	success = tcgetattr(STDIN_FILENO, &termios);
 	if (success < 0)	
 		exit_message("Could not get interface attributes", 1);
+	termios.c_lflag &= ~(ICANON);
 	success = tcsetattr(STDIN_FILENO, TCSANOW, &termios);
 	if (success < 0)
 		exit_message("Could not set interface attributes", 1);
