@@ -60,14 +60,3 @@ char	**split(char const *s, char *separator)
 	}
 	return (p);
 }
-/*
-#include <stdio.h>
-
-int		main(void)
-{
-	char *str = "first \t\n               \ second \t\n          last     ";
-	char **strs = split(str, "\t\n\ ");
-	for (int i; strs[i]; i++)
-		printf("|%s|\n", strs[i]);
-	return 0;
-}*/

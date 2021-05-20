@@ -9,15 +9,3 @@ char *readline(const char *prompt)
 		exit_message("Somethig went wrong while reading from STDIN", 1);
 	return (line);
 }
-
-int	interact(void)
-{
-	char *line;
-
-	while (1)
-	{
-		line = readline("crash$: ");
-		/* Here parsing starts */
-		(void)line;
-	}
-}
