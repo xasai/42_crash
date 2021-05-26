@@ -1,0 +1,10 @@
+.
+..
+echo
+exit.c
+init.c
+.init.c.swo
+.init.c.swp
+interact.c
+main.c
+readline

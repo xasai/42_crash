@@ -1,6 +1,7 @@
 #include "libft.h"
 
-int	ft_putchar(char c)
+int	putint(int c)
 {
+	c = (unsigned char)c;
 	return (write(1, &c, 1));
 }

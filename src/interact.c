@@ -8,6 +8,7 @@ int	interact(void)
 	{
 		line = readline("crash$: ");
 		/* Here parsing starts */
+		//ft_putendl_fd(line, STDOUT_FILENO);
 		(void)line;
 	}
 }

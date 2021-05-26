@@ -1,20 +1,21 @@
 #include "minishell.h"
 
-t_terminfo	*g_term;
+t_shell *g_shell;
 
-void	init_first(int ac, char **av, char **envp)
+void	init_term(char **envp)
 {
-	g_term = malloc(sizeof(*g_term));
-	if (NULL == g_term)
+	g_shell = malloc(sizeof(*g_shell));
+	if (NULL == g_shell)
 		exit_message("Malloc Error init.c:7\n", 1);
-	g_term->envp = envp;
+	g_shell->envp = envp;
+	term_capability_db_init();
 	term_capability_data_init();
-	g_term->termios = termios_init();
-	(void)ac;
-	(void)av;
+	if (tcgetattr(STDIN_FILENO, &g_shell->old_termios) < 0)
+		exit_message("Could not get interface attributes", 1);
+	tputs(g_shell->terminfo.clear, 1, &putint);
 }
 
-void	term_capability_data_init(void)
+void	term_capability_db_init(void)
 {
 	char		*term_type;
 	int			success;
@@ -35,17 +36,34 @@ void	term_capability_data_init(void)
 	}
 }
 
-struct termios termios_init(void)
+void	term_capability_data_init(void)
+{
+	struct s_terminfo *ti;	
+	char *ks;
+	
+	ks = tgetstr("ks", NULL);
+	tputs(ks, 1, &putint);
+	ti = &g_shell->terminfo;
+	ti->clear = tgetstr("cl", NULL);
+	ti->k_up = tgetstr("ku", NULL);
+	ti->k_down = tgetstr("kd", NULL);
+	ti->k_left = tgetstr("kl", NULL);
+	ti->k_right = tgetstr("kr", NULL);
+	ti->k_backspace = tgetstr("kb", NULL);
+	ti->move_left = tgetstr("le", NULL);
+	ti->move_right = tgetstr("ri", NULL);
+	ti->save_c = tgetstr("sc", NULL);
+	ti->restore_c = tgetstr("rc", NULL);
+}
+
+void	termios_init(void)
 {
 	struct termios	termios;
 	int				success;	
 	
-	success = tcgetattr(STDIN_FILENO, &termios);
-	if (success < 0)	
-		exit_message("Could not get interface attributes", 1);
-	termios.c_lflag &= ~(ICANON);
+	termios = g_shell->old_termios;
+	termios.c_lflag &= ~(ICANON | ECHO);
 	success = tcsetattr(STDIN_FILENO, TCSANOW, &termios);
 	if (success < 0)
 		exit_message("Could not set interface attributes", 1);
-	return (termios);
 }

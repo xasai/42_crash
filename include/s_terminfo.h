@@ -3,15 +3,18 @@
 
 # include <termios.h>
 
-/*
-** На эту структуру будет ссылаться глобальный указатель *g_term 
-** Память под эту переменную выделяется на куче функцией init_first()
-*/
-
-typedef struct s_terminfo
+struct s_terminfo
 {
-	char			**envp;
-	struct termios	termios;
-}					t_terminfo;
+	char	*k_up;
+	char	*k_down;
+	char	*k_left;
+	char	*k_right;
+	char	*k_backspace;
+	char	*move_left;
+	char	*move_right;
+	char	*clear;
+	char	*save_c;
+	char	*restore_c;
+};
 
-#endif
+#endif /* S_TERMINFO_H */

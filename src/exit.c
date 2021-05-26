@@ -2,15 +2,15 @@
 
 void	exit_message(char *message, uint8_t code)
 {
-	write(2, message, ft_strlen(message)); 
-	print_errno();
+	print_errno(message);
 	exit(code);
 }
 
-void	print_errno()
+void	print_errno(char *message)
 {
 	char *str_error;
 
+	write(2, message, ft_strlen(message)); 
 	if (errno)
 	{
 		str_error = strerror(errno);
