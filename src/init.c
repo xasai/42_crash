@@ -1,7 +1,12 @@
 #include "minishell.h"
 
-t_shell *g_shell;
 
+t_shell *g_shell; /* s_shell.h */
+
+/*
+** DESCRIPTION:
+**	
+*/
 void	init_term(char **envp)
 {
 	g_shell = malloc(sizeof(*g_shell));
@@ -15,6 +20,10 @@ void	init_term(char **envp)
 	tputs(g_shell->terminfo.clear, 1, &putint);
 }
 
+/*
+** DESCRIPTION:
+**	
+*/
 void	term_capability_db_init(void)
 {
 	char		*term_type;
@@ -36,6 +45,10 @@ void	term_capability_db_init(void)
 	}
 }
 
+/*
+** DESCRIPTION:
+**	
+*/
 void	term_capability_data_init(void)
 {
 	struct s_terminfo *ti;	
@@ -51,12 +64,17 @@ void	term_capability_data_init(void)
 	ti->k_right = tgetstr("kr", NULL);
 	ti->k_backspace = tgetstr("kb", NULL);
 	ti->move_left = tgetstr("le", NULL);
-	ti->move_right = tgetstr("ri", NULL);
+	ti->move_right = tgetstr("nd", NULL);
 	ti->save_c = tgetstr("sc", NULL);
 	ti->restore_c = tgetstr("rc", NULL);
 	ti->delete_char = tgetstr("dc", NULL);
+	/* ce cd */
 }
 
+/*
+** DESCRIPTION:
+**	
+*/
 void	termios_init(void)
 {
 	struct termios	termios;

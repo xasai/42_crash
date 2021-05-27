@@ -22,7 +22,7 @@ char	*readline(const char *prompt)
 	{
 		size = read(STDIN_FILENO, line_buf, BUFF_SIZE);
 		line_buf[size] = '\0';
-		if (cursor_key(line_buf, &chrlst_head.size, &cursor_pos)) /* Check if cursor mov */
+		if (cursor_key(line_buf, &chrlst_head, &cursor_pos)) /* Check if cursor mov */
 			continue ;
 		else if (false) /* FIXME: Check if control char */
 			continue ;
@@ -105,7 +105,17 @@ void	rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos)
 	(*cursor_pos)++;	
 }
 
-/* Clear and concatenate chrlst to one string */
+/*
+** PATH: src/readline/readline.c
+**
+** DESCRIPTION:
+**      Allocate list size * sizeof(char) bytes.
+**      Concatenate all lists' chr to string.
+**
+**  RETURN VALUE
+**      Pointer to string read by readline function
+**      NULL if allocation
+*/
 char	*rl_cat_line(t_lsthead *chrlst_head)
 {
 	t_chrlst	*cur;
