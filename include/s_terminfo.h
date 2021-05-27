@@ -15,6 +15,7 @@ struct s_terminfo
 	char	*clear;
 	char	*save_c;
 	char	*restore_c;
+	char	*delete_char;
 };
 
 #endif /* S_TERMINFO_H */

@@ -54,6 +54,7 @@ void	term_capability_data_init(void)
 	ti->move_right = tgetstr("ri", NULL);
 	ti->save_c = tgetstr("sc", NULL);
 	ti->restore_c = tgetstr("rc", NULL);
+	ti->delete_char = tgetstr("dc", NULL);
 }
 
 void	termios_init(void)

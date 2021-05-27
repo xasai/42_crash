@@ -10,11 +10,12 @@ void	print_errno(char *message)
 {
 	char *str_error;
 
-	write(2, message, ft_strlen(message)); 
+	putstr_fd(message, STDERR_FILENO);	
 	if (errno)
 	{
 		str_error = strerror(errno);
-		write(2, ": ", 2);
-		write(2, str_error, ft_strlen(str_error));	
+		putstr_fd(": ", STDERR_FILENO);
+		putstr_fd(str_error, STDERR_FILENO);	
 	}	
+	putchar_fd('\n', STDERR_FILENO);
 }

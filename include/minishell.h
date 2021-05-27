@@ -1,9 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
-
-# include "readline.h"
 
 /* struct defenitions */
 # include "s_terminfo.h"
@@ -21,6 +18,9 @@
 # include <errno.h>
 # include <stdbool.h>
 # include <limits.h>
+
+# include "libft.h"
+# include "readline.h"
 
 extern t_shell *g_shell;
 
