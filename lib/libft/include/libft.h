@@ -104,7 +104,9 @@ int					ft_intwid(long int i, int base);
 void				ft_putnbr_base(long int i, const char *base);
 int					ft_skip_atoi(char **s);
 int					ft_isempty_str(char *str);
-char				**split(char const *s, char *separator);
+char				**splitsep(char const *line, char const *sep);
+char				*strjoin_free(const char *s1, const char *s2,
+						char free_flag);
 
 /*
 **============================================================

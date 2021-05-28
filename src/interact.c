@@ -6,7 +6,7 @@ int	interact(void)
 
 	while (1)
 	{
-		line = readline("crash$: ");
+		 readline("crash$: ");
 		/* Here parsing starts */
 		(void)line;
 	}

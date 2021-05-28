@@ -17,6 +17,21 @@
 
 extern t_terminfo *g_term;
 
+
+
+typedef struct	s_dlist
+{
+	char	type; // var, bin
+	char	*name;
+	char	*arg;
+	void	*n_input;
+	void	*n_output;
+	char	sepch;
+	struct	s_dlist *next;
+	struct	s_dlist *prev;
+}				t_dlist;
+
+
 /*
 **			MAIN.c
 */
@@ -25,7 +40,7 @@ void			handle_args(int ac, char **av);
 /*
 ** 			INIT.c
 */
-void			init_first(int ac, char **av, char **envp);
+void			init_termios(int ac, char **av, char **envp);
 void			term_capability_data_init(void);
 struct termios	termios_init(void);
 
@@ -39,6 +54,12 @@ void			print_errno(void);
 **		 	READLINE/READLINE.c
 */
 int				interact(void);
-char			*readline(const char *prompt);
+void			readline(const char *prompt);
+
+
+/*
+ * 			PARS.c
+ */
+void			ft_line_analyz(char *line);
 
 #endif

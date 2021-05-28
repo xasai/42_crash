@@ -2,13 +2,15 @@
 
 void handle_args(int ac, char **av)
 {
-	(void)ac;
+	if (ac != 1)
+		exit(0);
 	(void)av;
 }
 
 int main(int ac, char **av, char **envp)
 {
 	handle_args(ac, av);
-	init_first(ac, av, envp);
-	return(interact());
+	init_termios(ac, av, envp);
+	readline("crash:");
+	return(0);
 }

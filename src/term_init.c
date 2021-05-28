@@ -2,13 +2,13 @@
 
 t_terminfo	*g_term;
 
-void	init_first(int ac, char **av, char **envp)
+void	init_termios(int ac, char **av, char **envp)
 {
 	g_term = malloc(sizeof(*g_term));
 	if (NULL == g_term)
 		exit_message("Malloc Error init.c:7\n", 1);
-	g_term->envp = envp;
 	term_capability_data_init();
+	g_term->envp = envp;
 	g_term->termios = termios_init();
 	(void)ac;
 	(void)av;

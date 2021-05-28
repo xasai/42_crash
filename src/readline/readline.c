@@ -1,25 +1,21 @@
 #include "minishell.h"
 
-char *readline(const char *prompt)
+
+void readline(const char *prompt)
 {
-	char	buf[2];	
-	char	*line;
-	ssize_t	size;
-	
-			
-	line = NULL;
-	size = 1;
-	write(1, prompt, ft_strlen(prompt));
-	while (size > 0)
+	char	*line;// = "ls  -a  -l ;ls;echo  eded <   cat >> ls <cat";
+	int	gnl_ret;
+
+	gnl_ret = 1;
+	while (gnl_ret)
 	{
-		read(STDIN_FILENO, buf, 2);
-		if (size == -1 || ft_strchr(buf, '\n'))
-			break ;	
+		write(1, prompt, ft_strlen(prompt));
+		gnl_ret = get_next_line(STDIN_FILENO, &line);
+		ft_line_analyz(line);
 	}
-	if (size == -1)
+	if (gnl_ret == -1)
 	{
 		free(line);
 		exit_message("In function readline() ", 1);
 	}
-	return (line);
 }
