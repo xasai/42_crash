@@ -73,7 +73,8 @@ void	term_capability_data_init(void)
 
 /*
 ** DESCRIPTION:
-**	
+**	FIXME FIXME FIXME FIXME 
+**	Make this funct switcher
 */
 void	termios_init(void)
 {

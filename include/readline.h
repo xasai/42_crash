@@ -118,4 +118,12 @@ void	backspace(t_lsthead *chrlst_head, size_t *cursor_pos);
 */
 t_chrlst	*init_chrlst(char chr);
 
+/*
+** PATH: src/readline/chrlst.c
+**
+** DESCRIPTION:
+**		Function to free all t_chrlst elements in linked list.
+*/
+void	free_chrlst(t_chrlst *head);
+
 #endif /* READLINE_H */
