@@ -2,7 +2,7 @@
 # define READLINE_H
 
 # include "minishell.h"
-
+# include "s_terminfo.h"
 # define BUFF_SIZE 3
 
 typedef struct s_chrlst
@@ -19,15 +19,17 @@ typedef struct s_lsthead
 }				t_lsthead;
 
 /*
+**==================================================================
 ** PATH: src/readline/readline.c
 **
-** DESCRIPTION:
+** DESCRIPTION: FIXME
 **		
 **
 */
-char	*readline(const char *prompt);
+char	*readline(char *prompt);
 
 /*
+**==================================================================
 ** PATH: src/readline/readline.c
 **
 ** DESCRIPTION:
@@ -43,6 +45,7 @@ char	*readline(const char *prompt);
 void    rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/readline.c
 **
 ** DESCRIPTION:
@@ -51,6 +54,7 @@ void    rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos);
 void    rl_rewrite(t_lsthead *chrlst_head, size_t cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/readline.c
 **
 ** DESCRIPTION:
@@ -64,6 +68,7 @@ void    rl_rewrite(t_lsthead *chrlst_head, size_t cursor_pos);
 char	*rl_cat_line(t_lsthead *chrlst_head);
 
 /*
+**==================================================================
 ** PATH: src/readline/cursor.c
 **
 ** DESCRIPTION : 
@@ -75,9 +80,10 @@ char	*rl_cat_line(t_lsthead *chrlst_head);
 **		TRUE:	if there was a any of these keys 
 **		FALSE:	if there was not any of these keys 
 **/
-bool	cursor_key(char *line, t_lsthead *chr_head, size_t *cursor_pos);
+bool	cursor_mov(char *line, t_lsthead *chr_head, size_t *cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/cursor.c
 **
 ** DECRIPTION : 
@@ -87,6 +93,7 @@ bool	cursor_key(char *line, t_lsthead *chr_head, size_t *cursor_pos);
 void	mov_left(size_t *cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/cursor.c
 **
 ** DECRIPTION : 
@@ -96,6 +103,7 @@ void	mov_left(size_t *cursor_pos);
 void	mov_right(size_t line_len, size_t *cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/cursor.c
 **
 ** DECRIPTION :
@@ -106,6 +114,7 @@ void	mov_right(size_t line_len, size_t *cursor_pos);
 void	backspace(t_lsthead *chrlst_head, size_t *cursor_pos);
 
 /*
+**==================================================================
 ** PATH: src/readline/chrlst.c
 **
 ** DESCRIPTION:
@@ -119,11 +128,42 @@ void	backspace(t_lsthead *chrlst_head, size_t *cursor_pos);
 t_chrlst	*init_chrlst(char chr);
 
 /*
+**==================================================================
 ** PATH: src/readline/chrlst.c
 **
 ** DESCRIPTION:
 **		Function to free all t_chrlst elements in linked list.
 */
 void	free_chrlst(t_chrlst *head);
+
+/*
+**==================================================================
+** PATH: src/readline/termios.c
+**
+** DESCRIPTION:
+**  On first call of this function, it is initializining all capability
+**  we need in struct s_terminfo.
+**  Return pointer to that struct
+*/
+struct s_terminfo	*termcap(void);
+
+/*
+**==================================================================
+** PATH: src/readline/termios.c
+**
+** DESCRIPTION:
+**  Initialize readline(rl) INPUT OUTPUT stream preferences. 
+*/
+void				termios_init(void);
+
+/*
+**==================================================================
+** PATH: src/readline/termios.c
+**
+** DESCRIPTION:
+**  Restore to system's INPUT OUTPUT stram preferences.
+*/
+
+void				termios_restore(void);
 
 #endif /* READLINE_H */

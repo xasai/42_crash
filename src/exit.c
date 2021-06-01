@@ -2,15 +2,17 @@
 
 void	exit_message(char *message, uint8_t code)
 {
-	print_errno(message);
+	
+	putstr_fd(message, STDERR_FILENO);	
+	if (code == SYS_ERROR)	
+		print_errno();
 	exit(code);
 }
 
-void	print_errno(char *message)
+void	print_errno(void)
 {
 	char *str_error;
 
-	putstr_fd(message, STDERR_FILENO);	
 	if (errno)
 	{
 		str_error = strerror(errno);

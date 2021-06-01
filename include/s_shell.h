@@ -8,11 +8,7 @@
 typedef struct s_shell
 {
 	char				**envp;
-	struct termios		old_termios;
-	struct s_terminfo	terminfo;
+	void				*hist_list;
 }						t_shell;
 
-/*
-** S_SHELL_H
-*/
-#endif
+#endif /* S_SHELL_H */

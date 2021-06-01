@@ -1,10 +1,10 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-
 /* struct defenitions */
 # include "s_terminfo.h"
 # include "s_shell.h"
+/*--------------------*/
 
 # include <unistd.h>
 # include <fcntl.h>
@@ -22,7 +22,10 @@
 # include "libft.h"
 # include "readline.h"
 
-extern t_shell *g_shell;
+# ifndef SYS_ERROR
+#  define SYS_ERROR 2
+# endif 
+
 
 /*
 **			MAIN.c
@@ -33,15 +36,12 @@ void			handle_args(int ac, char **av);
 ** 			INIT.c
 */
 void			init_term(char **envp);
-void			term_capability_db_init(void);
-void			term_capability_data_init(void);
-void			termios_init(void);
 
 /*
 **			EXIT.c
 */
 void			exit_message(char *message, uint8_t code);
-void			print_errno(char *message);
+void			print_errno(void);
 
 
 /*
@@ -49,10 +49,4 @@ void			print_errno(char *message);
 */
 int				interact(void);
 
-/*
-**		 	READLINE/READLINE.c
-*/
-char			*readline(const char *prompt);
-bool			ctl_char(char *line);
-
-#endif
+#endif /* MINISHELL_H */

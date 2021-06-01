@@ -1,19 +1,18 @@
 #include "readline.h"
 
 /*
-** DESCRIOPTION: FIXME FIXME FIXME
+**==================================================================
+** DESCRIOPTION: FIXME
 */
-	
-char	*readline(const char *prompt)
+char	*readline(char *prompt)
 {
 	ssize_t		size;	
 	size_t		cursor_pos;
 	char		line_buf[BUFF_SIZE + 1];
 	char		*line;
 	t_lsthead	chrlst_head;
-	
 	termios_init();
-	putstr_fd((char *)prompt, STDOUT_FILENO);
+	putstr_fd(prompt, STDOUT_FILENO);
 	size = 1;
 	cursor_pos = 0;
 	chrlst_head = (t_lsthead){0};
@@ -22,36 +21,39 @@ char	*readline(const char *prompt)
 	{
 		size = read(STDIN_FILENO, line_buf, BUFF_SIZE);
 		line_buf[size] = '\0';
-		if (cursor_key(line_buf, &chrlst_head, &cursor_pos)) /* Check if cursor mov */
+		if (cursor_mov(line_buf, &chrlst_head, &cursor_pos)) 
 			continue ;
-		else if (false) /* FIXME: Check if control char */
+		else if (false) /* FIXME: Check if sig char */
 			continue ;
 		else if (false) /* FIXME: Check if up/down arrow */
 			continue ;
 		rl_insert_chr(*line_buf, &chrlst_head, &cursor_pos);
 		rl_rewrite(&chrlst_head, cursor_pos);
-		line = rl_cat_line(&chrlst_head);
 	}
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &g_shell->old_termios) < 0)
-		exit_message("Could not set interface attributes", 1);
+	line = rl_cat_line(&chrlst_head);
+	termios_restore();
 	return (line);
 }
 
 /*
+**==================================================================
 ** DESCRIPTION:
 **		This function rewrite all after cursor.
 **		
 */
 void	rl_rewrite(t_lsthead *chrlst_head, size_t cursor_pos)
 {
-	t_chrlst			*cur;		
 	size_t				i;
-	struct 	s_terminfo *ti;
+	t_chrlst			*cur;		
+	//struct s_terminfo	*ti;
 
 	i = 0;
 	cur = chrlst_head->head;
-	ti = &g_shell->terminfo;
-	tputs(ti->save_c, 1, &putint);
+
+	//ti = &g_shell->terminfo;
+
+	//tputs(ti->save_c, 1, &putint);
+
 	if (cursor_pos == chrlst_head->size) /* skip if nothing to rewrite */
 		return ;
 	while (i++ < cursor_pos)
@@ -62,10 +64,12 @@ void	rl_rewrite(t_lsthead *chrlst_head, size_t cursor_pos)
 		cur = cur->next;
 		i++;
 	}
-	tputs(ti->restore_c, 1, &putint);
+	tputs(termcap()->restore_c, 1, putint);
+	//tputs(->restore_c, 1, &putint);
 }
 
 /*
+**==================================================================
 ** DESCRIPTION:
 **		This function insert one new node in chr_lst linked list.
 **		New node initialized on	heap, and take a place as 
@@ -106,6 +110,7 @@ void	rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos)
 }
 
 /*
+**==================================================================
 ** PATH: src/readline/readline.c
 **
 ** DESCRIPTION:
@@ -132,7 +137,7 @@ char	*rl_cat_line(t_lsthead *chrlst_head)
 	{
 		line[i++] = cur->chr;
 		next = cur->next;	
-		//free(cur);
+		//free(cur); FIXME
 		cur = next;	
 	}
 	line[i] = '\0';
