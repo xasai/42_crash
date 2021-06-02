@@ -1,6 +1,14 @@
 minishell
+local_env
+local_env_sorted
+cmake-build-debug
+sort_env.sh
 *.o
 *.out
 ./obj
 ./lib
+._.DS_Store
+.DS_Store
+lib/libft/.idea/
+lib/libft/libf*
 test

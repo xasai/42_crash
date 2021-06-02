@@ -107,6 +107,8 @@ int					ft_isempty_str(char *str);
 char				**splitsep(char const *line, char const *sep);
 char				*strjoin_free(const char *s1, const char *s2,
 						char free_flag);
+char				**split_with_brckt(char const *line,
+						   char const *sep);
 
 /*
 **============================================================

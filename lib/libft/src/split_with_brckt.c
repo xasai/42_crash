@@ -1,6 +1,6 @@
 #include "libft.h"
 
-void split_str(const char *line, char const **sep, char ***ptr, int word)
+void split_str(const char *line,char const **sep, char ***ptr, int word)
 {
 	int count;
 
@@ -26,7 +26,7 @@ void split_str(const char *line, char const **sep, char ***ptr, int word)
 		*sep = NULL;
 }
 
-char	**splitsep(char const *line, char const *sep)
+char	**split_with_brckt(char const *line, char const *sep)
 {
 	char	**ptr;
 	int i;
