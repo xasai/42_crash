@@ -55,11 +55,12 @@ char 	*rl_internal(size_t prompt_len, t_lsthead *chrlst_head)
 void	rl_rewrite(t_lsthead *chrlst_head, t_rl_sizes *s)
 {
 	size_t				i;
-	t_chrlst			*cur;		
+	t_chrlst			*cur;
+	struct winsize		ws;
 
 	i = 0;
 	cur = chrlst_head->head;
-	if (s->cursor_pos == chrlst_head->size) /* skip if nothing to rewrite */
+	if (s->cursor_pos == chrlst_head->size)/* skip if nothing to rewrite */
 		return ;
 	while (i++ < s->cursor_pos)
 		cur = cur->next;
@@ -69,7 +70,10 @@ void	rl_rewrite(t_lsthead *chrlst_head, t_rl_sizes *s)
 		s->cursor_pos++;
 		cur = cur->next;
 	}
-	putchar_fd(' ', STDOUT_FILENO);
+	if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) < 0)
+			exit_message("Ioctl() function bad return", SYS_ERROR);
+	else if (((s->prompt_len + s->cursor_pos + 1) % ws.ws_col) == 1)
+		putchar_fd(' ', STDOUT_FILENO);
 	clear_after_cursor();
 	while (s->cursor_pos >= i)
 		mov_left(s);
@@ -93,12 +97,9 @@ void	rl_insert_chr(char chr, t_lsthead *chrlst_head,\
 	if (chr == '\n')
 		return ;
 	insert_chrlst_node(chr, chrlst_head, s->cursor_pos);
-	//tputs(termcap()->save_c, 1, putint);//&
 	write(STDOUT_FILENO, &chr, 1);
-	//tputs(termcap()->restore_c, 1, putint);
 	s->line_len++;
 	s->cursor_pos++;
-	//mov_right(s);
 }
 
 /*
