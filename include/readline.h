@@ -1,22 +1,31 @@
 #ifndef READLINE_H
 # define READLINE_H
 
+# include <sys/ioctl.h>
+
 # include "minishell.h"
 # include "s_terminfo.h"
-# define BUFF_SIZE 3
 
-typedef struct s_chrlst
-{
+# define RL_BUFF_SIZE 3
+
+typedef struct s_chrlst { 
 	char	 		chr;
 	struct s_chrlst *next;
-	struct s_chrlst *prev;
 }					t_chrlst;
+
+typedef struct s_rl_sizes
+{
+	size_t			prompt_len;
+	size_t			line_len;
+	size_t			cursor_pos;
+}					t_rl_sizes;	
 
 typedef struct s_lsthead
 {
 	void		*head;
 	size_t		size;
 }				t_lsthead;
+
 
 /*
 **==================================================================
@@ -32,6 +41,16 @@ char	*readline(char *prompt);
 **==================================================================
 ** PATH: src/readline/readline.c
 **
+** DESCRIPTION: FIXME
+**		
+**
+*/
+char	*rl_internal(size_t prompt_len, t_lsthead *chrlst_head);
+
+/*
+**==================================================================
+** PATH: src/readline/readline.c
+**
 ** DESCRIPTION:
 **      This function insert one new node in chr_lst linked list.
 **      New node initialized on heap, and take a place as 
@@ -42,7 +61,8 @@ char	*readline(char *prompt);
 **  
 **      Program exits if initialization of new node failed.
 */
-void    rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos);
+void    rl_insert_chr(char chr, t_lsthead *chrlst_head, \
+		t_rl_sizes *s);
 
 /*
 **==================================================================
@@ -51,7 +71,7 @@ void    rl_insert_chr(char chr, t_lsthead *chrlst_head, size_t *cursor_pos);
 ** DESCRIPTION:
 **      Rewrite all after cursor.
 */
-void    rl_rewrite(t_lsthead *chrlst_head, size_t cursor_pos);
+void    rl_rewrite(t_lsthead *chrlst_head, t_rl_sizes *s);
 
 /*
 **==================================================================
@@ -80,38 +100,18 @@ char	*rl_cat_line(t_lsthead *chrlst_head);
 **		TRUE:	if there was a any of these keys 
 **		FALSE:	if there was not any of these keys 
 **/
-bool	cursor_mov(char *line, t_lsthead *chr_head, size_t *cursor_pos);
-
+bool				cursor_mov(char *buf, t_lsthead *chr_head,\
+					t_rl_sizes *s);
 /*
 **==================================================================
-** PATH: src/readline/cursor.c
-**
 ** DECRIPTION : 
-**		Decrease cursor_pos value by 1 and move it 1 column left.
-**		If cursor_pos <= 0 just leave.
+**      Increase cursor_pos value by 1 and move it 1 column right.
+**      If cursor_pos >= line_len just leave.
 */
-void	mov_left(size_t *cursor_pos);
+void mov_right(t_rl_sizes *s);
 
-/*
-**==================================================================
-** PATH: src/readline/cursor.c
-**
-** DECRIPTION : 
-**		Increase cursor_pos value by 1 and move it 1 column right.
-**		If cursor_pos >= line_len just leave.
-*/
-void	mov_right(size_t line_len, size_t *cursor_pos);
+void mov_left(t_rl_sizes *s);
 
-/*
-**==================================================================
-** PATH: src/readline/cursor.c
-**
-** DECRIPTION :
-**		Decrease cursor position by 1, then delete char under it.
-**      Frees chrlst element.
-**		If cursor_pos == 0 just leave.
-*/
-void	backspace(t_lsthead *chrlst_head, size_t *cursor_pos);
 
 /*
 **==================================================================
@@ -125,8 +125,11 @@ void	backspace(t_lsthead *chrlst_head, size_t *cursor_pos);
 **      NEW_NODE:   if allocation succeed.
 **      NULL:       if allocation fails.
 */
-t_chrlst	*init_chrlst(char chr);
+t_chrlst			*init_chrlst(char chr);
 
+void				insert_chrlst_node(char chr, t_lsthead *head, size_t index);
+
+void				del_chrlst(t_lsthead *head, size_t index);
 /*
 **==================================================================
 ** PATH: src/readline/chrlst.c
@@ -134,7 +137,7 @@ t_chrlst	*init_chrlst(char chr);
 ** DESCRIPTION:
 **		Function to free all t_chrlst elements in linked list.
 */
-void	free_chrlst(t_chrlst *head);
+void				free_chrlst(t_chrlst *head);
 
 /*
 **==================================================================
@@ -161,9 +164,12 @@ void				termios_init(void);
 ** PATH: src/readline/termios.c
 **
 ** DESCRIPTION:
-**  Restore to system's INPUT OUTPUT stram preferences.
+**  Restore to system's INPUT OUTPUT stream preferences.
 */
-
 void				termios_restore(void);
 
+bool				history(char *buf, t_lsthead *chrlst_head);
+
+void				clear_after_cursor(/*size_t cursor_pos, size_t line_len, \
+					size_t prompt_len*/);
 #endif /* READLINE_H */

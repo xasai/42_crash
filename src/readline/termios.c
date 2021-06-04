@@ -13,18 +13,18 @@ static void	termcap_init(void)
 	term_type = getenv("TERM");
 	if (0 == term_type)
 	{
-		exit_message("Specify terminal type within env variable 'TERM'",\
+		exit_message("Specify terminal type within env variable 'TERM'", \
 		EXIT_FAILURE);
 	}
 	success = tgetent(NULL, term_type);
 	if (success < 0)
 	{
-		exit_message("Could not access termcap database",\
+		exit_message("Could not access termcap database", \
 		EXIT_FAILURE);
 	}
 	else if (!success)
 	{
-		exit_message("Your terminal type is not defined",\
+		exit_message("Your terminal type is not defined", \
 		EXIT_FAILURE);
 	}
 }
@@ -36,17 +36,16 @@ static void	termcap_init(void)
 **	we need in struct s_terminfo.
 **	Return pointer to that struct
 */
-struct s_terminfo *termcap(void)
+/* ce cd */
+struct s_terminfo	*termcap(void)
 {
-	char 						*ks;
 	static bool					initialized;
 	static struct s_terminfo	ti;
-	
+
 	if (!initialized)
 	{
 		termcap_init();
-		ks = tgetstr("ks", NULL);
-		tputs(ks, 1, &putint);
+		tputs(tgetstr("ks", NULL), 1, &putint);
 		ti.clear = tgetstr("cl", NULL);
 		ti.k_up = tgetstr("ku", NULL);
 		ti.k_down = tgetstr("kd", NULL);
@@ -55,13 +54,17 @@ struct s_terminfo *termcap(void)
 		ti.k_backspace = tgetstr("kb", NULL);
 		ti.move_left = tgetstr("le", NULL);
 		ti.move_right = tgetstr("nd", NULL);
+		ti.move_up = tgetstr("up", NULL);
+		ti.move_down = tgetstr("do", NULL); 
+		ti.move_c_h = tgetstr("ch", NULL);
 		ti.save_c = tgetstr("sc", NULL);
 		ti.restore_c = tgetstr("rc", NULL);
+		ti.return_c = tgetstr("cr", NULL);
 		ti.delete_char = tgetstr("dc", NULL);
 		initialized = true;
 	}
 	return (&ti);
-}/* ce cd */
+}
 
 /*
 **==================================================================
@@ -73,19 +76,20 @@ void	termios_init(void)
 	int						success;
 	static bool				initialized;
 	static struct termios	rl_termios;
-	
+
 	if (!initialized)
 	{
-		success = tcgetattr(STDIN_FILENO, &rl_termios);	
+		termcap();
+		success = tcgetattr(STDIN_FILENO, &rl_termios);
 		if (success < 0)
-			exit_message("Could not get interface attributes",\
+			exit_message("Could not get interface attributes", \
 			SYS_ERROR);
 		rl_termios.c_lflag &= ~(ICANON | ECHO);
 		initialized = true;
 	}
 	success = tcsetattr(STDIN_FILENO, TCSANOW, &rl_termios);
 	if (success < 0)
-		exit_message("Could not set interface attributes",\
+		exit_message("Could not set interface attributes", \
 		SYS_ERROR);
 }
 
@@ -98,18 +102,18 @@ void	termios_restore(void)
 {
 	int						success;
 	static bool				initialized;
-	static struct termios	sys_termios; 
+	static struct termios	sys_termios;
 
 	if (!initialized)
 	{
 		success = tcgetattr(STDIN_FILENO, &sys_termios);
 		if (success < 0)
-			exit_message("Could not get interface attributes",\
+			exit_message("Could not get interface attributes", \
 			SYS_ERROR);
 		initialized = true;
 	}
 	success = tcsetattr(STDIN_FILENO, TCSANOW, &sys_termios);
 	if (success < 0)
-		exit_message("Could not set interface attributes",\
+		exit_message("Could not set interface attributes", \
 		SYS_ERROR);
 }
