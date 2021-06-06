@@ -1,6 +1,6 @@
-#include "readline.h" 
+#include "history.h"
 
-bool	history(char *buf, t_lsthead *chrlst_head)
+bool	history(char *buf, t_lsthead **chrlst_head)
 {
 	if (!ft_strncmp(termcap()->k_up, buf, 3))
 		;

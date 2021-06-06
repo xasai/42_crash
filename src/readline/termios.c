@@ -36,7 +36,6 @@ static void	termcap_init(void)
 **	we need in struct s_terminfo.
 **	Return pointer to that struct
 */
-/* ce cd */
 struct s_terminfo	*termcap(void)
 {
 	static bool					initialized;
@@ -55,7 +54,7 @@ struct s_terminfo	*termcap(void)
 		ti.move_left = tgetstr("le", NULL);
 		ti.move_right = tgetstr("nd", NULL);
 		ti.move_up = tgetstr("up", NULL);
-		ti.move_down = tgetstr("do", NULL); 
+		ti.move_down = tgetstr("do", NULL);
 		ti.move_c_h = tgetstr("ch", NULL);
 		ti.save_c = tgetstr("sc", NULL);
 		ti.restore_c = tgetstr("rc", NULL);

@@ -4,6 +4,7 @@
 **==================================================================
 ** DECRIPTION : 
 **      Decrease cursor_pos value by 1 and move it 1 column left.
+**		If cursor_pos in right margin, move it up one line and to right margin
 **      If cursor_pos <= 0 just leave.
 */
 void	mov_left(t_rl_sizes *s)
@@ -30,6 +31,7 @@ void	mov_left(t_rl_sizes *s)
 **==================================================================
 ** DECRIPTION : 
 **      Increase cursor_pos value by 1 and move it 1 column right.
+**		If cursor_pos in left margin, move it down one line and to left margin
 **      If cursor_pos >= line_len just leave.
 */
 void	mov_right(t_rl_sizes *s)
@@ -49,6 +51,17 @@ void	mov_right(t_rl_sizes *s)
 			tputs(termcap()->move_right, 1, &putint);
 		s->cursor_pos++;
 	}
+}
+
+/*
+**==================================================================
+** DECRIPTION : 
+**     	Move cursor to the end of line. 
+*/
+void	mov_end(t_rl_sizes *s)
+{
+	while (s->cursor_pos < s->line_len)
+		mov_right(s);
 }
 
 /*

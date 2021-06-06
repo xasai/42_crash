@@ -13,7 +13,7 @@
 t_chrlst	*init_chrlst(char chr)
 {
 	t_chrlst	*new_node;
-	
+
 	new_node = malloc(sizeof(*new_node));
 	if (!new_node)
 		return (NULL);
@@ -57,15 +57,16 @@ void	del_chrlst(t_lsthead *head, size_t index)
 void	free_chrlst(t_chrlst *head)
 {
 	t_chrlst	*next;
-	
+
 	while (head)
 	{
 		next = head->next;
-		*head  = (t_chrlst){0};
+		*head = (t_chrlst){0};
 		free(head);
 		head = next;
 	}
 }
+
 /*
 **==================================================================
 ** DESCRIPTION:
@@ -78,21 +79,21 @@ void	insert_chrlst_node(char chr, t_lsthead *head, size_t index)
 	size_t		i;
 
 	i = 0;
-    new = init_chrlst(chr);
+	new = init_chrlst(chr);
 	cur = head->head;
-    if (!new)
-        exit_message("Malloc failure", EXIT_FAILURE);
-    if (index != 0)
-    {   
-        while (i++ < index - 1)
-            cur= cur->next;  
-        new->next = cur->next;    
-        cur->next = new;
-    }
-    else
-    {   
-        new->next = head->head;
-        head->head = new;
-    }
+	if (!new)
+		exit_message("Malloc failure", EXIT_FAILURE);
+	if (index != 0)
+	{
+		while (i++ < index - 1)
+			cur = cur->next;
+		new->next = cur->next;
+		cur->next = new;
+	}
+	else
+	{
+		new->next = head->head;
+		head->head = new;
+	}
 	head->size++;
 }

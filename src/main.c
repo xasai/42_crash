@@ -2,7 +2,8 @@
 
 void handle_args(int ac, char **av)
 {
-	(void)ac;
+	if (ac > 1)
+		exit_message("Usage: ./minishell", EXIT_FAILURE);
 	(void)av;
 }
 

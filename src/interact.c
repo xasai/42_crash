@@ -7,8 +7,6 @@ int	interact(void)
 	while (1)
 	{
 		line = readline("crash$: ");
-		/* Here parsing starts */
-		//ft_putendl_fd(line, STDOUT_FILENO);
 		printf("\nline   |%s|\n", line);
 		(void)line;
 	}

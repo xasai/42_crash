@@ -14,7 +14,7 @@ OBJ := $(subst $(SRCPATH), $(OBJPATH), $(SRC:.c=.o))
 LIBFT := lib/libft/libft.a
 LIB := -ltermcap $(LIBFT)
 
-INC := -Iinclude/ -Ilib/libft/include
+INC := -Iinclude/ -Iinclude/struct -Ilib/libft/include 
 ############################################################################################
 CC := gcc#	 											  #_____    _____    _____ 
 CFLAGS := -fsanitize=address -g3 -Wall -Wextra -Werror --std=c99# 			#/ ____|  / ____|  / ____|

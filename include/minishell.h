@@ -4,6 +4,7 @@
 /* struct defenitions */
 # include "s_terminfo.h"
 # include "s_shell.h"
+# include "s_lsthead.h"
 /*--------------------*/
 
 # include <unistd.h>
