@@ -1,10 +1,6 @@
 #include "minishell.h"
 
-
-
-
-
-void print_thit_shit(t_dlist *l)
+void print_this_shit(t_dlist *l)
 {
 	printf("\n");
 	while(l->prev)
@@ -27,7 +23,7 @@ void print_thit_shit(t_dlist *l)
 
 void	list_init(t_dlist *l)
 {
-	l->type		= -1; // var, bin
+	l->type		= -1;
 	l->name		= NULL;
 	l->arg		= NULL;
 	l->n_input	= NULL;
@@ -56,12 +52,47 @@ void	ft_line_analyz(char *line)
 	line_without_brckt(&l, line);
 }
 
+void	ekr_func(char *line, int name_len, char dbrckt_flag)
+{
+	line[name_len] = EKR_CH;
+	if (dbrckt_flag)
+	{
+		if (line[name_len + 1] == '\\')
+			line[name_len + 1] = BCKSLSH_CH;
+		else if (line[name_len + 1] == '$')
+			line[name_len + 1] = DOLLAR_CH;
+		else if (line[name_len + 1] == '"')
+			;
+		else
+			line[name_len] = '\\';
+	}
+	else
+	{
+		if (line[name_len] == EKR_CH && line[name_len + 1] == '$')
+			line[name_len + 1] = DOLLAR_CH;
+		else if (line[name_len] == EKR_CH && line[name_len + 1] == ' ')
+			line[name_len + 1] = SPC_CH;
+		else if (line[name_len] == EKR_CH && line[name_len + 1] == '\\')
+			line[name_len + 1] = BCKSLSH_CH;
+	}
+}
+
+void	flag_change(char *line, int name_len, char *flag, char flag_ch)
+{
+	line[name_len] = flag_ch;
+	if (*flag == 0)
+		*flag = 1;
+	else
+		*flag = 0;
+}
+
 void	line_without_brckt(t_dlist *l, char *line)
 {
 	int		name_len;
 	char	dbrckt_flag;
 	char	obrckt_flag;
 	char	sep_len;
+	char	sep[] = {DBRCKT_CH, OBRCKT_CH, EKR_CH};
 
 	sep_len = 0;
 	obrckt_flag = 0;
@@ -69,38 +100,19 @@ void	line_without_brckt(t_dlist *l, char *line)
 	while(*line)
 	{
 		name_len = 0;
-		while (*line && strchr(SPACE_SYMB, *line))
+		while (*line && ft_strchr(SPACE_SYMB, *line))
 			++line;
 		while ((line[name_len] && (dbrckt_flag || obrckt_flag))
 				|| !strchr("<>;=| \t", line[name_len]))
 		{
-			if (!obrckt_flag  && !dbrckt_flag)
-			{
-				if (line[name_len] == '\\')
-					line[name_len] = EKR_CH;
-				if (line[name_len] == EKR_CH && line[name_len + 1] == '\\')
-					line[name_len + 1] = BCKSLSH_CH;
-				else if (line[name_len] == EKR_CH && line[name_len + 1] == '"')
-					line[name_len + 1] = DBRCKT_CH;
-				else if (line[name_len] == EKR_CH && line[name_len + 1] == '\'')
-					line[name_len + 1] = OBRCKT_CH;
-				else if ((line[name_len] == EKR_CH && ft_strchr(SPACE_SYMB, line[name_len + 1])))
-					line[name_len + 1] = SPC_CH;
-			}
-			if (line[name_len] == '"' && !obrckt_flag)
-			{
-				if (dbrckt_flag == 0)
-					dbrckt_flag = 1;
-				else
-					dbrckt_flag = 0;
-			}
-			else if (line[name_len] == '\'')
-			{
-				if (obrckt_flag == 0)
-					obrckt_flag= 1;
-				else
-					obrckt_flag = 0;
-			}
+			if (!obrckt_flag && line[name_len] == '\\')
+				ekr_func(line, name_len, dbrckt_flag);
+			if (line[name_len] == '\"' && !obrckt_flag
+				&& (!name_len || line[name_len - 1] != EKR_CH))
+				flag_change(line, name_len, &dbrckt_flag, DBRCKT_CH);
+			else if (line[name_len] == '\'' && !dbrckt_flag
+				&& (!name_len || line[name_len - 1] != EKR_CH))
+				flag_change(line, name_len, &obrckt_flag, OBRCKT_CH);
 			++name_len;
 		}
 		if (line[name_len] == '=')
@@ -108,16 +120,15 @@ void	line_without_brckt(t_dlist *l, char *line)
 		else
 			separate_analyz(line, name_len, &sep_len, l);
 		if (!l->name)
-			l->name = substr_ignore(line, 0, name_len, EKR_CH);// ft_substr(line, 0, name_len);
+			l->name = substr_ignore(line, 0, name_len, sep);// ft_substr(line, 0, name_len);
 		else if	(name_len || !l->sepch)
-			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, EKR_CH), 1);
+			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, sep), 1);
 		if (ft_strchr(";><+-|", l->sepch))
 			l = add_newl(l);
 		line += name_len + sep_len;
 	}
-	/*specch_replace(l);*/
-	print_thit_shit(l);
-	exit(0);
+	specch_replace(l);
+	print_this_shit(l);
 }
 
 void	separate_analyz(char *word, int name_len, char *sep_len, t_dlist *l)
@@ -142,5 +153,4 @@ void	separate_analyz(char *word, int name_len, char *sep_len, t_dlist *l)
 		l->sepch = word[name_len];
 		*sep_len = 1;
 	}
-	l->type = 'e';
 }

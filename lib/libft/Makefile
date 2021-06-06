@@ -1,5 +1,5 @@
 CCF = gcc -Wall -Wextra -Werror -g
-NAME = libft
+NAME = libft.a
 
 INC = -Iinclude/
 SRC =	$(addprefix src/, \

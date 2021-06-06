@@ -27,5 +27,5 @@ target_include_directories( minishell PUBLIC
 
 ##INCLUDE LIBRARIES
 target_link_libraries(minishell
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/libft/libft ${TERMCAP_LIBRARY}
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/libft/libft.a ${TERMCAP_LIBRARY}
         )

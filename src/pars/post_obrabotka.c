@@ -1,39 +1,34 @@
 #include "minishell.h"
+#include "pars.h"
 
+void	replace(char *str, int i)
+{
+	if (str[i] == BCKSLSH_CH)
+		str[i] = '\\';
+	else if (str[i] == DOLLAR_CH)
+		str[i] = '&';
+	else if (str[i] == SPC_CH)
+		str[i] = ' ';
+	else if (str[i] == '$')
+		/*env_past*/(void)i;
+}
 void	specch_replace(t_dlist *l) //not used
 {
 	int i;
 	int j;
 
-	j = -1;
 	i = -1;
-
 	while (l)
 	{
 		while (l->name && l->name[++i])
-		{
-			if (l->name[i] == BCKSLSH_CH)
-				l->name[i] = '\\';
-			else if (l->name[i] == DBRCKT_CH)
-				l->name[i] = '"';
-			else if (l->name[i] == OBRCKT_CH)
-				l->name[i] = '\'';
-			else if (l->name[i] == SPC_CH)
-				l->name[i] = ' ';
-		}
+			replace(l->name, i);
 		i = -1;
 		while(l->arg && l->arg[++i])
+		{
+			j = -1;
 			while(l->arg[i][++j])
-			{
-				if (l->arg[i][j] == BCKSLSH_CH)
-					l->arg[i][j] = '\\';
-				else if (l->arg[i][j] == DBRCKT_CH)
-					l->arg[i][j] = '"';
-				else if (l->arg[i][j] == OBRCKT_CH)
-					l->arg[i][j] = '\'';
-				else if (l->arg[i][j] == SPC_CH)
-					l->arg[i][j] = ' ';
-			}
+				replace(l->arg[i], j);
+		}
 		l = l->prev;
 	}
 }
