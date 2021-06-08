@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 /* struct defenitions */
-# include "s_terminfo.h"
 # include "s_shell.h"
 # include "s_lsthead.h"
 /*--------------------*/
@@ -36,18 +35,17 @@ void			handle_args(int ac, char **av);
 /*
 ** 			INIT.c
 */
-void			init_term(char **envp);
+t_shell			*init_term(char **envp);
+
+/*
+**			INTERACT.c
+*/
+int				interact(t_shell *s_shell);
 
 /*
 **			EXIT.c
 */
 void			exit_message(char *message, uint8_t code);
 void			print_errno(void);
-
-
-/*
-**			INTERACT.c
-*/
-int				interact(void);
 
 #endif /* MINISHELL_H */

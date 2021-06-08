@@ -16,11 +16,8 @@
 **==================================================================
 ** PATH: src/readline/readline.c
 */
-char	*readline(char *prompt);
-char	*rl_internal(size_t prompt_len, t_lsthead *chrlst_head);
-void    rl_insert_chr(char chr, t_lsthead *chrlst_head, t_rl_sizes *s);
-void    rl_rewrite(t_lsthead *chrlst_head, t_rl_sizes *s);
-char	*rl_cat_line(t_lsthead *chrlst_head);
+char				*readline(char *prompt, t_hist *hist);
+void			    rl_rewrite(t_lsthead *chrlst_head, t_rl_sizes *s);
 
 /*
 **==================================================================
@@ -39,6 +36,7 @@ t_chrlst			*init_chrlst(char chr);
 void				free_chrlst(t_chrlst *head);
 void				del_chrlst(t_lsthead *head, size_t index);
 void				insert_chrlst_node(char chr, t_lsthead *head, size_t index);
+t_chrlst			*str_to_chrlst(char *str);
 
 /*
 **==================================================================

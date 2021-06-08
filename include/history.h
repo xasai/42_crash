@@ -22,7 +22,7 @@
 **==================================================================
 ** PATH: src/readline/history.c
 */
-bool history(char *buf, t_lsthead **chrlst_head);
+bool history_key(char *line_buf, t_rl_data *rl);
 
 /*
 **==================================================================

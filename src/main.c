@@ -10,6 +10,5 @@ void handle_args(int ac, char **av)
 int main(int ac, char **av, char **envp)
 {
 	handle_args(ac, av);
-	init_term(envp);
-	return(interact());
+	return(interact(init_term(envp)));
 }

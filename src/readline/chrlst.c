@@ -97,3 +97,34 @@ void	insert_chrlst_node(char chr, t_lsthead *head, size_t index)
 	}
 	head->size++;
 }
+
+/*
+**==================================================================
+** DESCRIPTION:
+**		FIXME
+*/
+t_chrlst	*str_to_chrlst(char *str)
+{
+	t_chrlst	*head;
+	t_chrlst	*cur;
+	t_chrlst	*new;
+	size_t		i;
+	
+	i = 0;
+	head = NULL;
+	cur = NULL;
+	new = init_chrlst(str[i]);
+	if (!new)
+		exit_message("Memory allocation failure", SYS_ERROR);
+	head = new;
+	cur = head;
+	while(str[i])
+	{
+		new = init_chrlst(str[i]);
+		if (!new)
+			exit_message("Memory allocation failure", SYS_ERROR);
+		cur->next = new;
+		cur = cur->next;
+	}
+	return (head);
+}
