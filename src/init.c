@@ -1,19 +1,43 @@
 #include "minishell.h"
 
+char	*_prompt(void)
+{
+	static char	*prompt;
+	char		*hostname;
+	char		*username;
+
+	if (!prompt)
+	{
+		prompt = PROMPT;
+		hostname = getenv("HOSTNAME");
+		if (NULL == hostname)
+			hostname = getenv("HOST");
+		username = getenv("USER");
+		if (NULL == username)
+		{
+			username = getenv("USERNAME");
+			if (NULL == username)
+				username = getenv("LOGNAME");
+		}
+		if (username && hostname)
+			prompt = cat_lines_tab((char *[5]) \
+			{username, "@", hostname, ": ", NULL});
+	}
+	return (prompt);
+}
 
 /*
 ** DESCRIPTION:
-**	Initializing struct s_shell in this function.
+**	Initializing crash main struct in this function.
 */
-t_shell *init_term(char **envp)
+t_shell	*init_term(char **envp)
 {
-	
-	t_shell	*s_shell;
-	
-	s_shell = malloc(sizeof(*s_shell));
-	if (NULL == s_shell)
+	t_shell	*crash;
+
+	crash = malloc(sizeof(*crash));
+	if (NULL == crash)
 		exit_message("Malloc Error init.c:7\n", SYS_ERROR);
-	s_shell->envp = envp;
-	s_shell->hist = init_history();
-	return (s_shell);
+	crash->envp = envp;
+	crash->prompt = _prompt();
+	return (crash);
 }

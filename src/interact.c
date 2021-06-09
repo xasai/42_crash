@@ -1,13 +1,12 @@
 #include "minishell.h"
 
-int	interact(t_shell *s_shell)
+int	interact(t_shell *crash)
 {
 	char *line;
 
 	while (1)
 	{
-		line = readline("crash$: ", s_shell->hist);
-		printf("\nline   |%s|\n", line);
-		(void)line;
+		line = crash_readline(crash);
+		printf("%*s\n",(int)strlen(crash->prompt)+(int)strlen(line), line);
 	}
 }

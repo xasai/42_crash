@@ -106,6 +106,7 @@ void				ft_putnbr_base(long int i, const char *base);
 int					ft_skip_atoi(char **s);
 int					ft_isempty_str(char *str);
 char				**split(char const *s, char *separator);
+char				*cat_lines_tab(char **strs);
 
 /*
 **============================================================

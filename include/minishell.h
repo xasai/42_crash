@@ -9,6 +9,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <termcap.h> 
+
 # include <term.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -20,7 +21,7 @@
 # include <limits.h>
 
 # include "libft.h"
-# include "readline.h"
+# include "crash_readline.h"
 
 # ifndef SYS_ERROR
 #  define SYS_ERROR 2
@@ -36,6 +37,7 @@ void			handle_args(int ac, char **av);
 ** 			INIT.c
 */
 t_shell			*init_term(char **envp);
+char			*_prompt(void);
 
 /*
 **			INTERACT.c

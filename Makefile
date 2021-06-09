@@ -12,17 +12,18 @@ OBJ := $(subst $(SRCPATH), $(OBJPATH), $(SRC:.c=.o))
 
 
 LIBFT := lib/libft/libft.a
-LIB := -ltermcap $(LIBFT)
+LIB := -lreadline -ltermcap $(LIBFT)
 
 INC := -Iinclude/ -Iinclude/struct -Ilib/libft/include 
 ############################################################################################
-CC := gcc#	 											  #_____    _____    _____ 
-CFLAGS := -fsanitize=address -g3 -Wall -Wextra -Werror --std=c99# 			#/ ____|  / ____|  / ____|
+														 #_____    _____    _____ 
+														#/ ____|  / ____|  / ____|
 														#| |  __  | |      | |     
 														#| | |_ | | |      | |     
 														#| |__| | | |____  | |____ 
 														 #\_____|  \____|  \_____|
-
+CC := gcc
+CFLAGS := -g3 -Wall -Wextra -Werror --std=c99#  -fsanitize=address 
 ############################################################################################
 
 all: $(NAME)
