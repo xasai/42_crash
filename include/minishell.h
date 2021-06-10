@@ -14,11 +14,13 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-
 # include <stdint.h>
 # include <errno.h>
 # include <stdbool.h>
 # include <limits.h>
+# include "pars.h"
+
+
 
 # include "libft.h"
 # include "crash_readline.h"
@@ -26,6 +28,7 @@
 # ifndef SYS_ERROR
 #  define SYS_ERROR 2
 # endif 
+
 
 
 /*
@@ -37,7 +40,6 @@ void			handle_args(int ac, char **av);
 ** 			INIT.c
 */
 t_shell			*init_term(char **envp);
-char			*_prompt(void);
 
 /*
 **			INTERACT.c
@@ -49,5 +51,8 @@ int				interact(t_shell *s_shell);
 */
 void			exit_message(char *message, uint8_t code);
 void			print_errno(void);
+
+/*			INTERACT.c			*/
+int				interact(t_shell *crash);
 
 #endif /* MINISHELL_H */

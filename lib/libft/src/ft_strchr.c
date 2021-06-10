@@ -6,7 +6,7 @@ char	*ft_strchr(const char *s, int c)
 
 	i = -1;
 	while (s[++i])
-		if (s[i] == (unsigned char)c)
+		if (s[i] == (char)c)
 			return ((char *)&s[i]);
 	if (c == 0)
 		return ((char *)&s[i]);
