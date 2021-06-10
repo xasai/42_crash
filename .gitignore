@@ -4,6 +4,7 @@ local_env_sorted
 cmake-build-debug
 sort_env.sh
 *.o
+*.a
 *.out
 ./obj
 ./lib
