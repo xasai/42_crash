@@ -15,17 +15,23 @@ static void	_set_sighandlers(void)
 	signal(SIGQUIT, SIG_IGN); 
 }
 
+static void _set_sigdefault(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
 
 char	*crash_readline(t_shell *crash)
 {
 	char		*line;
-	static char	*prev_line;
+	static char	*prev_line = "";
 	
 	_set_sighandlers();
 	line = readline(crash->prompt);
+	_set_sigdefault();
 	if (line == NULL)
 		exit_message("exit", EXIT_SUCCESS);
-	if (!prev_line || ft_strncmp(line, prev_line, ft_strlen(line)))
+	if (ft_strncmp(line, prev_line, ft_strlen(line)))
 		add_history(line);
 	prev_line = line;
 	return (line);
