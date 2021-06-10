@@ -5,32 +5,20 @@ void print_this_shit(t_dlist *l)
 	printf("\n");
 	while(l->prev)
 		l = l->prev;
-	while(l) {
-		printf("adres - %p | command_name - %s | argument - ",
-			   l,
-			   l->name
-		);
+	printf("\033[1;35m");
+	while(l) 
+	{
+		printf("argv[0] \"%s\"\n", l->name);
 		if (l->arg)
+		{
 			for (int i = 0; l->arg[i]; ++i)
-				printf("%i) %s ", i, l->arg[i]);
-		else
-			printf("null ");
-		printf("| sepch - %c\n", l->sepch);
+				printf("argv[%i] \"%s\"\n", i+1, l->arg[i]);
+		}
+		if (l->sepch)
+			printf("separator - %c\n", l->sepch);
 		l = l->next;
 	}
-}
-
-
-void	list_init(t_dlist *l)
-{
-	l->type		= -1;
-	l->name		= NULL;
-	l->arg		= NULL;
-	l->n_input	= NULL;
-	l->n_output	= NULL;
-	l->sepch	= -1;
-	l->next		= NULL;
-	l->prev		= NULL;
+	printf("\033[1;0m");
 }
 
 t_dlist	*add_newl(t_dlist *l)
@@ -38,9 +26,11 @@ t_dlist	*add_newl(t_dlist *l)
 	t_dlist *new_l;
 
 	new_l = malloc(sizeof(t_dlist));
-	list_init(new_l);
+	if (!new_l)
+		exit_message("Memory allocation failure", SYS_ERROR);
+	*new_l = (t_dlist){0};
+	*new_l = (t_dlist){.type = -1, .sepch = -1, .prev = l};
 	l->next = new_l;
-	new_l->prev = l;
 	return (new_l);
 }
 
@@ -48,7 +38,7 @@ void	ft_line_analyz(char *line)
 {
 	t_dlist l;
 
-	list_init(&l);
+	l = (t_dlist){.type = -1, .sepch = -1, NULL};
 	line_without_brckt(&l, line);
 }
 

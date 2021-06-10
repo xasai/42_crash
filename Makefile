@@ -30,24 +30,37 @@ all: $(NAME)
 
 
 $(NAME): $(LIBFT) $(OBJPATH) $(OBJ)
+	@echo -n "\033[1;32m"
 	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
+	@echo "\n\t$(NAME) Sccessfully compiled"
+	@echo -n "\033[1;0m"
 
 $(OBJPATH)/%.o: %.c
+	@echo -n "\033[1;32m"
 	$(CC) $(INC) $(CFLAGS) -c $< -o $@
+	@echo -n "\033[1;0m"
 
 $(OBJPATH):
+	@echo -n "\033[1;32m"
 	mkdir -p $(OBJDIR)
+	@echo -n "\033[1;0m"
 
 $(LIBFT):
+	@echo -n "\033[1;32m"
 	make -C $(dir $(LIBFT))
+	@echo -n "\033[1;0m"
 
 clean:
+	@echo -n "\033[1;31m"
 	make clean -C $(dir $(LIBFT))
 	rm -rf $(OBJPATH)
+	@echo -n "\033[1;0m"
 
 fclean: clean
+	@echo -n "\033[1;31m"
 	make fclean -C $(dir $(LIBFT))
 	rm -rf $(NAME)
+	@echo -n "\033[1;0m"
 
 re: fclean all
 
