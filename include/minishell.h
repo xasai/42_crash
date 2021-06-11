@@ -24,6 +24,7 @@
 
 # include "libft.h"
 # include "crash_readline.h"
+# include "exec.h"
 
 # ifndef SYS_ERROR
 #  define SYS_ERROR 2
