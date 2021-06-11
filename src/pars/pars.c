@@ -8,11 +8,11 @@ void print_this_shit(t_dlist *l)
 	printf("\033[1;35m");
 	while(l) 
 	{
-		printf("argv[0] \"%s\"\n", l->name);
+		printf("Name \"%s\"\n", l->name);
 		if (l->arg)
 		{
 			for (int i = 0; l->arg[i]; ++i)
-				printf("argv[%i] \"%s\"\n", i+1, l->arg[i]);
+				printf("argv[%i] \"%s\"\n", i, l->arg[i]);
 		}
 		if (l->sepch != '0')
 			printf("separator - %c\n", l->sepch);
