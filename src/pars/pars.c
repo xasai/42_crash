@@ -2,10 +2,9 @@
 
 void print_this_shit(t_dlist *l)
 {
-	printf("\n");
 	while(l->prev)
 		l = l->prev;
-	printf("\033[1;35m");
+	write(1, "\033[1;35m", sizeof("\033[1;35m"));
 	while(l) 
 	{
 		printf("Name \"%s\"\n", l->name);
@@ -18,7 +17,7 @@ void print_this_shit(t_dlist *l)
 			printf("separator - %c\n", l->sepch);
 		l = l->next;
 	}
-	printf("\033[1;0m");
+	write(1, "\033[1;0m", sizeof("\033[1;0m"));
 }
 
 t_dlist	*add_newl(t_dlist *l)
