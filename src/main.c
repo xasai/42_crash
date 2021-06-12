@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	handle_args(int ac, char **av)
+static void	_handle_args(int ac, char **av)
 {
 	if (ac > 1)
 		exit_message("Usage: ./minishell", EXIT_FAILURE);
@@ -9,6 +9,6 @@ void	handle_args(int ac, char **av)
 
 int	main(int ac, char **av, char **envp)
 {
-	handle_args(ac, av);
+	_handle_args(ac, av);
 	return (interact(init_term(envp)));
 }

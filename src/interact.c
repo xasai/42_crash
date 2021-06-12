@@ -8,6 +8,6 @@ int	interact(t_shell *crash)
 	{
 		line = crash_readline(crash);
 		cmdline_exec(ft_line_analyz(line), crash);
-		printf("%*s\n",(int)strlen(crash->prompt)+(int)strlen(line), line);
+		//printf("%*s\n",(int)strlen(crash->prompt)+(int)strlen(line), line);
 	}
 }

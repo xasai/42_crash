@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+/*	Generate prompt of crash */
 char	*_prompt(void)
 {
 	static char	*prompt;
@@ -26,6 +27,19 @@ char	*_prompt(void)
 	return (prompt);
 }
 
+/* Generate $PATH as table of strings */
+char	**_path(void)
+{
+	char	*path;
+	char	**tab;
+
+	path = getenv("PATH");
+	if (!path)
+		return (NULL);
+	tab = ft_split(path, ':');
+	return (tab);
+}
+
 /*
 ** DESCRIPTION:
 **	Initializing crash main struct in this function.
@@ -39,5 +53,6 @@ t_shell	*init_term(char **envp)
 		exit_message("Malloc Error init.c:7\n", SYS_ERROR);
 	crash->envp = envp;
 	crash->prompt = _prompt();
+	crash->path = _path();
 	return (crash);
 }
