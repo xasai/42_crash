@@ -1,10 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/* struct defenitions */
-# include "s_shell.h"
-# include "s_lsthead.h"
-/*--------------------*/
+# include "struct/s_shell.h"
+# include "struct/s_lsthead.h"
+
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -17,14 +16,11 @@
 # include <string.h>
 # include <signal.h>
 
-/*-----data types-----*/
 # include <stdbool.h>
 # include <stdint.h>
 # include <sys/types.h>
-/*--------------------*/
 
 # include <errno.h>
-//# include <limits.h>
 
 # include "pars.h"
 # include "exec.h"
@@ -36,6 +32,10 @@
 # endif 
 
 # define PROMPT "crash$: "
+
+# ifdef __APPLE__
+void			rl_replace_line (const char *text, int clear_undo);
+# endif /* __APPLE__ */
 
 /* 			INIT.c				*/
 t_shell			*init_term(char **envp);

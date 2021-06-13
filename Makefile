@@ -1,6 +1,9 @@
 ##########################################################################################
 NAME :=	minishell
 
+OS = $(shell uname)
+USER = $(shell whoami)
+
 SRCPATH := src
 SRC := $(shell find $(SRCPATH) -name *.c)
 
@@ -12,16 +15,21 @@ OBJ := $(subst $(SRCPATH), $(OBJPATH), $(SRC:.c=.o))
 
 
 LIBFT := lib/libft/libft.a
-LIB := -lreadline -ltermcap $(LIBFT)
+LIB := $(LIBFT)
+LIB += -lreadline
 
-INC := -Iinclude/ -Iinclude/struct -Ilib/libft/include 
+ifeq ($(OS), Darwin)
+LIB += -LUsers/$(USER)/.brew/Cellar/readline/8.1/lib/
+endif
+
+INC := -Iinclude/ -Ilib/libft/include 
 ############################################################################################
-														 #_____    _____    _____ 
-														#/ ____|  / ____|  / ____|
-														#| |  __  | |      | |     
-														#| | |_ | | |      | |     
-														#| |__| | | |____  | |____ 
-														 #\_____|  \____|  \_____|
+ #_____    _____    _____ 
+#/ ____|  / ____|  / ____|
+#| |  __  | |      | |     
+#| | |_ | | |      | |     
+#| |__| | | |____  | |____ 
+ #\_____|  \____|  \_____|
 CC := gcc
 CFLAGS := -g3 -Wall -Wextra -Werror --std=c99#  -fsanitize=address 
 ############################################################################################
@@ -32,13 +40,13 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(OBJPATH) $(OBJ)
 	@echo -n "\033[1;32m"
 	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
-	@echo "\n\t$(NAME) Sccessfully compiled"
+	@echo "\n===========>   $(NAME) Successfully compiled"
 	@echo -n "\033[1;0m"
 
 $(OBJPATH)/%.o: %.c
 	@echo -n "\033[1;32m"
 	$(CC) $(INC) $(CFLAGS) -c $< -o $@
-	@echo -n "\033[1;0m"
+	@echo "\033[1;0m"
 
 $(OBJPATH):
 	@echo -n "\033[1;32m"

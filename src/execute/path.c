@@ -10,7 +10,8 @@
 **	TRUE: if path is relative path.
 **	FALSE: in other way.
 */
-static bool	is_relative_path(char *path)
+
+inline static bool	is_relative_path(char *path)
 {
 	return (path[0] != '/' && ft_strchr(path, '/'));
 }
@@ -25,7 +26,7 @@ static bool	is_relative_path(char *path)
 **	TRUE: if path is absolute path.
 **	FALSE: in other way.
 */
-static bool	is_absolute_path(char *path)
+inline static bool	is_absolute_path(char *path)
 {
 	return (path[0] == '/');
 }
@@ -43,11 +44,11 @@ static bool	is_absolute_path(char *path)
 **	@char* absolute_path: if allocation succeed.
 **	exit with explicit message, if memory allocation failed.
 */
-char *reltoabs(char *rel_path)
+char	*reltoabs(char *rel_path)
 {
 	char	*cwd;
 	char	*abs_path;
-	
+
 	cwd = _getcwd();
 	if (!cwd)
 		exit_message("Memory allocation failure", SYS_ERROR);
@@ -57,7 +58,7 @@ char *reltoabs(char *rel_path)
 		exit_message("Memory allocation failure", SYS_ERROR);
 	free(cwd);
 	free(rel_path);
-	return(abs_path);	
+	return (abs_path);
 }
 
 /*		
@@ -120,7 +121,7 @@ char	*get_path(char *pathname, char **env_path)
 	if (is_absolute_path(pathname))
 		;
 	else if (is_relative_path(pathname))
-		reltoabs(pathname);
+		path = reltoabs(pathname);
 	else if (env_path)
 		path = search_path(pathname, env_path);
 	return (path);
