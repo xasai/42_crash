@@ -1,5 +1,17 @@
 #include "exec.h"
 
+inline static void	_set_sighandlers(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+inline static void	_set_sigdefault(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
 static void	execve_wrap(char *path, char **args, char **envp)
 {
 	pid_t	pid;
@@ -15,12 +27,14 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	{
 		wpid = waitpid(pid, &status, WUNTRACED);
 		if (wpid < 0)
-			putstr_fd("wpid = -1\n", STDERR_FILENO);
+			print_errno("crash");	
 	}
 }
 
 void	cmdline_exec(t_dlist *cmdlst, t_shell *crash)
 {
+	_set_sighandlers();
 	cmdlst->name = get_path(cmdlst->name, crash->path);
 	execve_wrap(cmdlst->name, cmdlst->arg, crash->envp);
+	_set_sigdefault();
 }

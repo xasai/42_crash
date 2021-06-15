@@ -26,10 +26,9 @@
 # include "exec.h"
 # include "libft.h"
 # include "wrapper.h"
+# include "builtin.h"
 
-# ifndef SYS_ERROR
-#  define SYS_ERROR 2
-# endif 
+# define SYS_ERROR 2
 
 # define PROMPT "crash$: "
 
