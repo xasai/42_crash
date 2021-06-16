@@ -21,6 +21,6 @@ int	crash_echo(t_dlist *cmd, t_shell *crash)
 	}
 	if (nl)
 		write(STDOUT_FILENO, "\n", 1);
-	return (0);
+	return (RETURN_SUCCESS);
 	(void)crash;
 }
