@@ -25,7 +25,6 @@
 # include "pars.h"
 # include "exec.h"
 # include "libft.h"
-# include "wrapper.h"
 # include "builtin.h"
 
 # define SYS_ERROR 2

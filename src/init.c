@@ -1,7 +1,15 @@
 #include "minishell.h"
 
-/*	Generate prompt of crash */
-char	*_prompt(void)
+/*	
+**=================================================
+** DESCRIPTION:
+**	Generate prompt for our shell crash
+**
+** RETURN VALUE: 
+**	prompt: if allocation succeed.
+**	exit: if allocation failed.
+*/
+static char	*_prompt(void)
 {
 	static char	*prompt;
 	char		*hostname;
@@ -9,7 +17,6 @@ char	*_prompt(void)
 
 	if (!prompt)
 	{
-		prompt = PROMPT;
 		hostname = getenv("HOSTNAME");
 		if (NULL == hostname)
 			hostname = getenv("HOST");
@@ -23,11 +30,53 @@ char	*_prompt(void)
 		if (username && hostname)
 			prompt = cat_lines_tab((char *[5]) \
 			{username, "@", hostname, ": ", NULL});
+		else
+			prompt = ft_strdup(PROMPT);
 	}
+	if (!prompt)
+		exit_message("Memory allocation failure", SYS_ERROR);
 	return (prompt);
 }
 
-/* Generate $PATH as table of strings */
+/*
+** DESCRIPTION:
+**	Allocate copy of **environ variable. 
+**
+** RETURN VALUE:
+**	environ tab: if allocation succeed.
+**	exit : if allocation failed.
+*/
+static char	**_env(char **envp)
+{
+	char	**env;
+	size_t	env_counter;
+	size_t	idx;
+
+	env_counter = 0;
+	while (envp[env_counter++])
+		;
+	env = malloc(sizeof(char **) * env_counter);
+	if (!env)
+		exit_message("Memory alloction failure", SYS_ERROR);
+	idx = 0;
+	while (envp[idx])
+	{
+		env[idx] = ft_strdup(envp[idx]);
+		if (!env[idx])
+			exit_message("Memory alloction failure", SYS_ERROR);
+		idx++;
+	}
+	return (env);
+}
+
+/*
+** DESCRIPTION:
+**	Split $PATH environ variable on strings in **tab variable.
+**
+** RETURN VALUE:
+**	path tab: if allocation succeed.
+**	NULL: if allocation failed.
+*/
 char	**_path(void)
 {
 	char	*path;
@@ -42,7 +91,14 @@ char	**_path(void)
 
 /*
 ** DESCRIPTION:
-**	Initializing crash main struct in this function.
+**	Allocating (t_shell *) on heap, 
+**	Initialize on heap (char *) t_shell->prompt for readline.
+**	Initialize on heap (char **) t_shell->env for future adding environ variables.
+**	Initialize on heap (char **) t_shell->path tab.
+**
+** RETURN VALUE:
+**		t_shell * : if initializing succeed.
+**		exit : if initializing failed.
 */
 t_shell	*init_term(char **envp)
 {
@@ -51,8 +107,8 @@ t_shell	*init_term(char **envp)
 	crash = malloc(sizeof(*crash));
 	if (NULL == crash)
 		exit_message("Malloc Error init.c:7\n", SYS_ERROR);
-	crash->envp = envp;
-	crash->prompt = _prompt();
 	crash->path = _path();
+	crash->envp = _env(envp);
+	crash->prompt = _prompt();
 	return (crash);
 }

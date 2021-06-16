@@ -14,4 +14,6 @@ char	*reltoabs(char *rel_path);
 /*				IS_EXIST.c				*/
 bool	is_exist(char *path_to_file);
 
+char	*_getcwd(void);
+
 #endif /* EXEC_H */

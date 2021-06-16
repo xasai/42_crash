@@ -6,7 +6,6 @@ void	exit_message(char *message, uint8_t code)
 		print_errno(message);
 	else
 		putendl_fd(message, STDERR_FILENO);
-	putchar_fd('\n', STDERR_FILENO);
 	exit(code);
 }
 
