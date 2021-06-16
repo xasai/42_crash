@@ -37,8 +37,9 @@ static uint8_t	is_builtin(char *cmdname)
 bool	builtin_exec(t_dlist *cmd, t_shell *crash)
 {
 	uint8_t		builtin_idx;	
-	static	int	(*builtin_func[5])(t_dlist *, t_shell *) = \
-	{crash_echo, crash_cd, crash_pwd, 0};
+	static	int	(*builtin_func[])(t_dlist *, t_shell *) = \
+	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
+	export_builtin, unset_builtin, 	exit_builtin};
 
 	builtin_idx = is_builtin(cmd->name);
 	if (builtin_idx)

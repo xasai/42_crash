@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	crash_cd(t_dlist *cmd, t_shell *crash)
+int	cd_builtin(t_dlist *cmd, t_shell *crash)
 {
 	char	*path;
 	

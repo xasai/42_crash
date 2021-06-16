@@ -1,5 +1,6 @@
 #include "minishell.h"
-#define BUFF_SIZE 256 
+
+#define BUFF_SIZE 32 
 
 char	*_getcwd(void)
 {
