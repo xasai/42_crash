@@ -16,7 +16,7 @@ int	exit_builtin(t_dlist *cmd, t_shell *crash)
 	char	*arg;
 	int		exit_code;
 
-	exit_code = 0;
+	exit_code = 0; // FIXME assign to crash->status_code 
 	arg = cmd->arg[1];
 	if (arg)
 	{
