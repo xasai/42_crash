@@ -5,8 +5,8 @@ int	echo_builtin(t_dlist *cmd, t_shell *crash)
 	bool	nl;
 	char	*arg_value;
 	size_t	arg_index;
-	
-	nl = true; 
+
+	nl = true;
 	arg_index = 1;
 	arg_value = cmd->arg[arg_index];
 	if (ft_strncmp(arg_value, "-n", 3))

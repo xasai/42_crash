@@ -1,8 +1,8 @@
 #include "exec.h"
 
-int	_sig_skip(int signum)
+void _sig_skip(int signum)
 {
-	return (0);
+	return ;
 	(void)signum;
 }
 
@@ -34,7 +34,7 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	}
 	else
 	{
-		wpid = wait(&status);
+		wpid = waitpid(pid, &status, WUNTRACED);
 		if (wpid < 0)
 			print_errno("crash");	
 	}

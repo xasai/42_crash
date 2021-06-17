@@ -3,7 +3,7 @@
 int	pwd_builtin(t_dlist *cmd, t_shell *crash)
 {
 	char	*cwd;
-	
+
 	cwd = _getcwd();
 	if (!cwd)
 		exit_message("Memory allocation Failure", SYS_ERROR);

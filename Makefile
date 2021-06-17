@@ -78,6 +78,9 @@ re: fclean all
 test: $(NAME) 
 	./$(NAME)
 
+bash:
+	bash
+
 val: $(NAME)
 	valgrind --leak-check=full ./$(NAME)
 
