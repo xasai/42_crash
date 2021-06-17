@@ -1,9 +1,15 @@
 #include "exec.h"
 
+int	_sig_skip(int signum)
+{
+	return (0);
+	(void)signum;
+}
+
 inline static void	_set_sighandlers(void)
 {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, _sig_skip);
+	signal(SIGQUIT, _sig_skip);
 }
 
 inline static void	_set_sigdefault(void)

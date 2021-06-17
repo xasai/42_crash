@@ -27,13 +27,16 @@
 # include "libft.h"
 # include "builtin.h"
 
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
 # define SYS_ERROR 2
+
+# define STDIN_FILENO 0
+# define STDOUT_FILENO 1
+# define STDERR_FILENO 2
 
 # define PROMPT "crash$: "
 
-# ifdef __APPLE__
-void			rl_replace_line (const char *text, int clear_undo);
-# endif /* __APPLE__ */
 
 /* 			INIT.c				*/
 t_shell			*init_term(char **envp);
@@ -43,6 +46,11 @@ int				interact(t_shell *crash);
 
 /*			CRASH_READLINE.c	*/
 char			*crash_readline(t_shell *crash);
+
+# ifdef __APPLE__
+void			rl_replace_line (const char *text, int clear_undo);
+# endif /* __APPLE__ */
+
 
 /*			EXIT.c				*/
 void			exit_message(char *message, uint8_t code);
