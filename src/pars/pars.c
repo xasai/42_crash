@@ -122,7 +122,6 @@ void	line_without_brckt(t_dlist *l, char *line)
 		line += name_len + sep_len;
 	}
 	specch_replace(l);
-	print_this_shit(l);
 }
 
 void	separate_analyz(char *word, int name_len, char *sep_len, t_dlist *l)

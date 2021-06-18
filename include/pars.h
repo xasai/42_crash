@@ -25,6 +25,7 @@ typedef struct	s_dlist
  */
 t_dlist	*ft_line_analyz(char *line);
 
+void	print_this_shit(t_dlist *l);
 void	brckt_check(t_dlist *l, char *line);
 void	separate_analyz(char *word, int name_len, char *sep_len, t_dlist *l);
 char	**lineptrjoin(char **ptr, char *line, char free_flag);
