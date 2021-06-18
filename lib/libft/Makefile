@@ -10,7 +10,7 @@ SRC =	$(addprefix src/, \
 		ft_intwid.c   ft_isprint.c      ft_memcpy.c   ft_putnbr_base.c  ft_strchr.c     ft_strmapi.c  ft_tolower.c\
 		ft_isalnum.c  ft_isspace.c      ft_memmove.c  ft_putnbr_fd.c    ft_strdup.c     ft_strncmp.c  ft_toupper.c\
 		get_next_line_utils.c			get_next_line.c 	putint.c		cat_lines_tab.c	\
-		splitsep.c	strjoin_free.c	split_with_brckt.c)
+		strjoin_free.c	free_tab.c)
 
 OBJ = $(subst src/,obj/,$(SRC:.c=.o))
 HDR = include/libft.h

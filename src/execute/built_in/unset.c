@@ -39,9 +39,9 @@ int	unset_builtin(t_dlist *cmd, t_shell *crash)
 		var = crash_getenv_ptr(cmd->arg[arg_idx], crash->envp);
 		if (var)
 		{
-			/*if (ft_strncmp(env, "PATH=", 5))
-				crash->path = repath( *///FIXME repath
 			crash->envp = unset_env(var, crash->envp);
+			if (ft_strncmp(var, "PATH", 5))
+				rebuild_path(crash);	
 		}
 		arg_idx++;	
 	}

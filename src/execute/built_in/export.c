@@ -69,16 +69,18 @@ int	export_builtin(t_dlist *cmd, t_shell *crash)
 	size_t	arg_idx;
 
 	arg_idx = 1;
-	if (cmd->arg[arg_idx])
+	if (cmd->arg[arg_idx] == NULL)
+		return (env_builtin(cmd, crash));
+	while (cmd->arg[arg_idx])
 	{
-		while (cmd->arg[arg_idx])
+		if (is_valid_name(cmd->arg[arg_idx]))
 		{
-			if (is_valid_name(cmd->arg[arg_idx]))
-				crash->envp = append_var(cmd->arg[arg_idx], crash->envp);
-			arg_idx++;
+			crash->envp = append_var(cmd->arg[arg_idx], crash->envp);
+			if (cmd->arg[arg_idx][4] == '=' \
+			&& ft_strncmp(cmd->arg[arg_idx], "PATH", 4)) 
+				rebuild_path(crash);
 		}
+		arg_idx++;
 	}
-	else
-		env_builtin(cmd, crash);
 	return (RETURN_SUCCESS);
 }
