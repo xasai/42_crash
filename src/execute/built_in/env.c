@@ -3,11 +3,11 @@
 
 int	env_builtin(t_dlist *cmd, t_shell *crash)
 {
-	char **envp;
 	size_t idx;	
+	char **envp;
 	
-	envp = crash->envp;
 	idx = 0;
+	envp = crash->envp;
 	while (envp[idx])
 	{
 		putendl_fd(envp[idx], STDOUT_FILENO);
@@ -15,4 +15,5 @@ int	env_builtin(t_dlist *cmd, t_shell *crash)
 	}
 	putstr_fd(RESET_COLOR, STDOUT_FILENO);
 	return (RETURN_SUCCESS);
+	(void)cmd;
 }
