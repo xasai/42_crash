@@ -1,4 +1,5 @@
 #include "minishell.h"
+#define MAX_NAME_LEN 1024
 
 static bool is_valid_name(char *name)
 {
@@ -8,76 +9,76 @@ static bool is_valid_name(char *name)
 		name++;
 	if (*name == '=')
 		return (true);
-	return (false);
-}
-
-static void print_error_syntax(char *name)
-{
 	putstr_fd("crash: export: '", STDERR_FILENO);
 	putstr_fd(name, STDERR_FILENO);
 	putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+	return (false);
 }
 
-static char **env_realloc(char **envp, size_t addsize)
+static bool	swap_if_exist(char *var, char **envp)
+{
+	size_t	len;	
+	int		oldvar_idx;	
+	char	name[MAX_NAME_LEN];
+	
+	len = 0;
+	while (var[len] != '=')
+		len++;
+	ft_strlcpy(name, var, len);
+	oldvar_idx = getenv_idx(name, envp);
+	if (oldvar_idx > -1)
+	{
+		free(envp[oldvar_idx]);
+		envp[oldvar_idx] = ft_strdup(var);
+		if (!envp[oldvar_idx])
+			exit_message("Memory allocation failure", SYS_ERROR);
+		return (true);
+	}
+	return (false);
+}
+
+static char **append_var(char *var, char **old_envp)
 {
 	size_t	idx;
 	size_t	size;
-	char	**new_env;
+	char	**new_envp;
 
-	if (!addsize)
-		return (envp);
+	if (swap_if_exist(var, old_envp))
+		return (old_envp);
 	size = 0;
-	while (envp[size++])
+	while (old_envp[size++] != NULL)
 		;
-	size += addsize;
-	new_env = ft_calloc(sizeof(*new_env), size);	
-	if (!new_env)
+	new_envp = ft_calloc(sizeof(*new_envp), (size + 1));
+	if (!new_envp)
 		exit_message("Memory allocation failure", SYS_ERROR);
 	idx = 0;
-	while (envp[idx])
+	while (old_envp[idx])
 	{
-		new_env[idx] = envp[idx];
+		new_envp[idx] = old_envp[idx];
 		idx++;
 	}
-	free(envp);
-	return (new_env);
-}
-
-static void append_env(char **args, t_shell *crash)
-{
-	size_t	arg_idx;
-	size_t	env_idx;
-	size_t	count_to_add;
-	
-	arg_idx = 1;
-	count_to_add = 0;
-	while (args[arg_idx])
-	{
-		if (is_valid_name(args[arg_idx]))
-			count_to_add++;	
-		else
-			print_error_syntax(args[arg_idx]);
-		arg_idx++;
-	}
-	crash->envp = env_realloc(crash->envp, count_to_add);	
-	env_idx = 0;
-	while (crash->envp[env_idx])	
-		env_idx++;
-	arg_idx = 0;
-	while (args[arg_idx])
-	{
-		if (is_valid_name(args[arg_idx]))
-			crash->envp[env_idx] = args[arg_idx];
-		env_idx++;
-		arg_idx++;
-	}
+	new_envp[idx] = ft_strdup(var);
+	if (!new_envp[idx])
+		exit_message("Memory allocation failure", SYS_ERROR);
+	free(old_envp);
+	return (new_envp);
 }
 
 int	export_builtin(t_dlist *cmd, t_shell *crash)
-{
-	if (cmd->arg[1])
-		append_env(cmd->arg, crash);
+{	
+	size_t	arg_idx;
+
+	arg_idx = 1;
+	if (cmd->arg[arg_idx])
+	{
+		while (cmd->arg[arg_idx])
+		{
+			if (is_valid_name(cmd->arg[arg_idx]))
+				crash->envp = append_var(cmd->arg[arg_idx], crash->envp);
+			arg_idx++;
+		}
+	}
 	else
-		env_builtin(cmd, crash);		
+		env_builtin(cmd, crash);
 	return (RETURN_SUCCESS);
 }

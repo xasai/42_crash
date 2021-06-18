@@ -20,7 +20,7 @@ static uint8_t	is_builtin(char *cmdname)
 	while (names[idx])
 	{
 		name = names[idx];
-		if (!ft_strncmp(cmdname, name, cmdlen))
+		if (!ft_strncmp(cmdname, name, cmdlen + 1))
 			return (idx);
 		idx++;
 	}
