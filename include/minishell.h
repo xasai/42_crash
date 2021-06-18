@@ -51,6 +51,9 @@ char			*crash_readline(t_shell *crash);
 void			rl_replace_line (const char *text, int clear_undo);
 # endif /* __APPLE__ */
 
+/*			ENV.c				*/
+char			*crash_getenv_ptr(char *name, char **envp);
+char			*crash_getenv(char *name, char  **envp);
 
 /*			EXIT.c				*/
 void			exit_message(char *message, uint8_t code);
