@@ -40,7 +40,7 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	}
 }
 
-void	cmdline_exec(t_dlist *cmdlst, t_shell *crash)
+void	cmdline_exec(t_cmdlst *cmdlst, t_shell *crash)
 {
 	_set_sighandlers();
 	if (builtin_exec(cmdlst, crash))

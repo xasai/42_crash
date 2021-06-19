@@ -28,7 +28,7 @@ static char **unset_env(char *env, char **envp)
 	return (new_envp);
 }
 
-int	unset_builtin(t_dlist *cmd, t_shell *crash)
+int	unset_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	char	*var;
 	size_t	arg_idx;

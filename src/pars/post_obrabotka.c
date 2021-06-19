@@ -12,7 +12,7 @@ void	replace(char *str, int i)
 	else if (str[i] == '$')
 		/*env_past*/(void)i;
 }
-void	specch_replace(t_dlist *l) //not used
+void	specch_replace(t_cmdlst *l) //not used
 {
 	int i;
 	int j;
