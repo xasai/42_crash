@@ -40,7 +40,7 @@ int	unset_builtin(t_cmdlst *cmd, t_shell *crash)
 		if (var)
 		{
 			crash->envp = unset_env(var, crash->envp);
-			if (ft_strncmp(var, "PATH", 5))
+			if (!ft_strncmp(var, "PATH", 5))
 				rebuild_path(crash);	
 		}
 		arg_idx++;	

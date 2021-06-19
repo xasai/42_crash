@@ -9,7 +9,7 @@
 **      TRUE: if file exists. 
 **      FALSE: in other way.
 */
-inline bool	is_exist(char *path_to_file)
+bool	is_exist(char *path_to_file)
 {
 	struct stat	buf;
 

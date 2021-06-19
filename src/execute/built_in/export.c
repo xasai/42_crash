@@ -3,12 +3,17 @@
 
 static bool is_valid_name(char *name)
 {
-	if (!ft_isalpha(*name) && *name++ != '_')
-		return (false);
-	while (!ft_isalnum(*name) || *name == '_')
-		name++;
-	if (*name == '=')
-		return (true);
+	size_t	i;
+	
+	i = 0;
+	if (ft_isalpha(name[i]) || name[i] != '_')
+	{
+		i++;
+		while (ft_isalnum(name[i]) || name[i] == '_')
+			i++;
+		if (name[i] == '=')
+			return (true);
+	}
 	putstr_fd("crash: export: '", STDERR_FILENO);
 	putstr_fd(name, STDERR_FILENO);
 	putstr_fd("': not a valid identifier\n", STDERR_FILENO);
@@ -24,7 +29,7 @@ static bool	swap_if_exist(char *var, char **envp)
 	len = 0;
 	while (var[len] != '=')
 		len++;
-	ft_strlcpy(name, var, len);
+	ft_strlcpy(name, var, len + 1);
 	oldvar_idx = getenv_idx(name, envp);
 	if (oldvar_idx > -1)
 	{
