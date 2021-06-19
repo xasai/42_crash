@@ -5,7 +5,7 @@
 # include <sys/wait.h>
 
 /*				EXEC.c					*/
-void	cmdline_exec(t_dlist *cmdlst, t_shell *crash);
+void	cmdline_exec(t_cmdlst *cmdlst, t_shell *crash);
 
 /*				PATH.c					*/
 char	*get_path(char *pathname, char **env_path);

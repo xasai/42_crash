@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	echo_builtin(t_dlist *cmd, t_shell *crash)
+int	echo_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	bool	nl;
 	char	*arg_value;

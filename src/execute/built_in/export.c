@@ -73,7 +73,7 @@ static void append_env(char **args, t_shell *crash)
 	}
 }
 
-int	export_builtin(t_dlist *cmd, t_shell *crash)
+int	export_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	if (cmd->arg[1])
 		append_env(cmd->arg, crash);

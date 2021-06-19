@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	pwd_builtin(t_dlist *cmd, t_shell *crash)
+int	pwd_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	char	*cwd;
 

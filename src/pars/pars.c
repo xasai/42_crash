@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void print_this_shit(t_dlist *l)
+void print_this_shit(t_cmdlst *l)
 {
 	while(l->prev)
 		l = l->prev;
@@ -20,52 +20,27 @@ void print_this_shit(t_dlist *l)
 	write(1, "\033[1;0m", sizeof("\033[1;0m"));
 }
 
-t_dlist	*add_newl(t_dlist *l)
+t_cmdlst	*add_newl(t_cmdlst *l)
 {
-	t_dlist *new_l;
+	t_cmdlst *new_l;
 
-	new_l = malloc(sizeof(t_dlist));
+	new_l = malloc(sizeof(t_cmdlst));
 	if (!new_l)
 		exit_message("Memory allocation failure", SYS_ERROR);
-	*new_l = (t_dlist){0};
-	*new_l = (t_dlist){.type = -1, .sepch = -1, .prev = l};
+	*new_l = (t_cmdlst){0};
+	*new_l = (t_cmdlst){.type = -1, .sepch = -1, .prev = l};
 	if (l)
 		l->next = new_l;
 	return (new_l);
 }
 
-t_dlist *ft_line_analyz(char *line)
+t_cmdlst *ft_line_analyz(char *line, t_shell *shell)
 {
-	t_dlist *l;
+	t_cmdlst *l;
 
 	l = add_newl(NULL);
-	line_without_brckt(l, line);
+	line_pars(l, line, shell->envp);
 	return (l);
-}
-
-void	ekr_func(char *line, int name_len, char dquot_flag)
-{
-	line[name_len] = EKR_CH;
-	if (dquot_flag)
-	{
-		if (line[name_len + 1] == '\\')
-			line[name_len + 1] = BCKSLSH_CH;
-		else if (line[name_len + 1] == '$')
-			line[name_len + 1] = DOLLAR_CH;
-		else if (line[name_len + 1] == '"')
-			;
-		else
-			line[name_len] = '\\';
-	}
-	else
-	{
-		if (line[name_len] == EKR_CH && line[name_len + 1] == '$')
-			line[name_len + 1] = DOLLAR_CH;
-		else if (line[name_len] == EKR_CH && line[name_len + 1] == ' ')
-			line[name_len + 1] = SPC_CH;
-		else if (line[name_len] == EKR_CH && line[name_len + 1] == '\\')
-			line[name_len + 1] = BCKSLSH_CH;
-	}
 }
 
 void	flag_change(char *line, int name_len, char *flag, char flag_ch)
@@ -76,14 +51,40 @@ void	flag_change(char *line, int name_len, char *flag, char flag_ch)
 	else
 		*flag = 0;
 }
+int		env_len(char *line)
+{
+	int var_len;
 
-void	line_without_brckt(t_dlist *l, char *line)
+	var_len = 0;
+	if (ft_isalpha(line[var_len]) || line[var_len] == '_')
+		++var_len;
+	else if (line[var_len] == '?')
+		return (1);
+	while(ft_isalnum(line[var_len]) || line[var_len] == '_')
+		++var_len;
+	return (var_len);
+}
+
+void	env_past(char **line, int start, char **envp)
+{
+	int		var_len;
+	char	*var_substr;
+	char	*var_name;
+
+	var_len = env_len(&(*line)[start + 1]);
+	var_name = ft_substr(*line, start + 1, var_len);
+	var_substr = crash_getenv(var_name, envp);
+	free(var_name);
+	*line = strreplace(*line, start, start + var_len + 1, var_substr);
+}
+
+void	line_pars(t_cmdlst *l, char *line, char **envp)
 {
 	int		name_len;
 	char	dquot_flag;
 	char	quot_flag;
 	char	sep_len;
-	char	sep[] = {DQUOT_CH, QUOT_CH, EKR_CH};
+	char	sep[] = {DQUOT_CH, QUOT_CH};
 
 	sep_len = 0;
 	quot_flag = 0;
@@ -94,38 +95,32 @@ void	line_without_brckt(t_dlist *l, char *line)
 		while (*line && ft_strchr(SPACE_SYMB, *line))
 			++line;
 		while ((line[name_len] && (dquot_flag || quot_flag))
-				|| !strchr("<>;=| \t", line[name_len]))
+				|| !strchr("<>| \t", line[name_len]))
 		{
-			if (!quot_flag && line[name_len] == '\\')
-				ekr_func(line, name_len, dquot_flag);
-			if (line[name_len] == '\"' && !quot_flag
-				&& (!name_len || line[name_len - 1] != EKR_CH))
+			if (line[name_len] == '\"' && !quot_flag)
 				flag_change(line, name_len, &dquot_flag, DQUOT_CH);
-			else if (line[name_len] == '\'' && !dquot_flag
-				&& (!name_len || line[name_len - 1] != EKR_CH))
+			else if (line[name_len] == '\'' && !dquot_flag)
 				flag_change(line, name_len, &quot_flag, QUOT_CH);
+			else if (line[name_len] == '$' && !quot_flag)
+				env_past(&line, name_len, envp);
 			++name_len;
 		}
-		if (line[name_len] == '=')
-			/*work_with_env()*/;
-		else
-			separate_analyz(line, name_len, &sep_len, l);
+		separate_analyz(line, name_len, &sep_len, l);
 		if (!l->name)
 		{
-			l->name = substr_ignore(line, 0, name_len, sep);// ft_substr(line, 0, name_len);
+			l->name = substr_ignore(line, 0, name_len, sep);// FIXME protect allocated memory
 			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, sep), 1);
 		}
 		else if	(name_len || !l->sepch)
 			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, sep), 1);
-		if (ft_strchr(";><+-|", l->sepch))
+		if (ft_strchr("><+-|", l->sepch))
 			l = add_newl(l);
 		line += name_len + sep_len;
 	}
-	specch_replace(l);
 	print_this_shit(l);
 }
 
-void	separate_analyz(char *word, int name_len, char *sep_len, t_dlist *l)
+void	separate_analyz(char *word, int name_len, char *sep_len, t_cmdlst *l)
 {
 	if (word[name_len] == '>' && word[name_len + 1] == '>')
 	{

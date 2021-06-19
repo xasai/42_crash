@@ -4,7 +4,7 @@
 check if HOME exist
 and print mess if not*/
 
-int	cd_builtin(t_dlist *cmd, t_shell *crash)
+int	cd_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	char	*path;
 

@@ -7,7 +7,7 @@ int	interact(t_shell *crash)
 	while (1)
 	{
 		line = crash_readline(crash);
-		cmdline_exec(ft_line_analyz(line), crash);
+		cmdline_exec(ft_line_analyz(line, crash), crash);
 		//printf("%*s\n",(int)strlen(crash->prompt)+(int)strlen(line), line);
 	}
 }

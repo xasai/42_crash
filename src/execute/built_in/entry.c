@@ -34,10 +34,10 @@ static uint8_t	is_builtin(char *cmdname)
 **	if it is there. And then return 1.
 **	Otherwise return 0.
 */
-bool	builtin_exec(t_dlist *cmd, t_shell *crash)
+bool	builtin_exec(t_cmdlst *cmd, t_shell *crash)
 {
 	uint8_t		builtin_idx;	
-	static	int	(*builtin_func[])(t_dlist *, t_shell *) = \
+	static	int	(*builtin_func[])(t_cmdlst *, t_shell *) = \
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
 
