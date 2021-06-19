@@ -65,46 +65,61 @@ int		env_len(char *line)
 	return (var_len);
 }
 
-void	env_past(char **line, int start, char **envp)
+void	env_past(char **line, int start, int env_flag, char **envp)
 {
 	int		var_len;
 	char	*var_substr;
 	char	*var_name;
+	char	*free_line;
 
+	free_line = *line;
 	var_len = env_len(&(*line)[start + 1]);
 	var_name = ft_substr(*line, start + 1, var_len);
 	var_substr = crash_getenv(var_name, envp);
 	free(var_name);
-	*line = strreplace(*line, start, start + var_len + 1, var_substr);
+	*line = strreplace(*line, start, start + var_len, var_substr);
+	if (env_flag > 1)
+		free(free_line);
+}
+//echo qqq$LS"vvv$LS"bbb'$LS'
+void	line_quotvar_hf(char **line, int *name_len, int	*env_falg, char **envp)
+{
+	char	dquot_flag;
+	char	quot_flag;
+
+	dquot_flag = 0;
+	quot_flag = 0;
+	while (((*line)[*name_len] && (dquot_flag || quot_flag))
+		   || !ft_strchr("<>| \t", (*line)[*name_len]))
+	{
+		if ((*line)[*name_len] == '\"' && !quot_flag)
+			flag_change((*line), *name_len, &dquot_flag, DQUOT_CH);
+		else if ((*line)[*name_len] == '\'' && !dquot_flag)
+			flag_change((*line), *name_len, &quot_flag, QUOT_CH);
+		else if ((*line)[*name_len] == '$' && !quot_flag)
+		{
+			*env_falg += 1;
+			env_past(line, *name_len, *env_falg, envp);
+		}
+		++*name_len;
+	}
 }
 
 void	line_pars(t_cmdlst *l, char *line, char **envp)
 {
 	int		name_len;
-	char	dquot_flag;
-	char	quot_flag;
+	int 	env_flag;
 	char	sep_len;
 	char	sep[] = {DQUOT_CH, QUOT_CH};
 
 	sep_len = 0;
-	quot_flag = 0;
-	dquot_flag = 0;
+	env_flag = 0;
 	while(*line)
 	{
 		name_len = 0;
 		while (*line && ft_strchr(SPACE_SYMB, *line))
 			++line;
-		while ((line[name_len] && (dquot_flag || quot_flag))
-				|| !strchr("<>| \t", line[name_len]))
-		{
-			if (line[name_len] == '\"' && !quot_flag)
-				flag_change(line, name_len, &dquot_flag, DQUOT_CH);
-			else if (line[name_len] == '\'' && !dquot_flag)
-				flag_change(line, name_len, &quot_flag, QUOT_CH);
-			else if (line[name_len] == '$' && !quot_flag)
-				env_past(&line, name_len, envp);
-			++name_len;
-		}
+		line_quotvar_hf(&line, &name_len, &env_flag, envp);
 		separate_analyz(line, name_len, &sep_len, l);
 		if (!l->name)
 		{
@@ -117,7 +132,6 @@ void	line_pars(t_cmdlst *l, char *line, char **envp)
 			l = add_newl(l);
 		line += name_len + sep_len;
 	}
-	specch_replace(l);
 }
 
 void	separate_analyz(char *word, int name_len, char *sep_len, t_cmdlst *l)
