@@ -7,7 +7,7 @@
 **	If found equal, return index of builtin.
 **	Otherwise return 0.
 */
-static uint8_t	is_builtin(char *cmdname)
+static int8_t	is_builtin(char *cmdname)
 {
 	size_t		idx;
 	size_t		cmdlen;
@@ -24,7 +24,7 @@ static uint8_t	is_builtin(char *cmdname)
 			return (idx);
 		idx++;
 	}
-	return (0);
+	return (-1);
 }
 
 /*
@@ -36,17 +36,17 @@ static uint8_t	is_builtin(char *cmdname)
 */
 bool	builtin_exec(t_cmdlst *cmd, t_shell *crash)
 {
-	uint8_t		builtin_idx;	
+	int8_t		builtin_idx;	
 	static	int	(*builtin_func[])(t_cmdlst *, t_shell *) = \
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
 
 	builtin_idx = is_builtin(cmd->name);
-	if (builtin_idx)
+	if (builtin_idx >= 0)
 	{
 		(*builtin_func[builtin_idx])(cmd, crash);
 		return (1);
 	}
-	else
+	else 
 		return (0);
 }

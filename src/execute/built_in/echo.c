@@ -3,24 +3,24 @@
 int	echo_builtin(t_cmdlst *cmd, t_shell *crash)
 {
 	bool	nl;
-	char	*arg_value;
 	size_t	arg_index;
 
 	nl = true;
 	arg_index = 1;
-	arg_value = cmd->arg[arg_index];
-	if (ft_strncmp(arg_value, "-n", 3))
+	if (cmd->arg[1] && !ft_strncmp(cmd->arg[1], "-n", 3))
 	{	
 		nl = false;
 		arg_index++;
 	}
 	while (cmd->arg[arg_index])
 	{
-		arg_value = cmd->arg[arg_index];
-		putstr_fd(arg_value, STDOUT_FILENO);
+		putstr_fd(cmd->arg[arg_index], STDOUT_FILENO);
+		arg_index++;
+		if (cmd->arg[arg_index])
+			putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (nl)
-		write(STDOUT_FILENO, "\n", 1);
+		putchar_fd('\n', STDOUT_FILENO);
 	return (RETURN_SUCCESS);
 	(void)crash;
 }
