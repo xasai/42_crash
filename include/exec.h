@@ -11,12 +11,10 @@ void	cmdline_exec(t_cmdlst *cmdlst, t_shell *crash);
 char	*get_path(char *pathname, char **env_path);
 char	*reltoabs(char *rel_path);
 
+/*				REBUILD_PATH.c			*/
 void	rebuild_path(t_shell *crash);
 
-/*				IS_EXIST.c				*/
-bool	is_exist(char *path_to_file);
-
-
+/*				GETCWD.c				*/
 char	*_getcwd(void);
 
 #endif /* EXEC_H */

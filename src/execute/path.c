@@ -31,34 +31,21 @@ inline static bool	is_absolute_path(char *path)
 	return (path[0] == '/');
 }
 
-/*		
+/*              
 **=================================================
 ** DESCRIPTION: 
-**	Function which takes relative path as parameter, and
-**	return it's absolute value.
-**
-** NOTE:
-**	1st Parameter is freed inside function body.
+**      Function which takes absoule path as a parameter, and
+**      check if such file exists. 
 **
 ** RETURN VALUE:
-**	@char* absolute_path: if allocation succeed.
-**	exit with explicit message, if memory allocation failed.
+**      TRUE: if file exists. 
+**      FALSE: in other way.
 */
-char	*reltoabs(char *rel_path)
+inline static bool	is_exist(char *path_to_file)
 {
-	char	*cwd;
-	char	*abs_path;
+	struct stat	buf;
 
-	cwd = _getcwd();
-	if (!cwd)
-		exit_message("Memory allocation failure", SYS_ERROR);
-	abs_path = cat_lines_tab((char *[4]) \
-				{cwd, "/", rel_path, NULL});
-	if (!abs_path)
-		exit_message("Memory allocation failure", SYS_ERROR);
-	free(cwd);
-	free(rel_path);
-	return (abs_path);
+	return (stat(path_to_file, &buf) == 0);
 }
 
 /*		
@@ -116,13 +103,9 @@ static char	*search_path(char *pathname, char **env_path)
 */
 char	*get_path(char *pathname, char **env_path)
 {
-	char	*path;
-
-	if (is_absolute_path(pathname))
+	if (is_absolute_path(pathname) || is_relative_path(pathname))
 		;
-	else if (is_relative_path(pathname))
-		path = reltoabs(pathname);
 	else if (env_path)
-		path = search_path(pathname, env_path);
-	return (path);
+		return (search_path(pathname, env_path));
+	return (pathname);
 }
