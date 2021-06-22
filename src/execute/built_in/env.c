@@ -1,13 +1,13 @@
 #include "minishell.h"
 #define RESET_COLOR "\033[1;0m"
 
-int	env_builtin(t_cmdlst *cmd, t_shell *crash)
+int	env_builtin(t_cmdlst *cmd)
 {
 	size_t idx;	
 	char **envp;
 	
 	idx = 0;
-	envp = crash->envp;
+	envp = g_sh->envp;
 	while (envp[idx])
 	{
 		putendl_fd(envp[idx], STDOUT_FILENO);

@@ -1,9 +1,11 @@
 #include "minishell.h"
 
+t_shell	*g_sh;
+
 /*	
 **=================================================
 ** DESCRIPTION:
-**	Generate prompt for our shell crash
+**	Generate prompt for our g_shell g_sh
 **
 ** RETURN VALUE: 
 **	prompt: if allocation succeed.
@@ -100,15 +102,12 @@ char	**_path(void)
 **		t_shell * : if initializing succeed.
 **		exit : if initializing failed.
 */
-t_shell	*init_term(char **envp)
+void	init_term(char **envp)
 {
-	t_shell	*crash;
-
-	crash = malloc(sizeof(*crash));
-	if (NULL == crash)
+	g_sh = malloc(sizeof(*g_sh));
+	if (NULL == g_sh)
 		exit_message("Malloc Error init.c:7\n", SYS_ERROR);
-	crash->path = _path();
-	crash->envp = _env(envp);
-	crash->prompt = _prompt();
-	return (crash);
+	g_sh->path = _path();
+	g_sh->envp = _env(envp);
+	g_sh->prompt = _prompt();
 }

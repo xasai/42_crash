@@ -21,7 +21,7 @@ typedef struct	s_cmdlst
 }				t_cmdlst;
 
 /*			src/pars/			*/
-t_cmdlst *ft_line_analyz(char *line, t_shell *shell);
+t_cmdlst *ft_line_analyz(char *line);
 void	brckt_check(t_cmdlst *l, char *line);
 void	separate_analyz(char *word, int name_len, char *sep_len, t_cmdlst *l);
 void	print_this_shit(t_cmdlst *l);

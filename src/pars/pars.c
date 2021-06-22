@@ -34,12 +34,12 @@ t_cmdlst	*add_newl(t_cmdlst *l)
 	return (new_l);
 }
 
-t_cmdlst *ft_line_analyz(char *line, t_shell *shell)
+t_cmdlst *ft_line_analyz(char *line)
 {
 	t_cmdlst *l;
 
 	l = add_newl(NULL);
-	line_pars(l, line, shell->envp);
+	line_pars(l, line, g_sh->envp);
 	return (l);
 }
 

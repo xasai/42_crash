@@ -28,7 +28,7 @@ static char **unset_env(char *env, char **envp)
 	return (new_envp);
 }
 
-int	unset_builtin(t_cmdlst *cmd, t_shell *crash)
+int	unset_builtin(t_cmdlst *cmd)
 {
 	char	*var;
 	size_t	arg_idx;
@@ -36,12 +36,12 @@ int	unset_builtin(t_cmdlst *cmd, t_shell *crash)
 	arg_idx = 1;
 	while (cmd->arg[arg_idx])
 	{
-		var = crash_getenv_ptr(cmd->arg[arg_idx], crash->envp);
+		var = crash_getenv_ptr(cmd->arg[arg_idx], g_sh->envp);
 		if (var)
 		{
-			crash->envp = unset_env(var, crash->envp);
+			g_sh->envp = unset_env(var, g_sh->envp);
 			if (!ft_strncmp(var, "PATH", 5))
-				rebuild_path(crash);	
+				rebuild_path();	
 		}
 		arg_idx++;	
 	}

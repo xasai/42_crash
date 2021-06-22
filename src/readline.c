@@ -21,14 +21,14 @@ static void _set_sigdefault(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-char	*crash_readline(t_shell *crash)
+char	*crash_readline(void)
 {
 	char		*line;
 	size_t		len;
 	static char	*prev_line = "";
 	
 	_set_sighandlers();
-	line = readline(crash->prompt);
+	line = readline(g_sh->prompt);
 	_set_sigdefault();
 	if (line == NULL)
 		exit_message("exit", EXIT_SUCCESS);

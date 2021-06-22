@@ -1,31 +1,31 @@
 #include "minishell.h"
 
-/* FIXME crash_getenv()
+/* FIXME g_sh_getenv()
 check if HOME exist
 and print mess if not*/
 
-int	cd_builtin(t_cmdlst *cmd, t_shell *crash)
+int	cd_builtin(t_cmdlst *cmd)
 {
 	char	*path;
 
 	path = cmd->arg[1];
 	if (path && cmd->arg[2])
 	{
-		putstr_fd("crash: cd: too many arguments\n", STDERR_FILENO);
+		putstr_fd("g_sh: cd: too many arguments\n", STDERR_FILENO);
 		return (RETURN_FAILURE);
 	}
 	if (path == NULL || (path[0] == '~' && path[1] == '\0'))
 	{
-		path = crash_getenv("HOME", crash->envp);
+		path = crash_getenv("HOME", g_sh->envp);
 		if (!path)
 		{
-			putstr_fd("crash: cd: HOME not set\n", STDERR_FILENO);
+			putstr_fd("g_sh: cd: HOME not set\n", STDERR_FILENO);
 			return (RETURN_FAILURE);
 		}
 	}
 	if (chdir(path) < 0)
 	{
-		print_errno("crash");
+		print_errno("g_sh");
 		return (RETURN_FAILURE);
 	}
 	else

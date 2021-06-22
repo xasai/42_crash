@@ -3,7 +3,6 @@
 
 # include "struct/s_shell.h"
 # include "struct/s_lsthead.h"
-
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -37,24 +36,25 @@
 
 # define PROMPT "crash$: "
 
+extern t_shell *g_sh;
 
 /* 			INIT.c				*/
-t_shell			*init_term(char **envp);
+void			init_term(char **envp);
 
 /*			INTERACT.c			*/
-int		interact(t_shell *crash);
+int				interact(void);
 
 /*			CRASH_READLINE.c	*/
-char			*crash_readline(t_shell *crash);
+char			*crash_readline(void);
 
 # ifdef __APPLE__
 void			rl_replace_line (const char *text, int clear_undo);
 # endif /* __APPLE__ */
 
 /*			ENV.c				*/
-char			*crash_getenv_ptr(char *name, char **envp);
-char			*crash_getenv(char *name, char  **envp);
 int				getenv_idx(char *name, char **envp);
+char			*crash_getenv(char *name, char  **envp);
+char			*crash_getenv_ptr(char *name, char **envp);
 
 /*			EXIT.c				*/
 void			exit_message(char *message, uint8_t code);

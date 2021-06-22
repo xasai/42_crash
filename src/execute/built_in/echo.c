@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	echo_builtin(t_cmdlst *cmd, t_shell *crash)
+int	echo_builtin(t_cmdlst *cmd)
 {
 	bool	nl;
 	size_t	arg_index;
@@ -22,5 +22,5 @@ int	echo_builtin(t_cmdlst *cmd, t_shell *crash)
 	if (nl)
 		putchar_fd('\n', STDOUT_FILENO);
 	return (RETURN_SUCCESS);
-	(void)crash;
+	(void)g_sh;
 }

@@ -36,21 +36,21 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	{
 		wpid = waitpid(pid, &status, WUNTRACED);
 		if (wpid < 0)
-			print_errno("crash");	
+			print_errno("crag_sh");	
 	}
 }
 
-void	cmdline_exec(t_cmdlst *cmdlst, t_shell *crash)
+void	cmdline_exec(t_cmdlst *cmdlst)
 {
 	_set_sighandlers();
-	if (ft_strchr(">+", cmdlst->sepch);
-		redirect(cmdlst, crash);
-	if (builtin_exec(cmdlst, crash))
+	if (ft_strchr(">+", cmdlst->sepch))
+		(void)NULL;
+	if (builtin_exec(cmdlst))
 		;
 	else 
 	{
-		cmdlst->name = get_path(cmdlst->name, crash->path);
-		execve_wrap(cmdlst->name, cmdlst->arg, crash->envp);
+		cmdlst->name = get_path(cmdlst->name, g_sh->path);
+		execve_wrap(cmdlst->name, cmdlst->arg, g_sh->envp);
 	}
 	_set_sigdefault();
 }

@@ -6,7 +6,7 @@ static bool is_valid_name(char *name)
 	size_t	i;
 	
 	i = 0;
-	if (ft_isalpha(name[i]) || name[i] != '_')
+	if (ft_isalpha(name[i]) || name[i] == '_')
 	{
 		i++;
 		while (ft_isalnum(name[i]) || name[i] == '_')
@@ -14,7 +14,7 @@ static bool is_valid_name(char *name)
 		if (name[i] == '=')
 			return (true);
 	}
-	putstr_fd("crash: export: '", STDERR_FILENO);
+	putstr_fd("g_sh: export: '", STDERR_FILENO);
 	putstr_fd(name, STDERR_FILENO);
 	putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	return (false);
@@ -69,21 +69,21 @@ static char **append_var(char *var, char **old_envp)
 	return (new_envp);
 }
 
-int	export_builtin(t_cmdlst *cmd, t_shell *crash)
+int	export_builtin(t_cmdlst *cmd)
 {	
 	size_t	arg_idx;
 
 	arg_idx = 1;
 	if (cmd->arg[arg_idx] == NULL)
-		return (env_builtin(cmd, crash));
+		return (env_builtin(cmd));
 	while (cmd->arg[arg_idx])
 	{
 		if (is_valid_name(cmd->arg[arg_idx]))
 		{
-			crash->envp = append_var(cmd->arg[arg_idx], crash->envp);
+			g_sh->envp = append_var(cmd->arg[arg_idx], g_sh->envp);
 			if (cmd->arg[arg_idx][4] == '=' \
 			&& ft_strncmp(cmd->arg[arg_idx], "PATH", 4)) 
-				rebuild_path(crash);
+				rebuild_path();
 		}
 		arg_idx++;
 	}
