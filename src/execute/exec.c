@@ -43,6 +43,8 @@ static void	execve_wrap(char *path, char **args, char **envp)
 void	cmdline_exec(t_cmdlst *cmdlst, t_shell *crash)
 {
 	_set_sighandlers();
+	if (ft_strchr(">+", cmdlst->sepch);
+		redirect(cmdlst, crash);
 	if (builtin_exec(cmdlst, crash))
 		;
 	else 

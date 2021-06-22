@@ -19,7 +19,8 @@ LIB := $(LIBFT)
 LIB += -lreadline
 
 ifeq ($(OS), Darwin)
-LIB += -LUsers/$(USER)/.brew/Cellar/readline/8.1/lib/
+	LIB += -LUsers/$(USER)/.brew/Cellar/readline/8.1/lib/
+else
 endif
 
 INC := -Iinclude/ -Ilib/libft/include 
