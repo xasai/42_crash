@@ -1,45 +1,37 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 0
+
+#define DEBUG(...)\
+	if (SHOW_DEBUG)\
+	{\
+		printf("Debug: %s():%d ", __FUNCTION__, __LINE__);\
+		printf(__VA_ARGS__);\
+	}
 /*		
 **=================================================
 ** DESCRIPTION: 
-**	Function which takes path as parameter, and
-**	check if it is a relative path;
+**	is_path takes char * argument and
+**	trying to find slash character in it
 **
 ** RETURN VALUE:
-**	TRUE: if path is relative path.
-**	FALSE: in other way.
+**	TRUE:	if slash in str.
+**	FALSE:	if no slash in str.
 */
-
-inline static bool	is_relative_path(char *path)
+inline static bool	is_path(char *str)
 {
-	return (path[0] != '/' && ft_strchr(path, '/'));
-}
-
-/*		
-**=================================================
-** DESCRIPTION: 
-**	Function which takes path as parameter, and
-**	check if it is a absolute path;
-**
-** RETURN VALUE:
-**	TRUE: if path is absolute path.
-**	FALSE: in other way.
-*/
-inline static bool	is_absolute_path(char *path)
-{
-	return (path[0] == '/');
+	return (ft_strchr(str, '/') != NULL);
 }
 
 /*              
 **=================================================
 ** DESCRIPTION: 
-**      Function which takes absoule path as a parameter, and
-**      check if such file exists. 
+**	is_exist takes absolute path to file and check 
+**	if such file exists using function stat(2). 
 **
 ** RETURN VALUE:
-**      TRUE: if file exists. 
-**      FALSE: in other way.
+**      TRUE:	if file exists. 
+**      FALSE:	if there is no such file.
 */
 inline static bool	is_exist(char *path_to_file)
 {
@@ -51,32 +43,39 @@ inline static bool	is_exist(char *path_to_file)
 /*		
 **=================================================
 ** DESCRIPTION: 
-**	Takes name of binary and search this file in env_path table.
-**	If there's no such file, return the original binary name.
+**	search_path searchs the binary in PATH environ variable
+**	which is represented by null terminated array of strings g_sh->**path.
 **
 ** NOTE:
 **	1st Parameter is freed inside function, if binary exists
-**	in PATH variable.
+**	in one PATH's path.
 **
 ** RETURN VALUE:
-**	@char *absolute path: if file exists and allocation succeed.
-**	exit with explicit message, if memory alloctation failed.
+**	Return allocated pointer to absolute path value if it exists.
+**	Return its 1st argument if no such file in PATH variable.
+**	If there's error whith memory allocation, program exits with status code 2.
 */
-static char	*search_path(char *pathname, char **env_path)
+static char	*search_path(char *pathname)
 {
 	size_t	idx;
 	char	*abs_path;
+	char	**env_path;
 
 	idx = 0;
+	DEBUG("$PATH = \"%s\"\n", crash_getenv("PATH", g_sh->envp));
+	DEBUG("pathame = \"%s\"\n", pathname);
+	env_path = g_sh->path;
 	while (env_path[idx])
 	{
 		abs_path = cat_lines_tab((char *[4]) \
 		{env_path[idx], "/", pathname, NULL});
 		if (!abs_path)
 			exit_message("Memory allocation failure", SYS_ERROR);
+		DEBUG("Searching %s in %s[%lu] ...\n", abs_path, env_path[idx], idx);
 		if (is_exist(abs_path))
 		{
 			free(pathname);
+			DEBUG("SUCCESS\n");
 			return (abs_path);
 		}
 		free(abs_path);
@@ -84,28 +83,21 @@ static char	*search_path(char *pathname, char **env_path)
 	}
 	return (pathname);
 }
-
 /*		
 **=================================================
 ** DESCRIPTION: 
-**	Finds absolute path of file pathname, and returns it.
-**	1st parameter can be:
-**		1) Absolute path.
-**		2) Relative path.
-**		3) Name of binary in $PATH environ variable.
-**	
-** NOTE:
-**	If absolute path is found, frees pathname pointer.	
+**	get_path takes arg0 given to our shell.If it has slash character
+**	arg0 will be returned. If there's no slash in arg0, get_path will
+**	try to find arg0 file in PATH env variable. If such file was found
+**	arg0 is freed, and new path to file is returned
 **
 ** RETURN VALUE:
-**	@char *absolute path: if allocation succeed.
-**	exit with explicit message, if memory alloctation failed.
+**	Path to file
+**	If there's error whith memory allocation, program exits with status code 2.
 */
-char	*get_path(char *pathname, char **env_path)
+char	*get_path(char *arg0)
 {
-	if (is_absolute_path(pathname) || is_relative_path(pathname))
-		;
-	else if (env_path)
-		return (search_path(pathname, env_path));
-	return (pathname);
+	if (!is_path(arg0))
+		return (search_path(arg0));
+	return (arg0);
 }

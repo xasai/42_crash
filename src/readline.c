@@ -34,7 +34,8 @@ char	*crash_readline(void)
 		exit_message("exit", EXIT_SUCCESS);
 	len = ft_strlen(line);
 	if (ft_strncmp(line, prev_line, len + 1))
-		add_history(line);
+		add_history(line); 
+	//TODO substr prev_line(or free last line here and substitute it with new)
 	prev_line = line;
 	return (line);
 }

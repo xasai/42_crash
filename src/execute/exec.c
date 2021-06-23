@@ -40,17 +40,19 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	}
 }
 
-void	cmdline_exec(t_cmdlst *cmdlst)
+void	redirect_output(t_cmdlst *cmdl);
+
+void	cmdline_exec(t_cmdlst *cmdl)
 {
 	_set_sighandlers();
-	if (ft_strchr(">+", cmdlst->sepch))
-		(void)NULL;
-	if (builtin_exec(cmdlst))
+	if (ft_strchr(">+", cmdl->sepch))
+		redirect_output(cmdl);
+	if (builtin_exec(cmdl))
 		;
 	else 
 	{
-		cmdlst->name = get_path(cmdlst->name, g_sh->path);
-		execve_wrap(cmdlst->name, cmdlst->arg, g_sh->envp);
+		cmdl->name = get_path(cmdl->name);
+		execve_wrap(cmdl->name, cmdl->arg, g_sh->envp);
 	}
 	_set_sigdefault();
 }

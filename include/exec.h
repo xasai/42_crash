@@ -11,8 +11,7 @@ void	cmdline_exec(t_cmdlst *cmdlst);
 void	redirect_output();	//TODO
 
 /*				path.c					*/
-char	*get_path(char *pathname, char **env_path);
-char	*reltoabs(char *rel_path);
+char	*get_path(char *pathname);
 
 /*				rebuild_path.c			*/
 void	rebuild_path(void);
