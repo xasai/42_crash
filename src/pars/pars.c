@@ -28,7 +28,7 @@ t_cmdlst	*add_newl(t_cmdlst *l)
 	if (!new_l)
 		exit_message("Memory allocation failure", SYS_ERROR);
 	*new_l = (t_cmdlst){0};
-	*new_l = (t_cmdlst){.type = -1, .sepch = -1, .prev = l};
+	*new_l = (t_cmdlst){.sepch = -1, .prev = l};
 	if (l)
 		l->next = new_l;
 	return (new_l);
@@ -107,10 +107,10 @@ void	line_quotvar_hf(char **line, int *name_len, int	*env_falg, char **envp)
 
 void	line_pars(t_cmdlst *l, char *line, char **envp)
 {
-	int		name_len;
-	int 	env_flag;
-	char	sep_len;
-	char	sep[] = {DQUOT_CH, QUOT_CH};
+	int			name_len;
+	int 		env_flag;
+	char		sep_len;
+	const char	sep[] = {DQUOT_CH, QUOT_CH};
 
 	sep_len = 0;
 	env_flag = 0;

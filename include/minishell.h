@@ -42,7 +42,7 @@
 t_shell			*init_term(char **envp);
 
 /*			INTERACT.c			*/
-int		interact(t_shell *crash);
+int		interact(t_shell *sh);
 
 /*			CRASH_READLINE.c	*/
 char			*crash_readline(t_shell *crash);
