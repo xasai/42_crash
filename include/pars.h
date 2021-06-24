@@ -27,7 +27,7 @@ void	separate_analyz(char *word, int name_len, char *sep_len, t_cmdlst *l);
 void	print_this_shit(t_cmdlst *l);
 char	**lineptrjoin(char **ptr, char *line, char free_flag);
 void	specch_replace(t_cmdlst *l);
-void	line_pars(t_cmdlst *l, char *line, char **envp);
+void	line_pars(t_cmdlst *l, char *line);
 char	*substr_ignore(char const *s, unsigned int start, \
 				size_t len, const char *sep);
 char	*strreplace(char *line, int start, int end, char *substr);

@@ -1,46 +1,19 @@
 #include "minishell.h"
 
-static char **unset_env(char *env, char **envp)
+uint8_t	unset_builtin(t_cmdlst *cmd)
 {
-	size_t	new_idx;
-	size_t	old_idx;
-	size_t	new_size;
-	char	**new_envp;
-	
-	new_size = 0;
-	while (envp[new_size])
-		new_size++;	
-	new_envp = ft_calloc(sizeof(*new_envp), (new_size));	
-	if (!new_envp)
-		exit_message("Memory allocation failure", SYS_ERROR);
-	new_idx = 0;
-	old_idx = 0;
-	while (envp[old_idx])
-	{
-		if (envp[old_idx] == env)
-			old_idx++;
-		new_envp[new_idx] = envp[old_idx];
-		new_idx++;	
-		old_idx++;
-	}
-	free(env);
-	free(envp);
-	return (new_envp);
-}
-
-int	unset_builtin(t_cmdlst *cmd)
-{
-	char	*var;
+	int		env_idx;
 	size_t	arg_idx;
 
 	arg_idx = 1;
 	while (cmd->arg[arg_idx])
 	{
-		var = crash_getenv_ptr(cmd->arg[arg_idx], g_sh->envp);
-		if (var)
+		env_idx = getenv_idx(cmd->arg[arg_idx]);
+		if (env_idx >= 0)
 		{
-			g_sh->envp = unset_env(var, g_sh->envp);
-			if (!ft_strncmp(var, "PATH", 5))
+			DEBUG("NAME %s\n", cmd->arg[arg_idx]);
+			crash_unsetenv(cmd->arg[arg_idx]);
+			if (!ft_strncmp(cmd->arg[arg_idx], "PATH", 5))
 				rebuild_path();	
 		}
 		arg_idx++;	

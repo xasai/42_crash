@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "debug.h"//FIXME
+
 # include "struct/s_shell.h"
 # include "struct/s_lsthead.h"
 # include <readline/readline.h>
@@ -52,9 +54,11 @@ void			rl_replace_line (const char *text, int clear_undo);
 # endif /* __APPLE__ */
 
 /*			ENV.c				*/
-int				getenv_idx(char *name, char **envp);
-char			*crash_getenv(char *name, char  **envp);
-char			*crash_getenv_ptr(char *name, char **envp);
+int				getenv_idx(char *name);
+char			*getenv_name(char *varstr);
+char			*crash_getenv(char *name);
+void			crash_setenv(char *name, char *value);
+void			crash_unsetenv(char *name);
 
 /*			EXIT.c				*/
 void			exit_message(char *message, uint8_t code);

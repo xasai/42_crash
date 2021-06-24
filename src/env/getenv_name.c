@@ -1,0 +1,19 @@
+#include "minishell.h"
+
+char	*getenv_name(char *varstr)
+{
+	char	*name;	
+	size_t	size;
+
+	size = 0;
+	if (ft_isalpha(varstr[size]) || varstr[size] == '_')
+		size++;
+	else
+		return (NULL); //should no be variable starting from num or not alpha
+	while (ft_isalnum(varstr[size]) || varstr[size] == '_')
+		size++;
+	name = ft_substr(varstr, 0, size);
+	if (NULL == name)
+		print_errno("crash: ");
+	return (name);
+}

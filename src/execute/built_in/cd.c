@@ -4,7 +4,7 @@
 check if HOME exist
 and print mess if not*/
 
-int	cd_builtin(t_cmdlst *cmd)
+uint8_t	cd_builtin(t_cmdlst *cmd)
 {
 	char	*path;
 
@@ -16,7 +16,7 @@ int	cd_builtin(t_cmdlst *cmd)
 	}
 	if (path == NULL || (path[0] == '~' && path[1] == '\0'))
 	{
-		path = crash_getenv("HOME", g_sh->envp);
+		path = crash_getenv("HOME");
 		if (!path)
 		{
 			putstr_fd("g_sh: cd: HOME not set\n", STDERR_FILENO);

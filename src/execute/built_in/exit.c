@@ -11,7 +11,7 @@ static bool	is_numeric_arg(char *arg)
 	return (*arg == '\0');
 }
 
-int	exit_builtin(t_cmdlst *cmd)
+uint8_t	exit_builtin(t_cmdlst *cmd)
 {
 	char	*arg;
 	int		exit_code;

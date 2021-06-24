@@ -32,7 +32,7 @@ INC := -Iinclude/ -Ilib/libft/include
 #| |__| | | |____  | |____ 
  #\_____|  \____|  \_____|
 CC := gcc
-CFLAGS := -g3 -Wall -Wextra -Werror --std=c99#  -fsanitize=address 
+CFLAGS := -g3 -Wall -Wextra -Werror --std=c99 # -fsanitize=address 
 ############################################################################################
 
 all: $(NAME)

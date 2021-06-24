@@ -1,5 +1,4 @@
 #include "minishell.h"
-#define MAX_NAME_LEN 1024
 
 static bool is_valid_name(char *name)
 {
@@ -14,78 +13,68 @@ static bool is_valid_name(char *name)
 		if (name[i] == '=')
 			return (true);
 	}
-	putstr_fd("g_sh: export: '", STDERR_FILENO);
+	putstr_fd("crash: export: '", STDERR_FILENO);
 	putstr_fd(name, STDERR_FILENO);
 	putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	return (false);
 }
 
-static bool	swap_if_exist(char *var, char **envp)
-{
-	size_t	len;	
-	int		oldvar_idx;	
-	char	name[MAX_NAME_LEN];
+uint8_t	export_builtin(t_cmdlst *cmd)
+{	
+	char	**argp;
+	char	*env_value;
+	char	*env_name;
+	uint8_t	ret;
 	
-	len = 0;
-	while (var[len] != '=')
-		len++;
-	ft_strlcpy(name, var, len + 1);
-	oldvar_idx = getenv_idx(name, envp);
-	if (oldvar_idx > -1)
+	ret = RETURN_SUCCESS;
+	argp = cmd->arg + 1;
+	if (NULL == *argp)
+		return (env_builtin(cmd));
+	while (*argp)
 	{
-		free(envp[oldvar_idx]);
-		envp[oldvar_idx] = ft_strdup(var);
-		if (!envp[oldvar_idx])
-			exit_message("Memory allocation failure", SYS_ERROR);
-		return (true);
+		if (is_valid_name(*argp))
+		{
+			env_name = getenv_name(*argp);
+			env_value = ft_strchr(*argp, '=') + 1;
+			crash_setenv(env_name, env_value);
+			if ((*argp)[4] == '=' && ft_strncmp(env_name, "PATH", 4)) 
+				rebuild_path();
+			free(env_name);
+		}
+		else
+			ret = RETURN_FAILURE;
+		argp++;
 	}
-	return (false);
+	return (ret);
 }
-
-static char **append_var(char *var, char **old_envp)
-{
-	size_t	idx;
-	size_t	size;
-	char	**new_envp;
-
-	if (swap_if_exist(var, old_envp))
-		return (old_envp);
-	size = 0;
-	while (old_envp[size++] != NULL)
-		;
-	new_envp = ft_calloc(sizeof(*new_envp), (size + 1));
-	if (!new_envp)
-		exit_message("Memory allocation failure", SYS_ERROR);
-	idx = 0;
-	while (old_envp[idx])
-	{
-		new_envp[idx] = old_envp[idx];
-		idx++;
-	}
-	new_envp[idx] = ft_strdup(var);
-	if (!new_envp[idx])
-		exit_message("Memory allocation failure", SYS_ERROR);
-	free(old_envp);
-	return (new_envp);
-}
-
+/*
 int	export_builtin(t_cmdlst *cmd)
 {	
-	size_t	arg_idx;
-
-	arg_idx = 1;
-	if (cmd->arg[arg_idx] == NULL)
+	char	**args;
+	char	*env_value;
+	char	*env_name;
+	size_t	idx;
+	uint8_t	ret;
+	
+	ret = RETURN_SUCCESS;
+	idx = 1;
+	args = cmd->arg;
+	if (NULL == args[idx])
 		return (env_builtin(cmd));
-	while (cmd->arg[arg_idx])
+	while (args[idx])
 	{
-		if (is_valid_name(cmd->arg[arg_idx]))
+		if (is_valid_name(args[idx]))
 		{
-			g_sh->envp = append_var(cmd->arg[arg_idx], g_sh->envp);
-			if (cmd->arg[arg_idx][4] == '=' \
-			&& ft_strncmp(cmd->arg[arg_idx], "PATH", 4)) 
+			env_name = getenv_name(args[idx]);
+			env_value = ft_strchr(args[idx], '=') + 1;
+			crash_setenv(env_name, env_value);
+			if (args[idx][4] == '=' && ft_strncmp(env_name, "PATH", 4)) 
 				rebuild_path();
+			free(env_name);
 		}
-		arg_idx++;
+		else
+			ret = RETURN_FAILURE;
+		idx++;
 	}
-	return (RETURN_SUCCESS);
-}
+	return (ret);
+}*/

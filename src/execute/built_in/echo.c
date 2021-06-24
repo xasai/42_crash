@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	echo_builtin(t_cmdlst *cmd)
+uint8_t	echo_builtin(t_cmdlst *cmd)
 {
 	bool	nl;
 	size_t	arg_index;

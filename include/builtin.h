@@ -9,19 +9,19 @@
 bool builtin_exec(t_cmdlst *cmd);
 
 
-int	echo_builtin(t_cmdlst *cmd);
+uint8_t	echo_builtin(t_cmdlst *cmd);
 
-int	pwd_builtin(t_cmdlst *cmd);
+uint8_t	pwd_builtin(t_cmdlst *cmd);
 
-int	cd_builtin(t_cmdlst *cmd);
+uint8_t	cd_builtin(t_cmdlst *cmd);
 
-int exit_builtin(t_cmdlst *cmd);
+uint8_t exit_builtin(t_cmdlst *cmd);
 
-int unset_builtin(t_cmdlst *cmd);
+uint8_t unset_builtin(t_cmdlst *cmd);
 
-int env_builtin(t_cmdlst *cmd);
+uint8_t env_builtin(t_cmdlst *cmd);
 
-int export_builtin(t_cmdlst *cmd);
+uint8_t export_builtin(t_cmdlst *cmd);
 
 
 #endif /* BUILTIN_H */

@@ -37,7 +37,7 @@ static int8_t	is_builtin(char *cmdname)
 bool	builtin_exec(t_cmdlst *cmd)
 {
 	int8_t		builtin_idx;	
-	static	int	(*builtin_func[])(t_cmdlst *) = \
+	static	uint8_t	(*builtin_func[])(t_cmdlst *) = \
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
 

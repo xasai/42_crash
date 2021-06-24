@@ -36,11 +36,11 @@ t_cmdlst	*add_newl(t_cmdlst *l)
 
 t_cmdlst *ft_line_analyz(char *line)
 {
-	t_cmdlst *l;
+	t_cmdlst *cmdlst;
 
-	l = add_newl(NULL);
-	line_pars(l, line, g_sh->envp);
-	return (l);
+	cmdlst = add_newl(NULL);
+	line_pars(cmdlst, line);
+	return (cmdlst);
 }
 
 void	flag_change(char *line, int name_len, char *flag, char flag_ch)
@@ -65,7 +65,7 @@ int		env_len(char *line)
 	return (var_len);
 }
 
-void	env_past(char **line, int start, char **envp)
+void	env_past(char **line, int start)
 {
 	int		var_len;
 	char	*var_substr;
@@ -73,12 +73,12 @@ void	env_past(char **line, int start, char **envp)
 
 	var_len = env_len(&(*line)[start + 1]);
 	var_name = ft_substr(*line, start + 1, var_len);
-	var_substr = crash_getenv(var_name, envp);
+	var_substr = crash_getenv(var_name);
 	free(var_name);
 	*line = strreplace(*line, start, start + var_len + 1, var_substr);
 }
 
-void	line_pars(t_cmdlst *l, char *line, char **envp)
+void	line_pars(t_cmdlst *l, char *line)
 {
 	int		name_len;
 	char	dquot_flag;
@@ -102,7 +102,7 @@ void	line_pars(t_cmdlst *l, char *line, char **envp)
 			else if (line[name_len] == '\'' && !dquot_flag)
 				flag_change(line, name_len, &quot_flag, QUOT_CH);
 			else if (line[name_len] == '$' && !quot_flag)
-				env_past(&line, name_len, envp);
+				env_past(&line, name_len);
 			++name_len;
 		}
 		separate_analyz(line, name_len, &sep_len, l);
