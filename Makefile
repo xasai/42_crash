@@ -83,7 +83,7 @@ bash:
 	bash
 
 val: $(NAME)
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes ./$(NAME)
 
 debug: $(NAME)
 	gdb	./$(NAME)

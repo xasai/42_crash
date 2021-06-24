@@ -9,7 +9,7 @@ char	*getenv_name(char *varstr)
 	if (ft_isalpha(varstr[size]) || varstr[size] == '_')
 		size++;
 	else
-		return (NULL); //should no be variable starting from num or not alpha
+		return (NULL);
 	while (ft_isalnum(varstr[size]) || varstr[size] == '_')
 		size++;
 	name = ft_substr(varstr, 0, size);

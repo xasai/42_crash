@@ -16,7 +16,7 @@ uint8_t	exit_builtin(t_cmdlst *cmd)
 	char	*arg;
 	int		exit_code;
 
-	exit_code = 0; // FIXME assign to g_sh->status_code 
+	exit_code = g_sh->status_code;
 	arg = cmd->arg[1];
 	if (arg)
 	{

@@ -57,7 +57,7 @@ static char	**_env(char **envp)
 	env_counter = 0;
 	while (envp[env_counter++])
 		;
-	env = malloc(sizeof(char **) * env_counter);
+	env = ft_calloc(sizeof(char **), env_counter);
 	if (!env)
 		exit_message("Memory alloction failure", SYS_ERROR);
 	idx = 0;
@@ -102,7 +102,7 @@ char	**_path(void)
 **		t_shell * : if initializing succeed.
 **		exit : if initializing failed.
 */
-void	init_term(char **envp)
+void	init_sh(char **envp)
 {
 	g_sh = malloc(sizeof(*g_sh));
 	if (NULL == g_sh)

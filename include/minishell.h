@@ -41,7 +41,7 @@
 extern t_shell *g_sh;
 
 /* 			INIT.c				*/
-void			init_term(char **envp);
+void			init_sh(char **envp);
 
 /*			INTERACT.c			*/
 int				interact(void);
