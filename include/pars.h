@@ -1,16 +1,11 @@
 #ifndef PARS_H
 #define PARS_H
-# define EKR_CH			-2  /*253*/
 # define DQUOT_CH		-3	/*252*/
 # define QUOT_CH		-4	/*251*/
-# define SPC_CH			-5	/*250*/
-# define BCKSLSH_CH		-6	/*249*/
-# define DOLLAR_CH		-7	/*248*/
 # define SPACE_SYMB		"\t "
 
 typedef struct	s_cmdlst
 {
-	signed char		type; // (v)ar, (c)ommand 
 	char			*name;
 	char			**arg;
 	void			*n_input;
