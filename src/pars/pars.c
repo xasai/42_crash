@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 0//0 to off | 1 to on debug messages
+#define SHOW_DEBUG 1//0 to off | 1 to on debug messages
 
 void print_this_shit(t_cmdlst *l)
 {
@@ -70,19 +70,20 @@ int		env_len(char *line)
 
 void	env_past(char **line, int start, int env_flag)
 {
-	int		var_len;
-	char	*var_substr;
+	size_t	var_name_len;
+	char	*var_value;
 	char	*var_name;
 	char	*free_line;
 
 	free_line = *line;
 	//var_len = env_len(&(*line)[start + 1]);
-	//var_name = ft_substr(*line, start + 1, var_len);
-	var_name = getenv_name(&(*line)[start + 1]);
-	var_len = ft_strlen(var_name);
-	var_substr = crash_getenv(var_name);
+	//var_name = ft_substr(*line, start + 1, var_name_len);
+	var_name = getenv_name(&(*line)[start + 1]);//TODO check null
+	var_name_len = ft_strlen(var_name);
+	var_value = crash_getenv(var_name);//TODO check null
+	DEBUG("var $%s len %lu value %s\n", var_name, var_name_len, var_value);
+	*line = strreplace(*line, start, var_name_len, var_value);
 	free(var_name);
-	*line = strreplace(*line, start, var_len, var_substr);
 	if (env_flag > 1)
 		free(free_line);
 }
