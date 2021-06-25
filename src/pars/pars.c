@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 0//0 to off | 1 to on debug messages
+
 void print_this_shit(t_cmdlst *l)
 {
 	while(l->prev)
@@ -7,14 +9,14 @@ void print_this_shit(t_cmdlst *l)
 	write(1, "\033[1;35m", sizeof("\033[1;35m"));
 	while(l) 
 	{
-		printf("Name \"%s\"\n", l->name);
+		printf("\tName \"%s\"\n", l->name);
 		if (l->arg)
 		{
 			for (int i = 0; l->arg[i]; ++i)
-				printf("argv[%i] \"%s\"\n", i, l->arg[i]);
+				printf("\targv[%i] \"%s\"\n", i, l->arg[i]);
 		}
-		if (l->sepch != '0')
-			printf("separator - %c\n", l->sepch);
+		if (l->sepch)
+			printf("\tsepch %c\n", l->sepch);
 		l = l->next;
 	}
 	write(1, "\033[1;0m", sizeof("\033[1;0m"));
@@ -27,8 +29,8 @@ t_cmdlst	*add_newl(t_cmdlst *l)
 	new_l = malloc(sizeof(t_cmdlst));
 	if (!new_l)
 		exit_message("Memory allocation failure", SYS_ERROR);
-	*new_l = (t_cmdlst){0};
-	*new_l = (t_cmdlst){.sepch = -1, .prev = l};
+	*new_l = (t_cmdlst){.prev = l};//Такая инициализация занулит все кроме .prev
+	// На счет поля prev, под сомнением, оно скорее всего никак не пригождается.
 	if (l)
 		l->next = new_l;
 	return (new_l);
@@ -51,6 +53,7 @@ void	flag_change(char *line, int name_len, char *flag, char flag_ch)
 	else
 		*flag = 0;
 }
+
 int		env_len(char *line)
 {
 	int var_len;
@@ -110,51 +113,56 @@ void	line_pars(t_cmdlst *l, char *line)
 {
 	int			name_len;
 	int 		env_flag;
-	char		sep_len;
+	size_t		sep_len;
 	const char	sep[] = {DQUOT_CH, QUOT_CH};
 
-	sep_len = 0;
 	env_flag = 0;
 	while(*line)
 	{
 		name_len = 0;
-		while (*line && ft_strchr(SPACE_SYMB, *line))
+		while (ft_isspace(*line))
 			++line;
 		line_quotvar_hf(&line, &name_len, &env_flag);
-		separate_analyz(line, name_len, &sep_len, l);
+		sep_len = separate_analyz(&line[name_len], l);
 		if (!l->name)
-		{
-			l->name = substr_ignore(line, 0, name_len, sep);// FIXME protect allocated memory
+		{	// TODO check malloc return NULL ptr
+			l->name = substr_ignore(line, 0, name_len, sep);
 			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, sep), 1);
 		}
 		else if	(name_len || !l->sepch)
 			l->arg = lineptrjoin(l->arg, substr_ignore(line, 0, name_len, sep), 1);
-		if (ft_strchr("><+-|", l->sepch))
+		if (sep_len)//Память под sep_len лежит ближе чем под l->sepch
 			l = add_newl(l);
+		DEBUG("name_len = %d\n", name_len);
 		line += name_len + sep_len;
 	}
 }
 
-void	separate_analyz(char *word, int name_len, char *sep_len, t_cmdlst *l)
+
+// TODO TEST (обычные тесты проходит)
+// Бывшая separate_analyze()
+// Сейчас онa принимает только два аргумента,
+// устанавливает cmdl->sepch только на < > + - | , и остается неинициализированной 
+// если подходящего сепаратора в line нет .
+// Возвращает длину сепараторa, чтобы в дальнейшем пройти по строке вперед
+size_t	get_sepch(char *line, t_cmdlst *cmdl)
 {
-	if (word[name_len] == '>' && word[name_len + 1] == '>')
+	size_t	len;
+
+	len = 0;
+	if (line[0] == line[1] && (line[0] == '>' || line[0] == '<'))
 	{
-		l->sepch = '+';
-		*sep_len = 2;
+		if (line[1] == '>')
+			cmdl->sepch = '+';
+		else if (line[1] == '<')
+			cmdl->sepch = '-';
+		len = 2;
 	}
-	else if (word[name_len] == '<' && word[name_len + 1] == '<')
+	else if (line[0] == '|' || line[0] == '>' || line[0] == '<')
 	{
-		l->sepch = '-';
-		*sep_len = 2;
+		cmdl->sepch = line[0];
+		len = 1;
 	}
-	else if (word[name_len] == '\0')
-	{
-		l->sepch = '0';
-		*sep_len = 0;
-	}
-	else
-	{
-		l->sepch = word[name_len];
-		*sep_len = 1;
-	}
+	DEBUG("Sepch is: \"%c\"\n", cmdl->sepch);
+	return (len);
 }

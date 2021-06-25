@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 0
+
 /*		
 **=================================================
 ** DESCRIPTION: 
@@ -35,8 +37,8 @@ inline static bool	is_exist(char *path_to_file)
 /*		
 **=================================================
 ** DESCRIPTION: 
-**	search_path searchs the binary in PATH environ variable
-**	which is represented by null terminated array of strings g_sh->**path.
+**	search_path searchs the binary in PATH environ variable which 
+**	is represented by null terminated array of strings (char **)g_sh->path.
 **
 ** NOTE:
 **	1st Parameter is freed inside function, if binary exists
