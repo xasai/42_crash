@@ -76,11 +76,13 @@ void	env_past(char **line, int start, int env_flag)
 	char	*free_line;
 
 	free_line = *line;
-	var_len = env_len(&(*line)[start + 1]);
-	var_name = ft_substr(*line, start + 1, var_len);
+	//var_len = env_len(&(*line)[start + 1]);
+	//var_name = ft_substr(*line, start + 1, var_len);
+	var_name = getenv_name(&(*line)[start + 1]);
+	var_len = ft_strlen(var_name);
 	var_substr = crash_getenv(var_name);
 	free(var_name);
-	*line = strreplace(*line, start, start + var_len, var_substr);
+	*line = strreplace(*line, start, var_len, var_substr);
 	if (env_flag > 1)
 		free(free_line);
 }
@@ -123,7 +125,7 @@ void	line_pars(t_cmdlst *l, char *line)
 		while (ft_isspace(*line))
 			++line;
 		line_quotvar_hf(&line, &name_len, &env_flag);
-		sep_len = separate_analyz(&line[name_len], l);
+		sep_len = get_sepch(&line[name_len], l);
 		if (!l->name)
 		{	// TODO check malloc return NULL ptr
 			l->name = substr_ignore(line, 0, name_len, sep);
