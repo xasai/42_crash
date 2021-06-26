@@ -5,7 +5,7 @@ void	exit_message(char *message, uint8_t code)
 	if (code == SYS_ERROR && errno)
 		print_errno(message);
 	else
-		putendl_fd(message, STDERR_FILENO);
+		putstr_fd(message, STDERR_FILENO);
 	exit(code);
 }
 

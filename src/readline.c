@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 1
 static void _int_handler(int signum)
 {
 	signal(signum, _int_handler);
@@ -33,9 +34,10 @@ char	*crash_readline(void)
 	if (line == NULL)
 		exit_message("exit", EXIT_SUCCESS);
 	len = ft_strlen(line);
-	if (ft_strncmp(line, prev_line, len + 1))
+	if (len && ft_strncmp(line, prev_line, len + 1))
 		add_history(line); 
-	//TODO substr prev_line(or free last line here and substitute it with new)
+	if (*prev_line != '\0')
+		free(prev_line);
 	prev_line = line;
 	return (line);
 }
