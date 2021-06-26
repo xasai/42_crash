@@ -5,6 +5,7 @@
 
 # include "struct/s_shell.h"
 # include "struct/s_lsthead.h"
+# include "struct/s_cmdlst.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 

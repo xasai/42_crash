@@ -1,12 +1,18 @@
 #include "minishell.h"
 
-#define BUFF_SIZE 32 
+#define BUFF_SIZE 32
 
+/*
+**=================================================
+** DESCRIPTION:
+**	_getcwd is wrapper of function getcwd which will allocate enough
+**	space for getcwd(3) buffer and will return its result.
+*/
 char	*_getcwd(void)
 {
 	char	*buf;
 	size_t	size;
-	
+
 	size = BUFF_SIZE;
 	buf = malloc(sizeof(*buf) * size);
 	if (!buf)
@@ -15,7 +21,7 @@ char	*_getcwd(void)
 	while (buf == NULL && errno == ERANGE)
 	{
 		size += BUFF_SIZE;
-		buf = getcwd(buf, size); 	
+		buf = getcwd(buf, size);
 	}
 	return (buf);
 }

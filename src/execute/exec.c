@@ -45,8 +45,8 @@ void	redirect_output(t_cmdlst *cmdl);
 void	cmdline_exec(t_cmdlst *cmdl)
 {
 	_set_sighandlers();
-	if (ft_strchr(">+", cmdl->sepch))
-		redirect_output(cmdl);
+	//if (cmdl->sepch && ft_strchr(">+", cmdl->sepch))
+		//redirect_output(cmdl);
 	if (builtin_exec(cmdl))
 		;
 	else 

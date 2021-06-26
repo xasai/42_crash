@@ -3,8 +3,10 @@
 /*
  *  you can send only a dynamically allocated line
  */
-char **lineptrjoin(char **ptr, char *line, char free_flag)
+char **lineptrjoin(char **ptr, char *line, bool free_flag)
 {
+	//Можно сделать эту функцию универсальнее
+	//И применимой к любому типу указателей
 	char	**new_ptr;
 	int		ptr_len;
 
@@ -12,14 +14,20 @@ char **lineptrjoin(char **ptr, char *line, char free_flag)
 	if (ptr)
 		while(ptr[ptr_len])
 			++ptr_len;
+	// Если ptr = NULL аллоцируется 2 указателя сразу
 	new_ptr = malloc(sizeof(char *) * (ptr_len + 2));
 	if (!new_ptr)
-		return NULL;
+		return (NULL);
 	new_ptr[ptr_len + 1] = NULL;
 	new_ptr[ptr_len] = line;
+
+ 	//бессмысленная проверка на ptr, ptr_len == 0, если !ptr
 	while(ptr && --ptr_len >= 0)
 		new_ptr[ptr_len] = ptr[ptr_len];
-	if (free_flag)
+
+	//скорее всего это функция будет использоваться часто
+	//с флагом на единичку.
+	if (free_flag == true)
 		free(ptr);
 	return (new_ptr);
 }

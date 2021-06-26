@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 0
+
 uint8_t	unset_builtin(t_cmdlst *cmd)
 {
 	int		env_idx;
