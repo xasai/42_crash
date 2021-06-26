@@ -106,8 +106,12 @@ void	init_sh(char **envp)
 {
 	g_sh = malloc(sizeof(*g_sh));
 	if (NULL == g_sh)
-		exit_message("Malloc Error init.c:7\n", SYS_ERROR);
+		exit_message("Memory allocation failure", SYS_ERROR);
 	g_sh->path = _path();
 	g_sh->envp = _env(envp);
 	g_sh->prompt = _prompt();
+	g_sh->saved_stdout = dup(STDOUT_FILENO);
+	g_sh->saved_stderr = dup(STDERR_FILENO);
+	if ((g_sh->saved_stdout + g_sh->saved_stderr) == -1)
+		exit_message("crash: dup() ", SYS_ERROR);
 }

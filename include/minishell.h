@@ -2,13 +2,20 @@
 # define MINISHELL_H
 
 # include "debug.h"//FIXME
-
 # include "struct/s_shell.h"
 # include "struct/s_lsthead.h"
 # include "struct/s_cmdlst.h"
+
+# include "pars.h"
+# include "exec.h"
+# include "libft.h"
+# include "builtin.h"
+
 # include <readline/readline.h>
 # include <readline/history.h>
 
+// C этим .h точно нужно что-то делать
+// По факту все внешние либы стоит подключать прямо в .c файлах
 # include <unistd.h>
 # include <fcntl.h>
 # include <termcap.h> 
@@ -24,10 +31,6 @@
 
 # include <errno.h>
 
-# include "pars.h"
-# include "exec.h"
-# include "libft.h"
-# include "builtin.h"
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1

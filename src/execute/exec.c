@@ -40,19 +40,31 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	}
 }
 
-void	redirect_output(t_cmdlst *cmdl);
+int	redirect_ctl(t_cmdlst *cmdl);
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
+	int	redir_fd;
+
+	redir_fd = -1;
 	_set_sighandlers();
-	//if (cmdl->sepch && ft_strchr(">+", cmdl->sepch))
-		//redirect_output(cmdl);
+	// if pipe
+	//	do pipe
+	// else if sepch 
+	//	do redirection
+	if (cmdl->sepch && cmdl->sepch != '|')
+		redir_fd = redirect_ctl(cmdl);
 	if (builtin_exec(cmdl))
 		;
 	else 
 	{
 		cmdl->name = get_path(cmdl->name);
 		execve_wrap(cmdl->name, cmdl->arg, g_sh->envp);
+	}
+	if (redir_fd > -1)
+	{
+		close(redir_fd);
+		dup2(g_sh->saved_stdout, redir_fd/*or STDOUT_FILENO ?*/);
 	}
 	_set_sigdefault();
 }
