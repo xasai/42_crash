@@ -1,24 +1,21 @@
 #include "exec.h"
 
+#define SHOW_DEBUG 1
+
 void _sig_skip(int signum)
 {
 	return ;
 	(void)signum;
 }
 
-inline static void	_set_sighandlers(void)
+inline static void	_set_sighandlers(void (*sighandler)(int))
 {
-	signal(SIGINT, _sig_skip);
-	signal(SIGQUIT, _sig_skip);
+	signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
 }
 
-inline static void	_set_sigdefault(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
 
-static void	execve_wrap(char *path, char **args, char **envp)
+static void	execve_fork(char *path, char **args, char **envp)
 {
 	pid_t	pid;
 	pid_t	wpid;
@@ -40,19 +37,41 @@ static void	execve_wrap(char *path, char **args, char **envp)
 	}
 }
 
-void	redirect_output(t_cmdlst *cmdl);
+static void	execve_nofork(char *path, char **args, char **envp)
+{
+	if (execve(path, args, envp))
+	{
+		print_errno(path);
+		exit(EXIT_FAILURE);
+	}
+}
+
+t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
-	_set_sighandlers();
-	//if (cmdl->sepch && ft_strchr(">+", cmdl->sepch))
-		//redirect_output(cmdl);
-	if (builtin_exec(cmdl))
-		;
-	else 
+	t_cmdlst	*pipe_cmd;
+
+	_set_sighandlers(_sig_skip);
+	if (cmdl->sepch == '|')
 	{
-		cmdl->name = get_path(cmdl->name);
-		execve_wrap(cmdl->name, cmdl->arg, g_sh->envp);
+		pipe_cmd = pipe_ctl(cmdl);
+		//redir_ctl
+		if (pipe_cmd && !builtin_exec(cmdl))
+		{
+			pipe_cmd->name = get_path(pipe_cmd->name);
+			DEBUG("executing pipe %s ...\n", pipe_cmd->name);;
+			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
+		}
 	}
-	_set_sigdefault();
+	else
+	{
+		//redir_ctl
+		if (!builtin_exec(cmdl))
+		{
+			cmdl->name = get_path(cmdl->name);
+			execve_fork(cmdl->name, cmdl->arg, g_sh->envp);
+		}
+	}
+	_set_sighandlers(SIG_DFL);
 }
