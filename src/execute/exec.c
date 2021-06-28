@@ -40,6 +40,7 @@ static void	execve_fork(char *path, char **args, char **envp)
 
 static void	execve_nofork(char *path, char **args, char **envp)
 {
+//	DEBUG("==%d== execve(%s , args, envp)\n", getpid(), path);	
 	if (execve(path, args, envp))
 	{
 		print_errno(path);
@@ -57,17 +58,18 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	if (cmdl->sepch == '|')
 	{
 		pipe_cmd = pipe_ctl(cmdl);
-		//redir_ctl
+		//redirect_ctl
 		if (pipe_cmd && !builtin_exec(cmdl))
 		{
 			pipe_cmd->name = get_path(pipe_cmd->name);
-			//DEBUG("I AM %s [%d]\n", pipe_cmd->name, getpid());
 			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
 		}
+		else
+			wait(NULL);
 	}
 	else
 	{
-		//redir_ctl
+		//redirect_ctl
 		if (!builtin_exec(cmdl))
 		{
 			cmdl->name = get_path(cmdl->name);
