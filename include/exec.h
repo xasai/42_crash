@@ -5,18 +5,21 @@
 # include "minishell.h"
 
 /*				exec.c					*/
-void	cmdline_exec(t_cmdlst *cmdlst);
+void		cmdline_exec(t_cmdlst *cmdlst);
 
-/*				redirect/out.c		*/
-void	redirect_output();	//TODO
+/*				pipeline.c				*/
+t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
-/*				path.c					*/
-char	*get_path(char *pathname);
+/*				redirect/out.c			*/
+void		redirect_output();	//TODO
 
 /*				rebuild_path.c			*/
-void	rebuild_path(void);
+void		rebuild_path(void);
+
+/*				path.c					*/
+char		*get_path(char *pathname);
 
 /*				getcwd.c				*/
-char	*_getcwd(void);
+char		*_getcwd(void);
 
 #endif /* EXEC_H */

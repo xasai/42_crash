@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 1
+
 static void *_fork_error(pid_t pid)
 {
 	print_errno("crash: fork()");
@@ -7,7 +9,7 @@ static void *_fork_error(pid_t pid)
 	return (NULL);
 }
 
-pid_t	fork_n_dup(int new_in, int new_out)
+pid_t	fork_n_dup(int read_end, int write_end)
 {
 	pid_t	pid_out;
 	pid_t	pid_in;
@@ -15,17 +17,17 @@ pid_t	fork_n_dup(int new_in, int new_out)
 	pid_out = fork();	
 	if (!pid_out)
 	{
-		close(new_in);			
-		close(STDOUT_FILENO);
-		dup2(STDOUT_FILENO, new_out);
+		close(read_end);			
+		int tmp = dup2(write_end, 1);
+		DEBUG("OUTPUT dup2(%d,%d)\n",write_end,tmp);
 		return (1);
 	}
 	pid_in = fork();
 	if (!pid_in)
 	{
-		close(new_out);			
-		close(STDIN_FILENO);
-		dup2(STDIN_FILENO, new_in);
+		close(write_end);			
+		int tmp = dup2(read_end, 0);
+		DEBUG("INPUT dup2(%d,%d)\n",read_end,tmp);
 		return (2);
 	}
 	if (pid_out == -1)
@@ -61,6 +63,7 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 			return (next_command);
 		cur_command = next_command;
 	}
-	wait(&wstatus);
+	waitpid(0, &wstatus, WUNTRACED);
+	WIFEXITED(wstatus);
 	return NULL;
 }

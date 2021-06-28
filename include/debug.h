@@ -5,7 +5,7 @@
 #define DEBUG(...)\
 	if (SHOW_DEBUG)\
 	{\
-		printf("\t%sDEBUG: %s():%d ", ORANGE_C, __FUNCTION__, __LINE__);\
-		printf(__VA_ARGS__);\
-		write(1, RESET_C, sizeof(RESET_C));\
+		fprintf(stderr,"\t%sDEBUG: %s():%d ", ORANGE_C, __FUNCTION__, __LINE__);\
+		fprintf(stderr,__VA_ARGS__);\
+		fprintf(stderr, RESET_C);\
 	}

@@ -2,9 +2,10 @@
 
 #define SHOW_DEBUG 1
 
-void _sig_skip(int signum)
+void _sig_wait(int signum)
 {
-	return ;
+	wait(NULL);	
+	write(STDOUT_FILENO, "\n", 1);
 	(void)signum;
 }
 
@@ -32,8 +33,8 @@ static void	execve_fork(char *path, char **args, char **envp)
 	else
 	{
 		wpid = waitpid(pid, &status, WUNTRACED);
-		if (wpid < 0)
-			print_errno("crag_sh");	
+		wpid = WIFEXITED(status);
+		(void)wpid;
 	}
 }
 
@@ -52,7 +53,7 @@ void	cmdline_exec(t_cmdlst *cmdl)
 {
 	t_cmdlst	*pipe_cmd;
 
-	_set_sighandlers(_sig_skip);
+	_set_sighandlers(_sig_wait);
 	if (cmdl->sepch == '|')
 	{
 		pipe_cmd = pipe_ctl(cmdl);
@@ -60,7 +61,7 @@ void	cmdline_exec(t_cmdlst *cmdl)
 		if (pipe_cmd && !builtin_exec(cmdl))
 		{
 			pipe_cmd->name = get_path(pipe_cmd->name);
-			DEBUG("executing pipe %s ...\n", pipe_cmd->name);;
+			//DEBUG("I AM %s [%d]\n", pipe_cmd->name, getpid());
 			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
 		}
 	}
