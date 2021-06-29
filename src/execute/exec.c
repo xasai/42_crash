@@ -2,19 +2,22 @@
 
 #define SHOW_DEBUG 1
 
-void _sig_wait(int signum)
-{
-	wait(NULL);	
-	write(STDOUT_FILENO, "\n", 1);
-	(void)signum;
-}
-
 inline static void	_set_sighandlers(void (*sighandler)(int))
 {
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, sighandler);
 }
 
+void _sig_wait(int signum)
+{
+	g_sh->exit_status = 0x80 + signum;
+	_set_sighandlers(SIG_DFL);
+	if (signum == SIGQUIT)
+		write(STDOUT_FILENO, "Quit\n", 5);
+	else
+		write(STDOUT_FILENO, "\n", 1);
+	wait(0);
+}
 
 static void	execve_fork(char *path, char **args, char **envp)
 {
@@ -23,12 +26,14 @@ static void	execve_fork(char *path, char **args, char **envp)
 	pid = fork();
 	if (pid < 0)
 		print_errno("fork()");
-	else if (pid == 0 && execve(path, args, envp))
+	else if (pid == 0)
 	{
-		print_errno(path);
-		exit(EXIT_FAILURE);
+		_set_sighandlers(SIG_DFL);
+		if (execve(path, args, envp))
+			exit_message(path, SYS_ERROR);
 	}
-	g_sh->status_code = _wait(pid);
+	g_sh->cpid = pid;
+	_wait(pid);
 }
 
 static void	execve_nofork(char *path, char **args, char **envp)
@@ -51,7 +56,6 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	{
 		pipe_cmd = pipe_ctl(cmdl);
 		//redirect_ctl
-		DEBUG("executing %s\n", cmdl->name);
 		if (pipe_cmd && !builtin_exec(cmdl))
 		{
 			pipe_cmd->name = get_path(pipe_cmd->name);

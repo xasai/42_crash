@@ -10,8 +10,8 @@ void		cmdline_exec(t_cmdlst *cmdlst);
 /*				pipeline.c				*/
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
-/*				redirect/out.c			*/
-void		redirect_output();	//TODO
+/*				redirect/ctl.c */
+void		redirect_ctl();
 
 /*				rebuild_path.c			*/
 void		rebuild_path(void);
@@ -19,10 +19,10 @@ void		rebuild_path(void);
 /*				path.c					*/
 char		*get_path(char *pathname);
 
-/*				wait.c					*/
-uint8_t		_wait(pid_t	pid);
-
 /*				getcwd.c				*/
 char		*_getcwd(void);
+
+/*				wait.c					*/
+void		_wait(pid_t	pid);
 
 #endif /* EXEC_H */

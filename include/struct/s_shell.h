@@ -8,7 +8,8 @@ typedef struct s_shell
 	char	*prompt;
 	char	**envp;
 	char	**path;
-	uint8_t	status_code;
+	int		cpid;
+	uint8_t	exit_status;
 }			t_shell;
 
 #endif /* S_SHELL_H */

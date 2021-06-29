@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
-//TODO case "echo cat|"
+//TODO case  when pipe is unclosed
 static int **get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
@@ -32,7 +32,7 @@ static int **get_pipes(t_cmdlst *cmdl)
 	return (pipes);
 }
 
-bool fork_n_dup(int read_end, int write_end, int fd_to_close)
+pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 {
 	int		tmp;
 	pid_t	fpid;
@@ -51,17 +51,15 @@ bool fork_n_dup(int read_end, int write_end, int fd_to_close)
 	else if (fpid == -1)
 	{// KILL all childs or no?
 		print_errno("crash: fork()");
-		return (0);
+		return (-1);
 	}
-	return (fpid == 0);
+	return (fpid);
 }
 
-//Main
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 {
 	int			**pipes;
 	size_t		cmd_idx;
-	uint8_t		err;
 
 	cmd_idx = 0;
 	pipes = get_pipes(cmdl);
@@ -69,25 +67,21 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 	{
 		if (NULL == cmdl->prev)
 		{// Первая команда меняет только stdout
-			if (fork_n_dup(-1, pipes[cmd_idx][1], pipes[0][0]))
+			if (!fork_n_dup(-1, pipes[cmd_idx][1], pipes[0][0]))
 				return (cmdl);
 		}
 		else if (NULL == cmdl->next)
 		{// Последняя меняет только stdin
-			if (fork_n_dup(pipes[cmd_idx - 1][0], -1, pipes[cmd_idx - 1][1]))
+			if (!fork_n_dup(pipes[cmd_idx - 1][0], -1, pipes[cmd_idx - 1][1]))
 				return (cmdl);
 		}// Все остальные меняют и stdin и stdout
-		else if (fork_n_dup(pipes[cmd_idx - 1][0], pipes[cmd_idx][1], -1))
+		else if (!fork_n_dup(pipes[cmd_idx - 1][0], pipes[cmd_idx][1], -1))
 			return (cmdl);
 		cmd_idx++;
 		cmdl = cmdl->next;
 	}
+	printf("%ld=============\n", cmd_idx);
 	while (cmd_idx--)
-	{
-		err = _wait(0);
-		if (err)
-			g_sh->status_code = err;
-	}
-	printf("=================== %d\n",g_sh->status_code);
+		_wait(0);
 	return (NULL);
 }

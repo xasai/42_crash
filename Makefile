@@ -75,10 +75,10 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: test re fclean clean all
+.PHONY: run re fclean clean all
 
 ############################################################################################
-test: $(NAME) 
+run: $(NAME) 
 	./$(NAME)
 
 bash:
