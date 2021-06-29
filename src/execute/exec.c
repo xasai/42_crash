@@ -1,6 +1,6 @@
 #include "exec.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 inline static void	_set_sighandlers(void (*sighandler)(int))
 {

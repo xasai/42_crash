@@ -2,12 +2,14 @@
 
 #define SHOW_DEBUG 0
 
+typedef int (*t_pipes)[2];
+
 //TODO case  when pipe is unclosed
-static int **get_pipes(t_cmdlst *cmdl)
+static t_pipes get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
 	size_t	count;
-	int		**pipes;
+	t_pipes	pipes;	
 
 	count = 0;
 	while (cmdl->sepch == '|')
@@ -21,9 +23,6 @@ static int **get_pipes(t_cmdlst *cmdl)
 	idx = 0;
 	while (idx < count)
 	{
-		pipes[idx] = malloc(sizeof(**pipes) * 2);
-		if (NULL == pipes[idx])
-			exit_message("Memory allocation failure", SYS_ERROR);
 		if (pipe(pipes[idx]))
 			exit_message("Pipe allocation failure", SYS_ERROR);
 		DEBUG("Created Pipe [%lu] %d, %d\n", idx, pipes[idx][0], pipes[idx][1]);
@@ -41,24 +40,31 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 	if (fpid == 0)
 	{
 		if (write_end != -1)
+		{
 			tmp = dup2(write_end, STDOUT_FILENO);
-		DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,tmp);
+			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,tmp);
+		}
 		if (read_end != -1)
+		{
 			tmp = dup2(read_end, STDIN_FILENO);
-		DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
+			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
+		}
 		close(fd_to_close);
+		return (fpid);
 	}
 	else if (fpid == -1)
 	{// KILL all childs or no?
 		print_errno("crash: fork()");
 		return (-1);
 	}
+	close(read_end);
+	close(write_end);
 	return (fpid);
 }
 
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 {
-	int			**pipes;
+	t_pipes		pipes;
 	size_t		cmd_idx;
 
 	cmd_idx = 0;
@@ -80,7 +86,6 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 		cmd_idx++;
 		cmdl = cmdl->next;
 	}
-	printf("%ld=============\n", cmd_idx);
 	while (cmd_idx--)
 		_wait(0);
 	return (NULL);
