@@ -19,8 +19,6 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 static void	execve_fork(char *path, char **args, char **envp)
 {
 	pid_t	pid;
-	pid_t	wpid;
-	int		status;				
 
 	pid = fork();
 	if (pid < 0)
@@ -30,17 +28,11 @@ static void	execve_fork(char *path, char **args, char **envp)
 		print_errno(path);
 		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		wpid = waitpid(pid, &status, WUNTRACED);
-		wpid = WIFEXITED(status);
-		(void)wpid;
-	}
+	g_sh->status_code = _wait(pid);
 }
 
 static void	execve_nofork(char *path, char **args, char **envp)
 {
-//	DEBUG("==%d== execve(%s , args, envp)\n", getpid(), path);	
 	if (execve(path, args, envp))
 	{
 		print_errno(path);
@@ -59,13 +51,12 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	{
 		pipe_cmd = pipe_ctl(cmdl);
 		//redirect_ctl
+		DEBUG("executing %s\n", cmdl->name);
 		if (pipe_cmd && !builtin_exec(cmdl))
 		{
 			pipe_cmd->name = get_path(pipe_cmd->name);
 			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
 		}
-		else
-			wait(NULL);
 	}
 	else
 	{

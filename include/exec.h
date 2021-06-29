@@ -19,6 +19,9 @@ void		rebuild_path(void);
 /*				path.c					*/
 char		*get_path(char *pathname);
 
+/*				wait.c					*/
+uint8_t		_wait(pid_t	pid);
+
 /*				getcwd.c				*/
 char		*_getcwd(void);
 

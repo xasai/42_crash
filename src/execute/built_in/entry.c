@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 0
 /*
 *==============================================================================
 ** DESCRIPTION:
@@ -22,6 +23,8 @@ static int8_t	is_builtin(char *cmdname)
 		name = names[idx];
 		if (!ft_strncmp(cmdname, name, cmdlen + 1))
 			return (idx);
+		else
+			DEBUG("DOESNT match cmd '%s' builtin '%s'\n", cmdname, name);
 		idx++;
 	}
 	return (-1);

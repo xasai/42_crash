@@ -2,90 +2,92 @@
 
 #define SHOW_DEBUG 1
 
-//Need somehow to check and kill all processes
-static void *_fork_error()
+//TODO case "echo cat|"
+static int **get_pipes(t_cmdlst *cmdl)
 {
-	print_errno("crash: fork()");
-	return (NULL);
+	size_t	idx;
+	size_t	count;
+	int		**pipes;
+
+	count = 0;
+	while (cmdl->sepch == '|')
+	{
+		count++;
+		cmdl = cmdl->next;
+	}
+	pipes = ft_calloc(sizeof(*pipes), count);
+	if (NULL == pipes)
+		exit_message("Memory allocation failure", SYS_ERROR);
+	idx = 0;
+	while (idx < count)
+	{
+		pipes[idx] = malloc(sizeof(**pipes) * 2);
+		if (NULL == pipes[idx])
+			exit_message("Memory allocation failure", SYS_ERROR);
+		if (pipe(pipes[idx]))
+			exit_message("Pipe allocation failure", SYS_ERROR);
+		DEBUG("Created Pipe [%lu] %d, %d\n", idx, pipes[idx][0], pipes[idx][1]);
+		idx++;	
+	}
+	return (pipes);
 }
 
-bool fork_n_dup(int read_end, int write_end, int close1, int close2)
+bool fork_n_dup(int read_end, int write_end, int fd_to_close)
 {
 	int		tmp;
 	pid_t	fpid;
 
-	DEBUG("read_end: %d write_end: %d close1: %d close2: %d\n",
-			read_end, write_end, close1, close2);
 	fpid = fork();
 	if (fpid == 0)
 	{
 		if (write_end != -1)
-		{
 			tmp = dup2(write_end, STDOUT_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,tmp);
-		}
+		DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,tmp);
 		if (read_end != -1)
-		{
 			tmp = dup2(read_end, STDIN_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
-		}
-		close(close1);
-		close(close2);
-		return (true);
+		DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
+		close(fd_to_close);
 	}
 	else if (fpid == -1)
-		_fork_error();
-	DEBUG("Attached PID %d\n", fpid); 
-	DEBUG("Close(%d, %d, %d, %d) in main proc \n",\
-			read_end, write_end, close1, close2); 
-	/*
-	close(read_end); 
-	close(write_end);
-	close(close1);
-	close(close2);
-	*/
-	return (false);
+	{// KILL all childs or no?
+		print_errno("crash: fork()");
+		return (0);
+	}
+	return (fpid == 0);
 }
 
 //Main
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 {
-	int			pipe_1[2];
-	int			pipe_2[2];
-	t_cmdlst	*cur_command;
-	t_cmdlst	*next_command;
-	
-	cur_command = cmdl;
-	next_command = cmdl->next;
-	if (pipe(pipe_1) == -1)
+	int			**pipes;
+	size_t		cmd_idx;
+	uint8_t		err;
+
+	cmd_idx = 0;
+	pipes = get_pipes(cmdl);
+	while (cmdl)
 	{
-		print_errno("crash: pipe()");
-		return (NULL);
-	}
-	//  Редиректим только stdout в write_end[1], а read_end[0] закрываем
-	if (fork_n_dup(-1, pipe_1[1], pipe_1[0], -1))
-		return (cur_command);
-	while (next_command->sepch == '|')
-	{
-		cur_command = next_command;
-		if (pipe(pipe_2) == -1)
-		{
-			print_errno("crash: pipe()");
-			return (NULL);
+		if (NULL == cmdl->prev)
+		{// Первая команда меняет только stdout
+			if (fork_n_dup(-1, pipes[cmd_idx][1], pipes[0][0]))
+				return (cmdl);
 		}
-		// Редиректим пред. stdin read_end[0], a пред. write_end[1] закрываем
-		// Редиректим stdout в write_end[1], а read_end[0] закрываем
-		if (fork_n_dup(pipe_1[0], pipe_2[1], pipe_1[1], pipe_2[0]))
-			return (cur_command);
-		next_command = cur_command->next;
-
-		// Новый пайп становится предъидущем
-		pipe_1[0] = pipe_2[0];
-		pipe_1[1] = pipe_2[1];
+		else if (NULL == cmdl->next)
+		{// Последняя меняет только stdin
+			if (fork_n_dup(pipes[cmd_idx - 1][0], -1, pipes[cmd_idx - 1][1]))
+				return (cmdl);
+		}// Все остальные меняют и stdin и stdout
+		else if (fork_n_dup(pipes[cmd_idx - 1][0], pipes[cmd_idx][1], -1))
+			return (cmdl);
+		cmd_idx++;
+		cmdl = cmdl->next;
 	}
-
-	// Редиректим stdin read_end[0], a write_end[1] закрываем
-	if (fork_n_dup(pipe_1[0], -1, pipe_1[1], -1))
-		return (next_command);
-	return NULL;
+	while (cmd_idx--)
+	{
+		err = _wait(0);
+		if (err)
+			g_sh->status_code = err;
+	}
+	printf("=================== %d\n",g_sh->status_code);
+	return (NULL);
 }

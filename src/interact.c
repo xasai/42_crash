@@ -21,6 +21,7 @@ int	interact(void)
 		{
 			cmd = ft_line_analyz(line);
 			cmdline_exec(cmd);
+			print_this_shit(cmd);
 		}
 	}
 }
