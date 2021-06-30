@@ -90,11 +90,16 @@ VALFLAGS += --track-origins=yes
 val: $(NAME)
 	valgrind $(VALFLAGS) ./$(NAME)
 
+docker-build:
+	@echo building image minishell:latest
+	@(docker ps -a | grep minishell) || docker build . --tag minishell 	
+
+docker-run: docker-build
+	docker run --name minishell -it --rm minishell 
+
+docker-rm:
+	docker rmi -f minishell
+
 debug: $(NAME)
 	gdb	./$(NAME)
-
-echo:
-	@echo $(OBJDIR)
-	@echo $(OBJ)
-	@echo $(SRC)
 ###########################################################################################
