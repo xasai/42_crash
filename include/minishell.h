@@ -66,5 +66,6 @@ void			rlst_free(void); //TODO
 /*			exit.c				*/
 void			exit_message(char *message, uint8_t code);
 void			print_errno(char *message);
+void			xuinya(void);
 
 #endif /* MINISHELL_H */

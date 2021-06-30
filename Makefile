@@ -1,9 +1,6 @@
 ##########################################################################################
 NAME :=	minishell
 
-OS = $(shell uname)
-USER = $(shell whoami)
-
 SRCPATH := src
 SRC := $(shell find $(SRCPATH) -name *.c)
 
@@ -13,14 +10,13 @@ OBJPATH := obj
 OBJDIR := $(subst $(SRCPATH), $(OBJPATH), $(shell find $(SRCPATH) -type d))
 OBJ := $(subst $(SRCPATH), $(OBJPATH), $(SRC:.c=.o))
 
-
 LIBFT := lib/libft/libft.a
+
 LIB := $(LIBFT)
 LIB += -lreadline
 
-ifeq ($(OS), Darwin)
-	LIB += -LUsers/$(USER)/.brew/Cellar/readline/8.1/lib/
-else
+ifeq ($(OS), $(shell uname -s))
+	LIB += -LUsers/$(shell whoami)/.brew/Cellar/readline/8.1/lib/
 endif
 
 INC := -Iinclude/ -Ilib/libft/include 
@@ -32,50 +28,62 @@ INC := -Iinclude/ -Ilib/libft/include
 #| |__| | | |____  | |____ 
  #\_____|  \____|  \_____|
 CC := gcc
-CFLAGS := -g3 -Wall -Wextra -Werror --std=c99
-CFLAGS += -D_POSIX_SOURCE #kill
+CFLAGS := -Wall -Wextra -Werror --std=c99 -D_POSIX_SOURCE -MMD
+CFLAGS += -g3
+#CFLAGS += -Ofast
 #CLFAGS += -fsanitize=address 
 ############################################################################################
 
+ifeq ($(MAKECMDGOALS),clean)
+# doing clean, so dont make deps.
+DEPFILES=
+else
+# doing build, so make deps.
+DEPFILES := $(OBJ:.o=.d)
+-include $(DEPFILES)
+endif
 all: $(NAME)
 
+echo:
+	echo $(DEPPATH)
 
-$(NAME): $(LIBFT) $(OBJPATH) $(OBJ)
-	@echo -n "\033[1;32m"
+$(NAME): $(OBJPATH) $(LIBFT) $(OBJ)
+	@echo -n $(GREEN)
 	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
-	@echo "\n===========>   $(NAME) Successfully compiled"
-	@echo -n "\033[1;0m"
+	@echo "\n===========>\t$(NAME) Successfully compiled [+]"
+	@echo -n $(RESET)
 
 $(OBJPATH)/%.o: %.c
-	@echo -n "\033[1;32m"
-	$(CC) $(INC) $(CFLAGS) -c $< -o $@
-	@echo "\033[1;0m"
+	@echo -n $(GREEN)
+	$(CC) $(INC) $(CFLAGS) -c $< -o $@ 
+	@echo $(RESET)
+
 
 $(OBJPATH):
-	@echo -n "\033[1;32m"
+	@echo -n $(GREEN)
 	mkdir -p $(OBJDIR)
-	@echo -n "\033[1;0m"
+	@echo -n $(RESET)
 
 $(LIBFT):
-	@echo -n "\033[1;32m"
+	@echo -n $(GREEN)
 	make -C $(dir $(LIBFT))
-	@echo -n "\033[1;0m"
+	@echo -n $(RESET)
 
 clean:
-	@echo -n "\033[1;31m"
+	@echo -n $(RED)
 	make clean -C $(dir $(LIBFT))
 	rm -rf $(OBJPATH)
-	@echo -n "\033[1;0m"
+	@echo -n $(RESET)
 
 fclean: clean
-	@echo -n "\033[1;31m"
+	@echo -n $(RED)
 	make fclean -C $(dir $(LIBFT))
 	rm -rf $(NAME)
-	@echo -n "\033[1;0m"
+	@echo -n $(RESET)
 
 re: fclean all
 
-.PHONY: run re fclean clean all
+.PHONY: $(DEPPATH) run re fclean clean all
 
 ############################################################################################
 run: $(NAME) 
@@ -84,9 +92,9 @@ run: $(NAME)
 bash:
 	bash
 
-#VALFLAGS += --show-leak-kinds=all 
 VALFLAGS += --leak-check=full 
 VALFLAGS += --track-origins=yes
+#VALFLAGS += --show-leak-kinds=all 
 val: $(NAME)
 	valgrind $(VALFLAGS) ./$(NAME)
 
@@ -103,3 +111,6 @@ docker-rm:
 debug: $(NAME)
 	gdb	./$(NAME)
 ###########################################################################################
+GREEN := "\033[1;32m"
+RESET := "\033[1;0m"
+RED := "\033[1;31m"

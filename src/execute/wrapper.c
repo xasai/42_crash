@@ -1,10 +1,15 @@
 #include "minishell.h"
 
-#define GETCWD_BUFF_SIZE 32
-
 #define SHOW_DEBUG 0
 
-//TODO check on error ret_pid or not?
+#define GETCWD_BUFF_SIZE 32
+
+/*
+**=================================================
+** DESCRIPTION:
+**	_wait is wrapper of function waitpid which will wait pid argument.
+**	It will store exit_status if return of waitpid is not -1.	
+*/
 void	_wait(pid_t pid)
 {
 	int	status;

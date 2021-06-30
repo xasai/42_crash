@@ -6,7 +6,8 @@ sort_env.sh
 *.o
 *.a
 *.out
-./obj
+./obj/*
+./obj/
 ./lib
 ._.DS_Store
 .DS_Store

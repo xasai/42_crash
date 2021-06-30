@@ -37,7 +37,7 @@
 				fprintf(stderr, "%sPIPE %s", RED, GREEN);\
 			l = l->next;\
 		}\
-		fprintf(stderr, RESET);\
+		fprintf(stderr,"Exit_status: %d%s\n", g_sh->exit_status, RESET);\
 	}\
 }
 #endif /* DEBUG_H */
