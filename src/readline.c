@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
+
 static void _int_handler(int signum)
 {
 	signal(signum, _int_handler);
