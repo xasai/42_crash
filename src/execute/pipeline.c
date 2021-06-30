@@ -4,12 +4,19 @@
 
 typedef int (*t_pipes)[2];
 
+
+inline static void	_close(int fd)
+{
+	if (fd != -1)
+		close(fd)
+}
+
 //TODO case  when pipe is unclosed
 static t_pipes get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
 	size_t	count;
-	t_pipes	pipes;	
+	t_pipes	pipes;
 
 	count = 0;
 	while (cmdl->sepch == '|')
@@ -24,16 +31,28 @@ static t_pipes get_pipes(t_cmdlst *cmdl)
 	while (idx < count)
 	{
 		if (pipe(pipes[idx]))
-			exit_message("Pipe allocation failure", SYS_ERROR);
+			print_errno("Pipe allocation failure");
 		DEBUG("Created Pipe [%lu] %d, %d\n", idx, pipes[idx][0], pipes[idx][1]);
-		idx++;	
+		idx++;
 	}
 	return (pipes);
 }
-
+/*
+**=================================================
+** DESCRIPTION:
+**	fork_n_dup().
+**	Call dup2 read_end to STDIN, if read_end != -1
+**	Call dup2 write_end to STDOUT, if write_end != -1
+**	Close fd_to_close;.
+**	Close all read_end and write_end in parent process.
+**
+** RETURN:
+**		PID of forked process in parent.
+**		0 in child
+*/
 pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 {
-	int		tmp;
+	int		newfd;
 	pid_t	fpid;
 
 	fpid = fork();
@@ -41,30 +60,39 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 	{
 		if (write_end != -1)
 		{
-			tmp = dup2(write_end, STDOUT_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,tmp);
+			newfd= dup2(write_end, STDOUT_FILENO);
+			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,newfd);
 		}
 		if (read_end != -1)
 		{
-			tmp = dup2(read_end, STDIN_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
+			newfd = dup2(read_end, STDIN_FILENO);
+			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,newfd);
 		}
-		if (fd_to_close != -1)
-			close(fd_to_close);
+		_close(fd_to_close);
 		return (fpid);
 	}
 	else if (fpid == -1)
-	{// KILL all childs or no?
+	{
 		print_errno("crash: fork()");
-		return (-1);
+		return (-1);//TODO KILL all childs or no
 	}
-	if (read_end != -1)
-		close(read_end);
-	if (write_end != -1)
-		close(write_end);
+	_close(read_end);
+	_close(write_end);
 	return (fpid);
 }
 
+/*
+**=================================================
+** DESCRIPTION:
+**	pipe_ctl() controlling pipes and forks in t_cmdlst.
+**	It will fork count of t_cmdlst processess concatenated
+**	with pipes. And then it will concatenate its stdout&stdin
+**	fildes.
+**
+** RETURN:
+**		It returns t_cmdlst* command in child processes,
+**		and NULL in parent proccess.
+*/
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 {
 	t_pipes		pipes;
@@ -72,7 +100,7 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 
 	cmd_idx = 0;
 	pipes = get_pipes(cmdl);
-	while (cmdl)
+	while (cmdl && (cmdl->sepch == '|' || cmdl->prev->sepch == '|'))
 	{
 		if (NULL == cmdl->prev)
 		{// Первая команда меняет только stdout

@@ -27,4 +27,5 @@ int	interact(void)
 			cmdlst_free(cmd);
 		}
 	}
+	return (EXIT_SUCCESS)
 }

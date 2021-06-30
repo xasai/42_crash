@@ -2,12 +2,12 @@
 
 t_shell	*g_sh;
 
-/*	
+/*
 **=================================================
 ** DESCRIPTION:
 **	Generate prompt for our g_shell g_sh
 **
-** RETURN VALUE: 
+** RETURN VALUE:
 **	prompt: if allocation succeed.
 **	exit: if allocation failed.
 */
@@ -42,7 +42,7 @@ static char	*_prompt(void)
 
 /*
 ** DESCRIPTION:
-**	Allocate copy of **environ variable. 
+**	Allocate copy of **environ variable.
 **
 ** RETURN VALUE:
 **	environ tab: if allocation succeed.
@@ -93,10 +93,12 @@ char	**_path(void)
 
 /*
 ** DESCRIPTION:
-**	Allocating (t_shell *) on heap, 
+**	Allocating (t_shell *) on heap,
 **	Initialize on heap (char *) t_shell->prompt for readline.
 **	Initialize on heap (char **) t_shell->env for future adding environ variables.
 **	Initialize on heap (char **) t_shell->path tab.
+**	Initialize g_sh->saved_stdin.
+**	Initialize g_sh->saved_stdout.
 **
 ** RETURN VALUE:
 **		t_shell * : if initializing succeed.
