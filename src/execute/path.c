@@ -75,7 +75,7 @@ static char	*search_path(char *pathname)
 		free(abs_path);
 		idx++;
 	}
-	return (pathname);
+	return (NULL);
 }
 /*		
 **=================================================
@@ -87,11 +87,23 @@ static char	*search_path(char *pathname)
 **
 ** RETURN VALUE:
 **	Path to file
+**	If no file found in $PATH return NULL.
 **	If there's error whith memory allocation, program exits with status code 2.
 */
 char	*get_path(char *arg0)
 {
-	if (!is_path(arg0))
-		return (search_path(arg0));
-	return (arg0);
+	char *abs_path;
+
+	if (is_path(arg0))
+		return (arg0);
+	abs_path = search_path(arg0);
+	if (!abs_path)
+	{
+		putstr_fd(arg0, STDERR_FILENO);
+		putstr_fd(": command not found\n", STDERR_FILENO);
+		g_sh->exit_status = 0x7f;	
+		free(arg0);
+		return (NULL);
+	}
+	return (abs_path);
 }

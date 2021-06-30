@@ -46,27 +46,23 @@ static void	execve_nofork(char *path, char **args, char **envp)
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
-	t_cmdlst	*pipe_cmd;
+	void		(*_execve)(char*, char **, char**);
 
 	_set_sighandlers(_sig_wait);
 	if (cmdl->sepch == '|')
 	{
-		pipe_cmd = pipe_ctl(cmdl);
-		//redirect_ctl
-		if (pipe_cmd && !builtin_exec(cmdl))
-		{
-			pipe_cmd->name = get_path(pipe_cmd->name);
-			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
-		}
+		cmdl = pipe_ctl(cmdl);
+		_execve = execve_nofork;
 	}
-	else 
+	else
+		_execve = execve_fork;
+	if (cmdl && !builtin_exec(cmdl))
 	{
 		//redirect_ctl
-		if (!builtin_exec(cmdl))
-		{
-			cmdl->name = get_path(cmdl->name);
-			execve_fork(cmdl->name, cmdl->arg, g_sh->envp);
-		}
+		cmdl->name = get_path(cmdl->name);
+		if (NULL == cmdl->name)
+			return ;
+		_execve(cmdl->name, cmdl->arg, g_sh->envp);
 	}
 	_set_sighandlers(SIG_DFL);
 }
