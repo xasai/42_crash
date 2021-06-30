@@ -84,8 +84,11 @@ run: $(NAME)
 bash:
 	bash
 
+#VALFLAGS += --show-leak-kinds=all 
+VALFLAGS += --leak-check=full 
+VALFLAGS += --track-origins=yes
 val: $(NAME)
-	valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes ./$(NAME)
+	valgrind $(VALFLAGS) ./$(NAME)
 
 debug: $(NAME)
 	gdb	./$(NAME)

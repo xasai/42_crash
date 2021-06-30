@@ -49,7 +49,8 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 			tmp = dup2(read_end, STDIN_FILENO);
 			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,tmp);
 		}
-		close(fd_to_close);
+		if (fd_to_close != -1)
+			close(fd_to_close);
 		return (fpid);
 	}
 	else if (fpid == -1)
@@ -57,8 +58,10 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 		print_errno("crash: fork()");
 		return (-1);
 	}
-	close(read_end);
-	close(write_end);
+	if (read_end != -1)
+		close(read_end);
+	if (write_end != -1)
+		close(write_end);
 	return (fpid);
 }
 
@@ -88,5 +91,6 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 	}
 	while (cmd_idx--)
 		_wait(0);
+	free(pipes);
 	return (NULL);
 }

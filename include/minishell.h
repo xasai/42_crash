@@ -40,6 +40,10 @@
 
 # define PROMPT "crash$: "
 
+# ifdef __APPLE__
+void			rl_replace_line (const char *text, int clear_undo);
+# endif /* __APPLE__ */
+
 extern t_shell *g_sh;
 
 /* 			INIT.c				*/
@@ -51,16 +55,17 @@ int				interact(void);
 /*			CRASH_READLINE.c	*/
 char			*crash_readline(void);
 
-# ifdef __APPLE__
-void			rl_replace_line (const char *text, int clear_undo);
-# endif /* __APPLE__ */
-
 /*			ENV.c				*/
 int				getenv_idx(char *name);
 char			*getenv_name(char *varstr);
 char			*crash_getenv(char *name);
 void			crash_setenv(char *name, char *value);
 void			crash_unsetenv(char *name);
+
+/*			FREE.c				*/
+void			cmdlst_free(t_cmdlst *cmdl);
+void			rlst_free(void); //TODO
+
 
 /*			EXIT.c				*/
 void			exit_message(char *message, uint8_t code);

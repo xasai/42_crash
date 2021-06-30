@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 /*
 **=================================================
 ** DESCRIPTION:
@@ -22,7 +22,9 @@ int	interact(void)
 		{
 			cmd = ft_line_analyz(line);
 			cmdline_exec(cmd);
-			print_this_shit(cmd);
+			if (SHOW_DEBUG)
+				print_this_shit(cmd);
+			cmdlst_free(cmd);
 		}
 	}
 }
