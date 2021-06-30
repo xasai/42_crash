@@ -4,9 +4,9 @@
 
 uint8_t	env_builtin(t_cmdlst *cmd)
 {
-	size_t idx;	
-	char **envp;
-	
+	size_t	idx;
+	char	**envp;
+
 	idx = 0;
 	envp = g_sh->envp;
 	while (envp[idx])

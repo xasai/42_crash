@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-static bool is_valid_name(char *name)
+static bool	is_valid_name(char *name)
 {
 	size_t	i;
-	
+
 	i = 0;
 	if (ft_isalpha(name[i]) || name[i] == '_')
 	{
@@ -25,7 +25,7 @@ uint8_t	export_builtin(t_cmdlst *cmd)
 	char	*env_value;
 	char	*env_name;
 	uint8_t	ret;
-	
+
 	ret = RETURN_SUCCESS;
 	argp = cmd->arg + 1;
 	if (NULL == *argp)
@@ -37,7 +37,7 @@ uint8_t	export_builtin(t_cmdlst *cmd)
 			env_name = getenv_name(*argp);
 			env_value = ft_strchr(*argp, '=') + 1;
 			crash_setenv(env_name, env_value);
-			if ((*argp)[4] == '=' && !ft_strncmp(env_name, "PATH", 4)) 
+			if ((*argp)[4] == '=' && !ft_strncmp(env_name, "PATH", 4))
 				rebuild_path();
 			free(env_name);
 		}

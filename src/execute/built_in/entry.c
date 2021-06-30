@@ -39,7 +39,7 @@ static int8_t	is_builtin(char *cmdname)
 */
 bool	builtin_exec(t_cmdlst *cmd)
 {
-	int8_t		builtin_idx;	
+	int8_t			builtin_idx;	
 	static	uint8_t	(*builtin_func[])(t_cmdlst *) = \
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
@@ -50,6 +50,6 @@ bool	builtin_exec(t_cmdlst *cmd)
 		g_sh->exit_status = (*builtin_func[builtin_idx])(cmd);
 		return (1);
 	}
-	else 
+	else
 		return (0);
 }

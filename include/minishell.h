@@ -1,9 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "debug.h"//FIXME
+# include "debug.h"
 # include "struct/s_shell.h"
-# include "struct/s_lsthead.h"
 # include "struct/s_cmdlst.h"
 
 # include "pars.h"
@@ -16,7 +15,7 @@
 
 # include <unistd.h>
 # include <fcntl.h>
-# include <termcap.h> 
+# include <sys/wait.h>
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -27,7 +26,6 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include <errno.h>
-
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
@@ -43,30 +41,29 @@
 void			rl_replace_line (const char *text, int clear_undo);
 # endif /* __APPLE__ */
 
-extern t_shell *g_sh;
+extern t_shell	*g_sh;
 
-/* 			INIT.c				*/
+/* 			init.c				*/
 void			init_sh(char **envp);
 
-/*			INTERACT.c			*/
+/*			interact.c			*/
 int				interact(void);
 
-/*			CRASH_READLINE.c	*/
+/*			crash_readline.c	*/
 char			*crash_readline(void);
 
-/*			ENV.c				*/
+/*			env.c				*/
 int				getenv_idx(char *name);
 char			*getenv_name(char *varstr);
 char			*crash_getenv(char *name);
 void			crash_setenv(char *name, char *value);
 void			crash_unsetenv(char *name);
 
-/*			FREE.c				*/
+/*			free.c				*/
 void			cmdlst_free(t_cmdlst *cmdl);
 void			rlst_free(void); //TODO
 
-
-/*			EXIT.c				*/
+/*			exit.c				*/
 void			exit_message(char *message, uint8_t code);
 void			print_errno(char *message);
 

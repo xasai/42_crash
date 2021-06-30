@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-# define SHOW_DEBUG 0
+#define SHOW_DEBUG 0
+
 /*
 **=================================================
 ** DESCRIPTION:
@@ -8,9 +9,9 @@
 **	and will clear our old **char array of paths and change it with
 **	new array of strings spliting $PATH value by ':' semicolon.
 */
-void rebuild_path()
+void	rebuild_path(void)
 {
-	char *env_path;
+	char	*env_path;
 
 	DEBUG("Rebuilding path\n");
 	free_tab((void *)g_sh->path);

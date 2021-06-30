@@ -1,4 +1,4 @@
-#include "exec.h"
+#include "minishell.h"
 
 #define SHOW_DEBUG 0
 
@@ -8,7 +8,7 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 	signal(SIGQUIT, sighandler);
 }
 
-void _sig_wait(int signum)
+void	_sig_wait(int signum)
 {
 	g_sh->exit_status = 0x80 + signum;
 	_set_sighandlers(SIG_DFL);
@@ -19,7 +19,7 @@ void _sig_wait(int signum)
 	wait(0);
 }
 
-static void	execve_fork(char *path, char **args, char **envp)
+static void	_execve_fork(char *path, char **args, char **envp)
 {
 	pid_t	pid;
 
@@ -35,7 +35,7 @@ static void	execve_fork(char *path, char **args, char **envp)
 	_wait(pid);
 }
 
-static void	execve_nofork(char *path, char **args, char **envp)
+static void	_execve_nofork(char *path, char **args, char **envp)
 {
 	if (execve(path, args, envp))
 	{
@@ -52,13 +52,13 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	if (cmdl->sepch == '|')
 	{
 		cmdl = pipe_ctl(cmdl);
-		_execve = execve_nofork;
+		_execve = _execve_nofork;
 	}
 	else
-		_execve = execve_fork;
+		_execve = _execve_fork;
 	if (cmdl && !builtin_exec(cmdl))
 	{
-		//redirect_ctl
+		redirect_ctl(cmdl);
 		cmdl->name = get_path(cmdl->name);
 		if (NULL == cmdl->name)
 			return ;

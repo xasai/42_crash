@@ -22,6 +22,4 @@ char		*substr_ignore(char const *s, unsigned int start, \
 
 char		*strreplace(char *line, int start, int end, char *substr);
 
-void		print_this_shit(t_cmdlst *l); //FIXME
-
 #endif /* PARS_H */

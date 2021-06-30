@@ -114,6 +114,6 @@ void	init_sh(char **envp)
 	g_sh->prompt = _prompt();
 	g_sh->saved_stdout = dup(STDOUT_FILENO);
 	g_sh->saved_stdin = dup(STDIN_FILENO);
-	if (g_sh->saved_stdout == -1 || g_sh->saved_stdin== -1)
+	if (g_sh->saved_stdout == -1 || g_sh->saved_stdin == -1)
 		exit_message("crash: dup() ", SYS_ERROR);
 }

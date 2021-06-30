@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 
-static int _new_out(char *filename, bool append)
+static int _output_dup(char *filename, bool append)
 {
 	int		flags;
 	int		out_fd;	
@@ -17,7 +17,10 @@ static int _new_out(char *filename, bool append)
 		print_errno("crash: ");
 	return (dup2(out_fd, STDOUT_FILENO));//TODO Check on -1
 }
-void	_void()
+
+void	redirect_ctl(t_cmdlst *cmd)
 {
-	_new_out(NULL, 0);
+	if (1 == '+' || 1 == '>')
+		_output_dup(NULL, false);
+	(void)cmd;
 }

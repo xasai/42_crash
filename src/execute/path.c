@@ -2,7 +2,7 @@
 
 #define SHOW_DEBUG 0
 
-/*		
+/*
 **=================================================
 ** DESCRIPTION: 
 **	is_path takes char * argument and
@@ -56,8 +56,8 @@ static char	*search_path(char *pathname)
 	char	**env_path;
 
 	idx = 0;
-	DEBUG("$PATH = \"%s\"\n", crash_getenv("PATH"));
-	DEBUG("pathame = \"%s\"\n", pathname);
+	DEBUG("$PATH=\"%s\"\n", crash_getenv("PATH"));
+	DEBUG("pathame=\"%s\"\n", pathname);
 	env_path = g_sh->path;
 	while (env_path[idx])
 	{
@@ -77,6 +77,7 @@ static char	*search_path(char *pathname)
 	}
 	return (NULL);
 }
+
 /*		
 **=================================================
 ** DESCRIPTION: 
@@ -92,16 +93,16 @@ static char	*search_path(char *pathname)
 */
 char	*get_path(char *arg0)
 {
-	char *abs_path;
+	char	*abs_path;
 
-	if (is_path(arg0))
+	if (NULL == arg0 || is_path(arg0))
 		return (arg0);
 	abs_path = search_path(arg0);
 	if (!abs_path)
 	{
 		putstr_fd(arg0, STDERR_FILENO);
 		putstr_fd(": command not found\n", STDERR_FILENO);
-		g_sh->exit_status = 0x7f;	
+		g_sh->exit_status = 0x7f;
 		free(arg0);
 		return (NULL);
 	}

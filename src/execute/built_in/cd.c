@@ -27,4 +27,3 @@ uint8_t	cd_builtin(t_cmdlst *cmd)
 		return (_error(path));
 	return (RETURN_SUCCESS);
 }
-

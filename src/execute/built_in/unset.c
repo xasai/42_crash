@@ -16,9 +16,9 @@ uint8_t	unset_builtin(t_cmdlst *cmd)
 			DEBUG("NAME %s\n", cmd->arg[arg_idx]);
 			crash_unsetenv(cmd->arg[arg_idx]);
 			if (!ft_strncmp(cmd->arg[arg_idx], "PATH", 5))
-				rebuild_path();	
+				rebuild_path();
 		}
-		arg_idx++;	
+		arg_idx++;
 	}
 	return (EXIT_SUCCESS);
 }

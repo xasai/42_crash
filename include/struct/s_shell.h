@@ -1,7 +1,7 @@
 #ifndef S_SHELL_H
 # define S_SHELL_H
 
-#include <stdint.h>
+# include <stdint.h>
 
 typedef struct s_shell
 {
