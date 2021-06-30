@@ -8,7 +8,8 @@ typedef struct s_shell
 	char	*prompt;
 	char	**envp;
 	char	**path;
-	int		cpid;
+	int		saved_stdin;
+	int		saved_stdout;
 	uint8_t	exit_status;
 }			t_shell;
 

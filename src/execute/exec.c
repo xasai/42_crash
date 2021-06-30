@@ -32,7 +32,6 @@ static void	execve_fork(char *path, char **args, char **envp)
 		if (execve(path, args, envp))
 			exit_message(path, SYS_ERROR);
 	}
-	g_sh->cpid = pid;
 	_wait(pid);
 }
 
@@ -44,8 +43,6 @@ static void	execve_nofork(char *path, char **args, char **envp)
 		exit(EXIT_FAILURE);
 	}
 }
-
-t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
@@ -62,7 +59,7 @@ void	cmdline_exec(t_cmdlst *cmdl)
 			execve_nofork(pipe_cmd->name, pipe_cmd->arg, g_sh->envp);
 		}
 	}
-	else
+	else 
 	{
 		//redirect_ctl
 		if (!builtin_exec(cmdl))

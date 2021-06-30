@@ -11,7 +11,7 @@ void		cmdline_exec(t_cmdlst *cmdlst);
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
 /*				redirect/ctl.c */
-void		redirect_ctl();
+int			redirect_ctl(t_cmdlst *cmdl);
 
 /*				rebuild_path.c			*/
 void		rebuild_path(void);

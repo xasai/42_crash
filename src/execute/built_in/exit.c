@@ -24,12 +24,12 @@ uint8_t	exit_builtin(t_cmdlst *cmd)
 		{
 			putstr_fd("g_sh: exit: ", STDERR_FILENO);
 			putstr_fd(arg, STDERR_FILENO);
-			exit_message(": numeric argument required", BUILTIN_ERROR);
+			exit_message(": numeric argument required", BUILTIN_FAILURE);
 		}		
 		if (cmd->arg[2])
 		{
 			putstr_fd("g_sh: exit: too many arguments\n", STDERR_FILENO);
-			return (BUILTIN_ERROR);
+			return (BUILTIN_FAILURE);
 		}		
 		exit_code = ft_atoi(cmd->arg[1]);
 	}

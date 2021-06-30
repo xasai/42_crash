@@ -1,10 +1,11 @@
 #ifndef PARS_H
 #define PARS_H
 
-//# define DQUOT_CH	-3 
-//# define QUOT_CH	-4
+#include <stdbool.h>
+
 # define DQUOT_CH	-('\"')
 # define QUOT_CH	-('\'')
+
 
 t_cmdlst	*ft_line_analyz(char *line);
 
@@ -21,7 +22,6 @@ char		*substr_ignore(char const *s, unsigned int start, \
 
 char		*strreplace(char *line, int start, int end, char *substr);
 
-////////////////////////////////////////////////////////////////////////
-void		print_this_shit(t_cmdlst *l);
+void		print_this_shit(t_cmdlst *l); //FIXME
 
 #endif /* PARS_H */

@@ -2,10 +2,14 @@
 # define MINISHELL_H
 
 # include "debug.h"//FIXME
-
 # include "struct/s_shell.h"
 # include "struct/s_lsthead.h"
 # include "struct/s_cmdlst.h"
+
+# include "pars.h"
+# include "exec.h"
+# include "libft.h"
+# include "builtin.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -22,13 +26,8 @@
 # include <stdbool.h>
 # include <stdint.h>
 # include <sys/types.h>
-
 # include <errno.h>
 
-# include "pars.h"
-# include "exec.h"
-# include "libft.h"
-# include "builtin.h"
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1

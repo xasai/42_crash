@@ -47,7 +47,7 @@ bool	builtin_exec(t_cmdlst *cmd)
 	builtin_idx = is_builtin(cmd->name);
 	if (builtin_idx >= 0)
 	{
-		(*builtin_func[builtin_idx])(cmd);
+		g_sh->exit_status = (*builtin_func[builtin_idx])(cmd);
 		return (1);
 	}
 	else 
