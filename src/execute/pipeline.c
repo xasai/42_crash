@@ -8,7 +8,7 @@ typedef int (*t_pipes)[2];
 inline static void	_close(int fd)
 {
 	if (fd != -1)
-		close(fd)
+		close(fd);
 }
 
 //TODO case  when pipe is unclosed

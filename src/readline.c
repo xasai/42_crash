@@ -8,6 +8,7 @@ static void _int_handler(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	g_sh->exit_status = 0x80 + signum;
 }
 
 static void	_set_sighandlers(void)

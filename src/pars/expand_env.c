@@ -24,7 +24,10 @@ void	expand_env(char **line, int start, int env_flag)
 	free_line = *line;
 	var_len = env_len(&(*line)[start + 1]);
 	var_name = ft_substr(*line, start + 1, var_len);
-	var_substr = crash_getenv(var_name);
+	if (var_name[0] == '?' && !var_name[1])
+		var_substr = ft_itoa(g_sh->exit_status);
+	else 
+		var_substr = crash_getenv(var_name);
 	free(var_name);
 	*line = strreplace(*line, start, start + var_len, var_substr);
 	if (env_flag > 1)
