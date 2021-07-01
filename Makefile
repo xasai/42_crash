@@ -94,6 +94,7 @@ bash:
 
 VALFLAGS += --leak-check=full 
 VALFLAGS += --track-origins=yes
+VALFLAGS += --trace-children=yes
 #VALFLAGS += --show-leak-kinds=all 
 val: $(NAME)
 	valgrind $(VALFLAGS) ./$(NAME)
