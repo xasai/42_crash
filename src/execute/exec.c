@@ -9,23 +9,33 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 }
 
 
-static void	_execve_fork(char *path, char **args, char **envp)
+static void	_execve_fork(t_cmdlst *cmdl)
 {
 	pid_t	pid;
 
+	if (builtin_exec(cmdl))
+		return ;
+	cmdl->name = get_path(cmdl->name);
+	if (NULL == cmdl->name)
+		return ;
 	pid = fork();
 	if (pid < 0)
 		print_errno("crash: fork()");
-	else if (pid == 0 && execve(path, args, envp))
-		exit_message(path, SYS_ERROR);
+	else if (pid == 0 && execve(cmdl->name, cmdl->arg, g_sh->envp))
+		exit_message(cmdl->name, SYS_ERROR);
 	_wait(pid);
 }
 
-static void	_execve_nofork(char *path, char **args, char **envp)
+static void	_execve_nofork(t_cmdlst *cmdl)
 {
-	if (execve(path, args, envp))
+	if (builtin_exec(cmdl))
+		exit(g_sh->exit_status);
+	cmdl->name = get_path(cmdl->name);
+	if (NULL == cmdl->name)
+		return ;
+	if (execve(cmdl->name, cmdl->arg, g_sh->envp))
 	{
-		print_errno(path);
+		print_errno(cmdl->name);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -40,7 +50,7 @@ void	_sig_wait(int signum)
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
-	void		(*_execve)(char*, char **, char**);
+	void		(*_execve)(t_cmdlst *);
 
 	_set_sighandlers(_sig_wait);
 	if (cmdl->sepch == '|')
@@ -50,13 +60,10 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	}
 	else
 		_execve = _execve_fork;
-	if (cmdl && !builtin_exec(cmdl))
+	if (cmdl)
 	{
 		redirect_ctl(cmdl);
-		cmdl->name = get_path(cmdl->name);
-		if (NULL == cmdl->name)
-			return ;
-		_execve(cmdl->name, cmdl->arg, g_sh->envp);
+		_execve(cmdl);
 	}
 	_set_sighandlers(SIG_DFL);
 	if (g_sh->exit_status == SIGQUIT + 0x80)

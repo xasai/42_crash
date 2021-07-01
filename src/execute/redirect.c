@@ -32,18 +32,20 @@ void	redirect_ctl(t_cmdlst *cmd)
 {
 	int			err;
 	char		type;
+	char		*filename;
 	t_redir_lst *redir_lst;
 	
 	redir_lst = cmd->rlst;
 	while (redir_lst)
 	{
 		type = redir_lst->type;
+		filename = redir_lst->filename;
 		if (type == '-')
-			err = _input_dup(NULL);
+			err = _input_dup(filename);
 		else if (type == '>')
-			err = _output_dup(NULL, false);
+			err = _output_dup(filename, false);
 		else if (type == '+')
-			err = _output_dup(NULL, true);
+			err = _output_dup(filename, true);
 		if (err)
 			print_errno("crash: ");
 		redir_lst = redir_lst->next;
