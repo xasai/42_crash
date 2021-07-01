@@ -34,14 +34,6 @@ CFLAGS += -g3
 #CLFAGS += -fsanitize=address 
 ############################################################################################
 
-ifeq ($(MAKECMDGOALS),clean)
-# doing clean, so dont make deps.
-DEPFILES=
-else
-# doing build, so make deps.
-DEPFILES := $(OBJ:.o=.d)
--include $(DEPFILES)
-endif
 all: $(NAME)
 
 echo:
@@ -52,6 +44,14 @@ $(NAME): $(OBJPATH) $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
 	@echo "\n===========>\t$(NAME) Successfully compiled [+]"
 	@echo -n $(RESET)
+
+ifeq ($(MAKECMDGOALS),clean)
+# doing clean, so dont make deps.
+DEPFILES=
+else
+DEPFILES := $(OBJ:.o=.d)
+-include $(DEPFILES)
+endif
 
 $(OBJPATH)/%.o: %.c
 	@echo -n $(GREEN)
@@ -83,7 +83,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: $(DEPPATH) run re fclean clean all
+.PHONY: run re fclean clean all
 
 ############################################################################################
 run: $(NAME) 

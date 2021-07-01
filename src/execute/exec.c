@@ -8,16 +8,6 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 	signal(SIGQUIT, sighandler);
 }
 
-void	_sig_wait(int signum)
-{
-	g_sh->exit_status = 0x80 + signum;
-	_set_sighandlers(SIG_DFL);
-	if (signum == SIGQUIT)
-		write(STDOUT_FILENO, "Quit\n", 5);
-	else
-		write(STDOUT_FILENO, "\n", 1);
-	wait(0);
-}
 
 static void	_execve_fork(char *path, char **args, char **envp)
 {
@@ -25,13 +15,9 @@ static void	_execve_fork(char *path, char **args, char **envp)
 
 	pid = fork();
 	if (pid < 0)
-		print_errno("fork()");
-	else if (pid == 0)
-	{
-		_set_sighandlers(SIG_DFL);
-		if (execve(path, args, envp))
-			exit_message(path, SYS_ERROR);
-	}
+		print_errno("crash: fork()");
+	else if (pid == 0 && execve(path, args, envp))
+		exit_message(path, SYS_ERROR);
 	_wait(pid);
 }
 
@@ -43,6 +29,14 @@ static void	_execve_nofork(char *path, char **args, char **envp)
 		exit(EXIT_FAILURE);
 	}
 }
+
+void	_sig_wait(int signum)
+{
+	_set_sighandlers(_sig_wait);
+	_wait(0);
+	g_sh->exit_status = 0x80 + signum;
+}
+
 
 void	cmdline_exec(t_cmdlst *cmdl)
 {
@@ -65,4 +59,8 @@ void	cmdline_exec(t_cmdlst *cmdl)
 		_execve(cmdl->name, cmdl->arg, g_sh->envp);
 	}
 	_set_sighandlers(SIG_DFL);
+	if (g_sh->exit_status == SIGQUIT + 0x80)
+		putstr_fd("Quit\n", STDOUT_FILENO);
+	else if (g_sh->exit_status == SIGINT + 0x80)
+		ft_putchar('\n');
 }

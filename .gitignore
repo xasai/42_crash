@@ -3,6 +3,7 @@ local_env
 local_env_sorted
 cmake-build-debug
 sort_env.sh
+*.d
 *.o
 *.a
 *.out
