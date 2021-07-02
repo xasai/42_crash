@@ -32,7 +32,7 @@ static void	_execve_nofork(t_cmdlst *cmdl)
 		exit(g_sh->exit_status);
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
-		return ;
+		exit(g_sh->exit_status);
 	if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
 	{
 		print_errno(cmdl->pathname);
