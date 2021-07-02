@@ -2,6 +2,8 @@
 #define PARS_H
 
 #include <stdbool.h>
+#include "struct/s_cmdlst.h"
+#include "libft.h"
 
 # define DQUOT_CH	-('\"')
 # define QUOT_CH	-('\'')
@@ -15,11 +17,18 @@ void		expand_env(char **line, int start, int env_flag);
 
 size_t		get_sepch(char *line, t_cmdlst *cmdl);
 
-char		**lineptrjoin(char **ptr, char *line, bool free_flag);
+char		**lineptrjoin(char **ptr, char *line);
 
-char		*substr_ignore(char const *s, unsigned int start, \
+char		*substr_ignore(char const *s, unsigned int start_idx, \
 						size_t len, const char *sep);
 
 char		*strreplace(char *line, int start, int end, char *substr);
+
+
+void		print_this_shit(t_cmdlst *l); //FIXME
+
+size_t      sstrlen(char *s, char *ignored, size_t start, size_t end);
+
+void        skip_spasech(char **line);
 
 #endif /* PARS_H */

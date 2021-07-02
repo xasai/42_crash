@@ -25,12 +25,12 @@
 		while(l)\
 		{\
 			i = 0;\
-			fprintf(stderr, "execve(\"%s\", [", l->name);\
-			while (l->arg[i])\
+			fprintf(stderr, "execve(\"%s\", [", l->pathname);\
+			while (l->args[i])\
 			{\
 				if (i)\
 					fprintf(stderr, ", ");\
-				fprintf(stderr, "\"%s\"", l->arg[i++]);\
+				fprintf(stderr, "\"%s\"", l->args[i++]);\
 			}\
 			fprintf(stderr, "], **envp)\n");\
 			if (l->sepch == '|')\

@@ -27,7 +27,7 @@ uint8_t	export_builtin(t_cmdlst *cmd)
 	uint8_t	ret;
 
 	ret = RETURN_SUCCESS;
-	argp = cmd->arg + 1;
+	argp = cmd->args + 1;
 	if (NULL == *argp)
 		return (env_builtin(cmd));
 	while (*argp)

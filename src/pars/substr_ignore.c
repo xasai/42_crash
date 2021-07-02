@@ -11,29 +11,27 @@ unsigned int	strlen_ignore(char const *s, const char *sep)
 	return (count);
 }
 
-char	*substr_ignore(char const *s, unsigned int start, size_t len, const char *sep)
+char	*substr_ignore(char const *s, unsigned int start_idx, size_t len, const char *sep)
 {
-	int		i;
-	char	*new;
+    size_t      i;
+	size_t      sub_len;
+	char        *new;
 
-	if (!s) // Стоит ли ? + Стоит предерживаться одинакового стиля проверки на NULL
-		return (NULL);
 	i = 0;
-	if (strlen_ignore(s, sep) < start)
-		return (ft_strdup(""));
-	//выделяется лишняя память если len + start вываливается за пределы s
+	//if (strlen_ignore(s, sep) < start_idx)
+	//	return (ft_strdup(""));
+	sub_len = strlen_ignore(s, sep);
+	if(len > sub_len)
+	    len = sub_len;
+	//выделяется лишняя память если len + start_idx вываливается за пределы s
 	new = malloc(sizeof(char) * (len + 1));
 	if (new == NULL)
 		return (NULL);
-	while (s[start] && len--)
+	while (s[start_idx] && len--)
 	{
-		//malloc не занулит память которую выделяет
-		//и в каждом чаре который надо заигнорить может лежать 
-		//любое значение от 0 до 255.
-		// FIXME
-		if (!ft_strchr(sep, s[start]))
-			new[i++] = s[start];
-		++start;
+		if (!ft_strchr(sep, s[start_idx]))
+			new[i++] = s[start_idx];
+		++start_idx;
 	}
 	new[i] = '\0';
 	return (new);
