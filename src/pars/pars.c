@@ -31,10 +31,10 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
 {
     size_t  envvalue_len;
     size_t  envkey_len;
-    bool    qout_flag[2];
+    size_t  tmp;
+    bool    *qout_flag;
 
-    qout_flag[0] = false;
-    qout_flag[1] = false;
+    qout_flag = (bool [2]){0};
     envvalue_len = 0;
     envkey_len = 0;
     while ((line[*arg_len] && (qout_flag[0] || qout_flag[1]))
@@ -47,13 +47,14 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
         else if (line[*arg_len] == '$' && !qout_flag[0])
         {
             line[*arg_len] = DOLLAR_CH;
-            envkey_len += get_envkey_len(&line[*arg_len]);
-            envvalue_len += get_envvalue_len(&line[*arg_len], envkey_len);
-            *arg_len += envkey_len - 1;
+            tmp = get_envkey_len(&line[*arg_len]);
+            envkey_len += tmp;
+            envvalue_len += get_envvalue_len(&line[*arg_len], tmp);
+            *arg_len += tmp - 1;
         }
         ++*arg_len;
     }
-    return (*arg_len - envkey_len + envvalue_len);
+    return ((*arg_len + envvalue_len) - envkey_len );
 }
 
 
@@ -121,7 +122,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
             i += (int)envvalue_len;
             j += (int)envkey_len - 1;
         }
-        else if(line[j] != DQUOT_CH && line[j] != QUOT_CH)
+        else if(!ft_strchr((char [3]) {DOLLAR_CH, QUOT_CH, DQUOT_CH}, line[j]))
             buffer[i++] = line[j];
         ++j;
     }
