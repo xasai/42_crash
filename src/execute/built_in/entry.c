@@ -33,7 +33,7 @@ static int8_t	is_builtin(char *cmdname)
 /*
 *==============================================================================
 ** DESCRIPTION:
-**	Check if cmd->name is in builtin list and execute this builtin
+**	Check if cmd->pathname is in builtin list and execute this builtin
 **	if it is there. And then return 1.
 **	Otherwise return 0.
 */
@@ -44,7 +44,7 @@ bool	builtin_exec(t_cmdlst *cmd)
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
 
-	builtin_idx = is_builtin(cmd->name);
+	builtin_idx = is_builtin(cmd->pathname);
 	if (builtin_idx >= 0)
 	{
 		g_sh->exit_status = (*builtin_func[builtin_idx])(cmd);

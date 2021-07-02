@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 /*
 **=================================================

@@ -8,18 +8,18 @@ execute_process (
         COMMAND bash -c "env > local_env"
         )
 
+AUX_SOURCE_DIRECTORY(src/ SRC)
+AUX_SOURCE_DIRECTORY(src/env/ ENV_SRC)
 AUX_SOURCE_DIRECTORY(src/execute/ EXECUTE_SRC)
-AUX_SOURCE_DIRECTORY(src/execute/built_in BUILT_SRC)
-set(SRC src/exit.c src/env.c src/init.c src/interact.c src/main.c src/readline.c
-        src/pars/pars.c src/pars/lineptrjoin.c src/pars/substr_ignore.c
-        src/pars/strreplace.c)
+AUX_SOURCE_DIRECTORY(src/execute/built_in/ BUILT_SRC)
+AUX_SOURCE_DIRECTORY(src/pars/ PARS_SRC)
 
 set(HDR_PATH ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/lib/libft/include)
 set(SRC_PATH ${PROJECT_SOURCE_DIR}/src)
 set(GCC_FLAGS "-Wall -Wextra -Werror -ltermcap")
 
 add_executable( minishell
-        ${SRC} ${BUILT_SRC} ${EXECUTE_SRC}
+        ${SRC} ${ENV_SRC} ${EXECUTE_SRC} ${BUILT_SRC} ${PARS_SRC}
         )
 
 ##FIND TERMCAP

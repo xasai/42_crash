@@ -5,8 +5,8 @@
 
 typedef struct s_cmdlst
 {
-	char			*name;
-	char			**arg;
+	char			*pathname;
+	char			**args;
 	char			sepch;
 	t_redir_lst		*rlst;
 	struct s_cmdlst	*next;

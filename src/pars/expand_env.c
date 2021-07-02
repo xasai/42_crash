@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-static int	env_len(char *line)
+int	get_envkey_len(char *line)
 {
-	int var_len;
+	int envkey_len;
 
-	var_len = 0;
-	if (ft_isalpha(line[var_len]) || line[var_len] == '_')
-		++var_len;
-	else if (line[var_len] == '?')
+    envkey_len = 0;
+	if (ft_isalpha(line[envkey_len]) || line[envkey_len] == '_')
+		++envkey_len;
+	else if (line[envkey_len] == '?')
 		return (1);
-	while(ft_isalnum(line[var_len]) || line[var_len] == '_')
-		++var_len;
-	return (var_len);
+	while(ft_isalnum(line[envkey_len]) || line[envkey_len] == '_')
+		++envkey_len;
+	return (envkey_len);
 }
 
 void	expand_env(char **line, int start, int env_flag)
@@ -22,7 +22,7 @@ void	expand_env(char **line, int start, int env_flag)
 	char	*free_line;
 
 	free_line = *line;
-	var_len = env_len(&(*line)[start + 1]);
+	var_len = get_envkey_len(&(*line)[start + 1]);
 	var_name = ft_substr(*line, start + 1, var_len);
 	if (var_name[0] == '?' && !var_name[1])
 		var_substr = ft_itoa(g_sh->exit_status);
