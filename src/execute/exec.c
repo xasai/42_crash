@@ -15,7 +15,7 @@ static void	_execve_fork(t_cmdlst *cmdl)
 
 	if (builtin_exec(cmdl))
 		return ;
-	cmdl->name = get_path(cmdl->name);
+	cmdl->name = get_path(cmdl->arg[0]);
 	if (NULL == cmdl->name)
 		return ;
 	pid = fork();
@@ -30,7 +30,7 @@ static void	_execve_nofork(t_cmdlst *cmdl)
 {
 	if (builtin_exec(cmdl))
 		exit(g_sh->exit_status);
-	cmdl->name = get_path(cmdl->name);
+	cmdl->name = get_path(cmdl->arg[0]);
 	if (NULL == cmdl->name)
 		return ;
 	if (execve(cmdl->name, cmdl->arg, g_sh->envp))
@@ -62,12 +62,12 @@ void	cmdline_exec(t_cmdlst *cmdl)
 		_execve = _execve_fork;
 	if (cmdl)
 	{
-		redirect_ctl(cmdl);
+		redirect_ctl(cmdl);// TODO ERROR
 		_execve(cmdl);
 	}
 	_set_sighandlers(SIG_DFL);
 	if (g_sh->exit_status == SIGQUIT + 0x80)
-		putstr_fd("Quit\n", STDOUT_FILENO);
+		putstr_fd("^Quit\n", STDOUT_FILENO);
 	else if (g_sh->exit_status == SIGINT + 0x80)
-		ft_putchar('\n');
+		putstr_fd("^C\n", STDOUT_FILENO);
 }

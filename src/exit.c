@@ -16,5 +16,5 @@ void	print_errno(char *message)
 	putstr_fd(message, STDERR_FILENO);
 	str_error = strerror(errno);
 	putstr_fd(": ", STDERR_FILENO);
-	putendl_fd(str_error, STDERR_FILENO);
+	putstr_fd(str_error, STDERR_FILENO);
 }

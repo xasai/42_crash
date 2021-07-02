@@ -2,6 +2,12 @@
 
 t_shell	*g_sh;
 
+static void setup_term(void) {
+    struct termios t;
+    tcgetattr(0, &t);
+    t.c_lflag &= ~ECHOCTL;
+    tcsetattr(0, TCSANOW, &t);
+}
 /*
 **=================================================
 ** DESCRIPTION:
@@ -106,6 +112,7 @@ char	**_path(void)
 */
 void	init_sh(char **envp)
 {
+	setup_term();
 	g_sh = malloc(sizeof(*g_sh));
 	if (NULL == g_sh)
 		exit_message("Memory allocation failure", SYS_ERROR);

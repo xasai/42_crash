@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 0
+#define SHOW_DEBUG 1
 
 /*
 **=================================================
@@ -68,7 +68,6 @@ static char	*search_path(char *pathname)
 		DEBUG("Searching %s in %s[%lu] ...\n", abs_path, env_path[idx], idx);
 		if (is_exist(abs_path))
 		{
-			free(pathname);
 			DEBUG("SUCCESS\n");
 			return (abs_path);
 		}
@@ -81,10 +80,9 @@ static char	*search_path(char *pathname)
 /*		
 **=================================================
 ** DESCRIPTION: 
-**	get_path takes arg0 given to our shell.If it has slash character
+**	get_path takes arg0 given to our shell. If it has slash character
 **	arg0 will be returned. If there's no slash in arg0, get_path will
-**	try to find arg0 file in PATH env variable. If such file was found
-**	arg0 is freed, and new path to file is returned
+**	try to find arg0 file in PATH env variable.
 **
 ** RETURN VALUE:
 **	Path to file
@@ -95,15 +93,16 @@ char	*get_path(char *arg0)
 {
 	char	*abs_path;
 
-	if (NULL == arg0 || is_path(arg0))
-		return (arg0);
+	if (NULL == arg0)
+		return (NULL);
+	if (is_path(arg0))
+		return (ft_strdup(arg0));
 	abs_path = search_path(arg0);
 	if (!abs_path)
 	{
 		putstr_fd(arg0, STDERR_FILENO);
-		putstr_fd(": command not found\n", STDERR_FILENO);
+		putendl_fd(": command not found", STDERR_FILENO);
 		g_sh->exit_status = 0x7f;
-		free(arg0);
 		return (NULL);
 	}
 	return (abs_path);

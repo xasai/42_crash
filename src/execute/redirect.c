@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+inline static bool	_error(char *filename)
+{
+	print_errno("crash:");
+	putendl_fd(filename, STDERR_FILENO);
+	return (true);
+}
 
 static int _output_dup(char *filename, bool append)
 {
@@ -14,7 +20,7 @@ static int _output_dup(char *filename, bool append)
 	out_fd = open(filename, flags, perm);
 	if (!out_fd)
 		return (1);
-	return (dup2(out_fd, STDOUT_FILENO) < 0);
+	return (dup2(out_fd, STDOUT_FILENO) == -1);
 }
 
 static	int _input_dup(char *filename)
@@ -24,11 +30,10 @@ static	int _input_dup(char *filename)
 	input_fd = open(filename, O_RDONLY);
 	if (!input_fd)
 		return (1);
-	return (dup2(input_fd, STDIN_FILENO) < 0);
+	return (dup2(input_fd, STDIN_FILENO) == -1);
 }
 
-//TODO HEREDOC
-void	redirect_ctl(t_cmdlst *cmd)
+bool	redirect_ctl(t_cmdlst *cmd)
 {
 	int			err;
 	char		type;
@@ -42,13 +47,15 @@ void	redirect_ctl(t_cmdlst *cmd)
 		filename = redir_lst->filename;
 		if (type == '-')
 			err = _input_dup(filename);
+		else if (type == '-')
+			err = _input_dup(filename);
 		else if (type == '>')
 			err = _output_dup(filename, false);
 		else if (type == '+')
 			err = _output_dup(filename, true);
 		if (err)
-			print_errno("crash: ");
+			return (_error(filename));
 		redir_lst = redir_lst->next;
 	}
-	(void)cmd;
+	return (false);
 }
