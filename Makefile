@@ -28,7 +28,7 @@ INC := -Iinclude/ -Ilib/libft/include
 #| |__| | | |____  | |____ 
  #\_____|  \____|  \_____|
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror --std=c99 -D_POSIX_SOURCE -MMD
+CFLAGS := -Wall -Wextra -Werror --std=c99 -D_POSIX_SOURCE -MMD -MP
 CFLAGS += -g3
 #CFLAGS += -Ofast
 #CLFAGS += -fsanitize=address 
