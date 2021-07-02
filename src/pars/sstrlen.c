@@ -16,7 +16,7 @@ size_t sstrlen(char *s, char *ignored, size_t start, size_t end)
     if (start > end)
         return (0);
     while (s[start] && start != end)
-        if (!ft_strchr(ignored, s[start]))
+        if (!ft_strchr(ignored, s[start++]))
             ++count;
     return (count);
 }

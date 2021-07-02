@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 0
+#define SHOW_DEBUG 1
 
 size_t	get_envkey_len(char *line);
 
@@ -56,6 +56,20 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
     return (*arg_len - envkey_len + envvalue_len);
 }
 
+size_t get_qoutcount(char *line, size_t arg_len)
+{
+    size_t count;
+
+    count = 0;
+    while(*line && arg_len--)
+    {
+        if(*line == DQUOT_CH || *line == QUOT_CH)
+            ++count;
+        ++line;
+    }
+    return (count);
+}
+
 static char *get_argbuf(char *line, size_t *arg_len)
 {
     char    *buffer;
@@ -63,8 +77,8 @@ static char *get_argbuf(char *line, size_t *arg_len)
     size_t  argbuflen_withqout;
 
     argbuflen_withqout = get_argbuflen_withquot(line, arg_len);
-    qout_count = sstrlen(line, (char [2]){ DQUOT_CH, QUOT_CH},0, *arg_len);
-    buffer = ft_calloc(argbuflen_withqout - qout_count, sizeof(char));
+    qout_count = get_qoutcount(line, *arg_len);
+    buffer = ft_calloc(argbuflen_withqout - qout_count + 1, sizeof(char));
     if (buffer == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
     return (buffer);
@@ -95,7 +109,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
 
     i = 0;
     j = 0;
-    while (j <= arg_len)
+    while (j < arg_len)
     {
         if(line[i] == '$')
         {
@@ -105,7 +119,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
             i += (int)envvalue_len;
             j += (int)envkey_len;
         }
-        else if(line[i] != DQUOT_CH && line[i] != QUOT_CH)
+        else if(line[j] != DQUOT_CH && line[j] != QUOT_CH)
             buffer[i++] = line[j];
         ++j;
     }
@@ -128,16 +142,17 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
 
 	while(*line)
     {
+	    arg_len = 0;
 	    skip_spasech(&line);
 	    arg = get_shellarg(&line, &arg_len);
         skip_spasech(&line);
 	    sep_len = get_sepch(&line[arg_len], cmdl);
         if (!cmdl->pathname)
-            cmdl->pathname = arg;
+            cmdl->pathname = ft_strdup(arg);
         cmdl->args = lineptrjoin(cmdl->args, arg);
         if (sep_len)
             cmdl = add_newl(cmdl);
-            DEBUG("arg_len = %d\n", (int)arg_len);
+        //DEBUG("arg_len = %d\n", (int)arg_len);
         line += arg_len + sep_len;
 	}
 }
