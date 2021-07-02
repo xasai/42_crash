@@ -4,6 +4,7 @@ inline static bool	_error(char *filename)
 {
 	print_errno("crash:");
 	putendl_fd(filename, STDERR_FILENO);
+	g_sh->exit_status = BUILTIN_FAILURE; 
 	return (true);
 }
 

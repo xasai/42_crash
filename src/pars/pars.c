@@ -33,8 +33,6 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
     size_t  envkey_len;
     bool    qout_flag[2];
 
-    qout_flag[0] = false;
-    qout_flag[1] = false;
     envvalue_len = 0;
     envkey_len = 0;
     while ((line[*arg_len] && (qout_flag[0] || qout_flag[1]))
