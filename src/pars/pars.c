@@ -16,15 +16,14 @@ size_t get_envvalue_len(char *line, size_t envkey_len)
     char    *envvalue;
     char    *envkey;
 
-    envkey = ft_substr(line, 0, envkey_len);
+    envkey = ft_substr(line, 1, envkey_len - 1);
     if (envkey == NULL)
-        exit_message("Memory allocation failure",SYS_ERROR);
+        exit_message("Memory allocation failure", SYS_ERROR);
     envvalue = crash_getenv(envkey);
     if (envvalue == NULL)
         return (0);
     envvalue_len = ft_strlen(envvalue);
     free(envkey);
-    free(envvalue);
     return (envvalue_len);
 }
 
@@ -47,14 +46,16 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
             wq_fc(&line[*arg_len], &qout_flag[0]);
         else if (line[*arg_len] == '$' && !qout_flag[0])
         {
+            line[*arg_len] = DOLLAR_CH;
             envkey_len += get_envkey_len(&line[*arg_len]);
             envvalue_len += get_envvalue_len(&line[*arg_len], envkey_len);
-            *arg_len += envkey_len;
+            *arg_len += envkey_len - 1;
         }
         ++*arg_len;
     }
     return (*arg_len - envkey_len + envvalue_len);
 }
+
 
 size_t get_qoutcount(char *line, size_t arg_len)
 {
@@ -91,13 +92,14 @@ void copy_env(char *buffer, char *line)
     char    *envkey;
 
     envkey_len = get_envkey_len(line);
-    envkey = ft_substr(line, 0, envkey_len);
+    envkey = ft_substr(line, 1, envkey_len - 1);
     if(envkey == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
     envvalue = crash_getenv(envkey);
     if(envvalue == NULL)
         return;
     ft_memmove(buffer, envvalue, ft_strlen(envvalue));
+    free(envkey);
 }
 
 void copy_arg(char *line, size_t arg_len, char *buffer)
@@ -111,13 +113,13 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     j = 0;
     while (j < arg_len)
     {
-        if(line[i] == '$')
+        if(line[i] == DOLLAR_CH)
         {
             envkey_len = get_envkey_len(line);
             envvalue_len = get_envvalue_len(line, envkey_len);
             copy_env(&buffer[i], line);
             i += (int)envvalue_len;
-            j += (int)envkey_len;
+            j += (int)envkey_len - 1;
         }
         else if(line[j] != DQUOT_CH && line[j] != QUOT_CH)
             buffer[i++] = line[j];

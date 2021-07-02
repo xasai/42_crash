@@ -7,6 +7,7 @@
 
 # define DQUOT_CH	-('\"')
 # define QUOT_CH	-('\'')
+# define DOLLAR_CH  -('$')
 
 
 t_cmdlst	*ft_line_analyz(char *line);
