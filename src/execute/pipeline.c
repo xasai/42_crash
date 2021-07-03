@@ -11,7 +11,6 @@ inline static void	_close(int fd)
 		close(fd);
 }
 
-//TODO case  when pipe is unclosed
 static t_pipes get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
@@ -32,7 +31,6 @@ static t_pipes get_pipes(t_cmdlst *cmdl)
 	{
 		if (pipe(pipes[idx]))
 			print_errno("Pipe allocation failure");
-		DEBUG("Created Pipe [%lu] %d, %d\n", idx, pipes[idx][0], pipes[idx][1]);
 		idx++;
 	}
 	return (pipes);
@@ -52,22 +50,15 @@ static t_pipes get_pipes(t_cmdlst *cmdl)
 */
 pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 {
-	int		newfd;
 	pid_t	fpid;
 
 	fpid = fork();
 	if (fpid == 0)
 	{
 		if (write_end != -1)
-		{
-			newfd= dup2(write_end, STDOUT_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), write_end,newfd);
-		}
+			dup2(write_end, STDOUT_FILENO); //TODO check dup2
 		if (read_end != -1)
-		{
-			newfd = dup2(read_end, STDIN_FILENO);
-			DEBUG("[PID %d] dup2(%d,%d)\n",getpid(), read_end,newfd);
-		}
+			dup2(read_end, STDIN_FILENO);
 		_close(fd_to_close);
 		return (fpid);
 	}

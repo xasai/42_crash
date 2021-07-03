@@ -2,16 +2,28 @@
 
 #define SHOW_DEBUG 1
 
-void    wq_fc(char *ch, bool *flag)
+
+/* FIXME
+
+ ls $PATH >1 | a  =  args{"ls", "/path/bin...", ""} пустой аргумент
+
+ ls -la >1 >>2 >>3 >4  >5
+execve("/usr/bin/ls", ["ls", "-la", "", "", "", "", ""], **envp)
+redirects : > 1 + 2 + 3 > 4 > 5
+
+*/
+
+void    quot_flagchange(char *ch, bool *flag)
 {
 	*ch *= -1;
-	*flag ^= true;// 1 ^ 1 = 0 | 0 ^ 1 = 1
+	*flag ^= true;
 }
 
 size_t get_envvalue_len(char *line, size_t envkey_len)
 {
     size_t  envvalue_len;
-    char    *envvalue; char    *envkey;
+    char    *envvalue;
+	char    *envkey;
 
     envkey = ft_substr(line, 1, envkey_len - 1);
     if (envkey == NULL)
@@ -38,9 +50,9 @@ size_t get_argbuflen_withquot(char *line, size_t *arg_len)
            || !ft_strchr("<>| \t", line[*arg_len]))
     {
         if (line[*arg_len] == '\"' && !qout_flag[0])
-            wq_fc(&line[*arg_len], &qout_flag[1]);
+            quot_flagchange(&line[*arg_len], &qout_flag[1]);
         else if (line[*arg_len] == '\'' && !qout_flag[1])
-            wq_fc(&line[*arg_len], &qout_flag[0]);
+            quot_flagchange(&line[*arg_len], &qout_flag[0]);
         else if (line[*arg_len] == '$' && !qout_flag[0])
         {
             line[*arg_len] = DOLLAR_CH;
@@ -121,6 +133,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
         }
         else if(!ft_strchr((char [3]) {DOLLAR_CH, QUOT_CH, DQUOT_CH}, line[j]))
             buffer[i++] = line[j];
+		//condition on unitilized value in ft_strchr ?? 
         ++j;
     }
 }
@@ -148,12 +161,9 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
         line += arg_len;
         skip_spasech(&line);
 	    sep_len = get_sepch(line, cmdl);
-        if (!cmdl->pathname)
-            cmdl->pathname = ft_strdup(arg);
         cmdl->args = lineptrjoin(cmdl->args, arg);
         if (cmdl->sepch)
-            cmdl = add_newl(cmdl);
-        //DEBUG("arg_len = %d\n", (int)arg_len);
+            cmdl = new_cmdlst(cmdl);
         line += sep_len;
 	}
 }
@@ -162,7 +172,8 @@ t_cmdlst *ft_line_analyz(char *line)
 {
 	t_cmdlst *cmdlst;
 
-	cmdlst = add_newl(NULL);
+	cmdlst = new_cmdlst(NULL);
 	line_pars(cmdlst, line);
+	//validate_cmdl();
 	return (cmdlst);
 }

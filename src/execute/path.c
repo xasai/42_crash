@@ -56,8 +56,6 @@ static char	*search_path(char *pathname)
 	char	**env_path;
 
 	idx = 0;
-	DEBUG("$PATH=\"%s\"\n", crash_getenv("PATH"));
-	DEBUG("pathame=\"%s\"\n", pathname);
 	env_path = g_sh->path;
 	while (env_path[idx])
 	{
@@ -65,12 +63,8 @@ static char	*search_path(char *pathname)
 		{env_path[idx], "/", pathname, NULL});
 		if (!abs_path)
 			exit_message("Memory allocation failure", SYS_ERROR);
-		DEBUG("Searching %s in %s[%lu] ...\n", abs_path, env_path[idx], idx);
 		if (is_exist(abs_path))
-		{
-			DEBUG("SUCCESS\n");
 			return (abs_path);
-		}
 		free(abs_path);
 		idx++;
 	}

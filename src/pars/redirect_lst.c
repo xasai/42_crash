@@ -30,3 +30,18 @@ t_redir_lst	*append_rlst(t_redir_lst **head, char type)
 	}
 	return (new);
 }
+
+void	redir_lst_free(t_redir_lst *head)
+{
+	t_redir_lst	*next;
+
+	if (!head)
+		return ;
+	while (head)
+	{
+		next = head->next;
+		free(head->filename);
+		free(head);
+		head = next;
+	}
+}

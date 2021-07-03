@@ -17,7 +17,7 @@
 
 #define DEBUG_CMDL(x)\
 {\
-	if (SHOW_DEBUG)\
+	if (SHOW_DEBUG && x)\
 	{\
 		size_t	i;\
 		t_cmdlst *l = x;\
