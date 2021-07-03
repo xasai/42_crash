@@ -20,7 +20,7 @@ static int _output_dup(char *filename, bool append)
 		flags = O_CREAT | O_WRONLY | O_TRUNC;
 	out_fd = open(filename, flags, perm);
 	if (!out_fd)
-		return (1);
+		return (RETURN_FAILURE);
 	return (dup2(out_fd, STDOUT_FILENO) == -1);
 }
 
@@ -30,7 +30,7 @@ static	int _input_dup(char *filename)
 
 	input_fd = open(filename, O_RDONLY);
 	if (!input_fd)
-		return (1);
+		return (RETURN_FAILURE);
 	return (dup2(input_fd, STDIN_FILENO) == -1);
 }
 
@@ -46,9 +46,7 @@ bool	redirect_ctl(t_cmdlst *cmd)
 	{
 		type = redir_lst->type;
 		filename = redir_lst->filename;
-		if (type == '-')
-			err = _input_dup(filename);
-		else if (type == '<')
+		if (type == '-' && type == '<')
 			err = _input_dup(filename);
 		else if (type == '>')
 			err = _output_dup(filename, false);
@@ -58,5 +56,5 @@ bool	redirect_ctl(t_cmdlst *cmd)
 			return (_error(filename));
 		redir_lst = redir_lst->next;
 	}
-	return (false);
+	return (RETURN_SUCCESS);
 }

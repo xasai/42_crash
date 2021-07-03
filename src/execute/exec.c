@@ -13,7 +13,7 @@ static void	_execve_fork(t_cmdlst *cmdl)
 {
 	pid_t	pid;
 
-	if (redirect_ctl(cmdl) || builtin_exec(cmdl))
+	if (builtin_exec(cmdl))
 		return ;
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
@@ -21,9 +21,16 @@ static void	_execve_fork(t_cmdlst *cmdl)
 	pid = fork();
 	if (pid < 0)
 		print_errno("crash: fork()");
-	else if (pid == 0 && execve(cmdl->pathname, cmdl->args, g_sh->envp))
-		exit_message(cmdl->pathname, SYS_ERROR);
+	else if (pid == 0)
+	{	
+		if (redirect_ctl(cmdl) == RETURN_FAILURE)
+			exit(BUILTIN_FAILURE);
+		else if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
+			exit_message(cmdl->pathname, SYS_ERROR);
+	}
 	_wait(pid);
+	dup2(g_sh->saved_stdin, STDIN_FILENO);
+	dup2(g_sh->saved_stdout, STDOUT_FILENO);
 }
 
 static void	_execve_nofork(t_cmdlst *cmdl)
