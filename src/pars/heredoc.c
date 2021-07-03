@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 1
+
 static	char *_get_hdoc_filename(void)
 {
 	static int		num = 0;
@@ -22,6 +24,8 @@ static char *_write_hdoc(char *delim)
 {
 	int		hdoc_fd;
 	char	*filename;
+	char	*str;
+	size_t	str_len;
 
 	filename = _get_hdoc_filename();
 	hdoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0600);
@@ -32,8 +36,17 @@ static char *_write_hdoc(char *delim)
 		free(filename);
 		return (NULL);
 	}
-	//TODO read
-	(void)delim;
+	str = readline(">");
+	while (str)
+	{
+		DEBUG("STR is \"%s\"\n", str);
+		str_len = ft_strlen(str);
+		if (!ft_strncmp(delim, str, str_len))
+			break ;
+		write(hdoc_fd, str, str_len);
+		write(hdoc_fd, "\n", 1);
+		str = readline(">");
+	}
 	close(hdoc_fd);
 	return (filename);
 }

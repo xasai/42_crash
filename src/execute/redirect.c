@@ -1,11 +1,14 @@
 #include "minishell.h"
 
+#define SHOW_DEBUG 1
+
 inline static bool	_error(char *filename)
 {
-	print_errno("crash:");
+	print_errno("crash");
+	putchar_fd(' ', STDERR_FILENO);
 	putendl_fd(filename, STDERR_FILENO);
 	g_sh->exit_status = BUILTIN_FAILURE; 
-	return (true);
+	return (RETURN_FAILURE);
 }
 
 static int _output_dup(char *filename, bool append)
@@ -46,7 +49,7 @@ bool	redirect_ctl(t_cmdlst *cmd)
 	{
 		type = redir_lst->type;
 		filename = redir_lst->filename;
-		if (type == '-' && type == '<')
+		if (type == '-' || type == '<')
 			err = _input_dup(filename);
 		else if (type == '>')
 			err = _output_dup(filename, false);

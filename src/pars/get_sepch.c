@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 0
+#define SHOW_DEBUG 1
 
 char *get_stopname(char *line, size_t *arg_len)
 {
@@ -74,6 +74,5 @@ size_t	get_sepch(char *line, t_cmdlst *cmdl)
 	}
 	else if (*line == '>' || *line == '<')
 		len = _get_redirection(line, cmdl);
-	DEBUG("Sepch is: \"%*s\"\n",(int)len, line);
 	return (len);
 }

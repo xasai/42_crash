@@ -2,6 +2,17 @@
 
 #define SHOW_DEBUG 1
 
+
+/* FIXME
+
+ ls $PATH >1 | a  =  args{"ls", "/path/bin...", ""} пустой аргумент
+
+ ls -la >1 >>2 >>3 >4  >5
+execve("/usr/bin/ls", ["ls", "-la", "", "", "", "", ""], **envp)
+redirects : > 1 + 2 + 3 > 4 > 5
+
+*/
+
 void    quot_flagchange(char *ch, bool *flag)
 {
 	*ch *= -1;
@@ -79,7 +90,6 @@ static char *get_argbuf(char *line, size_t *arg_len)
     argbuflen_withqout = get_argbuflen_withquot(line, arg_len);
     qout_count = get_qoutcount(line, *arg_len);
     buffer = ft_calloc(argbuflen_withqout - qout_count + 1, sizeof(char));
-	DEBUG("LEN %lu\n",argbuflen_withqout - qout_count + 1);
     if (buffer == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
     return (buffer);
