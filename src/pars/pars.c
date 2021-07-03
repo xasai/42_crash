@@ -79,6 +79,7 @@ static char *get_argbuf(char *line, size_t *arg_len)
     argbuflen_withqout = get_argbuflen_withquot(line, arg_len);
     qout_count = get_qoutcount(line, *arg_len);
     buffer = ft_calloc(argbuflen_withqout - qout_count + 1, sizeof(char));
+	DEBUG("LEN %lu\n",argbuflen_withqout - qout_count + 1);
     if (buffer == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
     return (buffer);
@@ -122,6 +123,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
         }
         else if(!ft_strchr((char [3]) {DOLLAR_CH, QUOT_CH, DQUOT_CH}, line[j]))
             buffer[i++] = line[j];
+		//condition on unitilized value in ft_strchr ?? 
         ++j;
     }
 }
@@ -149,8 +151,6 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
         line += arg_len;
         skip_spasech(&line);
 	    sep_len = get_sepch(line, cmdl);
-        if (!cmdl->pathname)
-            cmdl->pathname = ft_strdup(arg);
         cmdl->args = lineptrjoin(cmdl->args, arg);
         if (cmdl->sepch)
             cmdl = new_cmdlst(cmdl);

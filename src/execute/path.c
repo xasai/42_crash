@@ -56,8 +56,6 @@ static char	*search_path(char *pathname)
 	char	**env_path;
 
 	idx = 0;
-	DEBUG("$PATH=\"%s\"\n", crash_getenv("PATH"));
-	DEBUG("pathame=\"%s\"\n", pathname);
 	env_path = g_sh->path;
 	while (env_path[idx])
 	{

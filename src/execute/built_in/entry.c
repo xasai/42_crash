@@ -44,7 +44,7 @@ bool	builtin_exec(t_cmdlst *cmd)
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
 	export_builtin, unset_builtin, 	exit_builtin};
 
-	builtin_idx = is_builtin(cmd->pathname);
+	builtin_idx = is_builtin(cmd->args[0]);
 	if (builtin_idx >= 0)
 	{
 		redirect_ctl(cmd);

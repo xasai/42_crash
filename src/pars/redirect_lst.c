@@ -31,7 +31,7 @@ t_redir_lst	*append_rlst(t_redir_lst **head, char type)
 	return (new);
 }
 
-void	free_redir_lst(t_redir_lst *head)
+void	redir_lst_free(t_redir_lst *head)
 {
 	t_redir_lst	*next;
 

@@ -31,7 +31,11 @@ void	   	quot_flagchange(char *ch, bool *flag);
 
 char		*get_hdoc(char *delim);
 
+/*			redirect_lst.c					*/
 t_redir_lst	*append_rlst(t_redir_lst **head, char type);
+void		redir_lst_free(t_redir_lst *head);
+
+/*			cmdlst.c						*/
 t_cmdlst	*new_cmdlst(t_cmdlst *curr);
 void		cmdlst_free(t_cmdlst *cmdlst);
 

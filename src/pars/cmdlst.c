@@ -22,6 +22,7 @@ void	cmdlst_free(t_cmdlst *cmdl)
 		next = cmdl->next;
 		free(cmdl->pathname);
 		free_tab((void *)cmdl->args);
+		redir_lst_free(cmdl->rlst);
 		free(cmdl);
 		cmdl = next;
 	}

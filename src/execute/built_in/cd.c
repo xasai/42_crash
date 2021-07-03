@@ -12,7 +12,7 @@ uint8_t	cd_builtin(t_cmdlst *cmd)
 	char	*path;
 
 	path = cmd->args[1];
-	if (cmd->args[2])
+	if (path && cmd->args[2])
 		return (_error("too many arguments"));
 	if (path == NULL || (path[0] == '~' && path[1] == '\0'))
 	{

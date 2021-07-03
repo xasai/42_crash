@@ -73,10 +73,7 @@ size_t	get_sepch(char *line, t_cmdlst *cmdl)
 		return (1); 
 	}
 	else if (*line == '>' || *line == '<')
-	{
 		len = _get_redirection(line, cmdl);
-		//ВОт тут проверить на NULL в redirect_lst->name
-	}
 	DEBUG("Sepch is: \"%*s\"\n",(int)len, line);
 	return (len);
 }
