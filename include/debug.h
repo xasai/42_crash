@@ -32,7 +32,13 @@
 					fprintf(stderr, ", ");\
 				fprintf(stderr, "\"%s\"", l->args[i++]);\
 			}\
-			fprintf(stderr, "], **envp)\n");\
+			fprintf(stderr, "], **envp)");\
+			while (l->rlst)\
+			{\
+				fprintf(stderr, " %c %s", l->rlst->type, l->rlst->filename);\
+				l->rlst = l->rlst->next;\
+			}\
+			fprintf(stderr, "\n");\
 			if (l->sepch == '|')\
 				fprintf(stderr, "%sPIPE %s", RED, GREEN);\
 			l = l->next;\

@@ -21,18 +21,25 @@ static void	_execve_fork(t_cmdlst *cmdl)
 	pid = fork();
 	if (pid < 0)
 		print_errno("crash: fork()");
-	else if (pid == 0 && execve(cmdl->pathname, cmdl->args, g_sh->envp))
-		exit_message(cmdl->pathname, SYS_ERROR);
+	else if (pid == 0)
+	{	
+		if (redirect_ctl(cmdl) == RETURN_FAILURE)
+			exit(BUILTIN_FAILURE);
+		else if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
+			exit_message(cmdl->pathname, SYS_ERROR);
+	}
 	_wait(pid);
+	dup2(g_sh->saved_stdin, STDIN_FILENO);
+	dup2(g_sh->saved_stdout, STDOUT_FILENO);
 }
 
 static void	_execve_nofork(t_cmdlst *cmdl)
 {
-	if (builtin_exec(cmdl))
+	if (redirect_ctl(cmdl) || builtin_exec(cmdl))
 		exit(g_sh->exit_status);
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
-		return ;
+		exit(g_sh->exit_status);
 	if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
 	{
 		print_errno(cmdl->pathname);
@@ -61,10 +68,7 @@ void	cmdline_exec(t_cmdlst *cmdl)
 	else
 		_execve = _execve_fork;
 	if (cmdl)
-	{
-		redirect_ctl(cmdl);// TODO ERROR
 		_execve(cmdl);
-	}
 	_set_sighandlers(SIG_DFL);
 	if (g_sh->exit_status == SIGQUIT + 0x80)
 		putstr_fd("^Quit\n", STDOUT_FILENO);

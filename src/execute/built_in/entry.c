@@ -47,7 +47,10 @@ bool	builtin_exec(t_cmdlst *cmd)
 	builtin_idx = is_builtin(cmd->pathname);
 	if (builtin_idx >= 0)
 	{
+		redirect_ctl(cmd);
 		g_sh->exit_status = (*builtin_func[builtin_idx])(cmd);
+		dup2(g_sh->saved_stdin, STDIN_FILENO);
+		dup2(g_sh->saved_stdout, STDOUT_FILENO);
 		return (1);
 	}
 	else
