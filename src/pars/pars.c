@@ -2,9 +2,7 @@
 
 #define SHOW_DEBUG 1
 
-size_t	get_envkey_len(char *line);
-
-static void wq_fc(char *ch, bool *flag)
+void    wq_fc(char *ch, bool *flag)
 {
 	*ch *= -1;
 	*flag ^= true;// 1 ^ 1 = 0 | 0 ^ 1 = 1

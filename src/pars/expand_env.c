@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	get_envkey_len(char *line)
+size_t	get_envkey_len(char *line)
 {
 	int envkey_len;
 
