@@ -127,7 +127,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     }
 }
 
-static char	*get_shellarg(char **line, size_t *arg_len)
+char	*get_shellarg(char **line, size_t *arg_len)
 {
     char    *buffer;
 
