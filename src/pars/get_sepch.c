@@ -16,12 +16,14 @@ char *get_stopname(char *line, size_t *arg_len)
            || !ft_strchr("<>| \t", line[*arg_len]))
     {
         if (line[*arg_len] == '\"' && !qout_flag[0])
-            wq_fc(&line[*arg_len], &qout_flag[1]);
+            quot_flagchange(&line[*arg_len], &qout_flag[1]);
         else if (line[*arg_len] == '\'' && !qout_flag[1])
-            wq_fc(&line[*arg_len], &qout_flag[0]);
+            quot_flagchange(&line[*arg_len], &qout_flag[0]);
         ++*arg_len;
     }
     buffer = calloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
+	//Привет сега если память не саллочилась. 
+	//Напиши свой xmalloc для такого
     while (j < *arg_len)
     {
         if(!ft_strchr((char [2]) {QUOT_CH, DQUOT_CH}, line[j]))
@@ -53,7 +55,7 @@ size_t	_get_redirection(char *line, t_cmdlst *cmdl)
     line += len;
 	rlst = append_rlst(&cmdl->rlst, type);
 	if (type == '-')
-        rlst->filename = get_stopname(line, &filename_len);
+        rlst->filename = get_hdoc(get_stopname(line, &filename_len));
 	else
 	    rlst->filename = get_shellarg(line, &filename_len);//TODO check this value
 	return (filename_len + len);
@@ -71,7 +73,10 @@ size_t	get_sepch(char *line, t_cmdlst *cmdl)
 		return (1); 
 	}
 	else if (*line == '>' || *line == '<')
+	{
 		len = _get_redirection(line, cmdl);
+		//ВОт тут проверить на NULL в redirect_lst->name
+	}
 	DEBUG("Sepch is: \"%*s\"\n",(int)len, line);
 	return (len);
 }
