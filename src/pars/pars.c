@@ -116,9 +116,9 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     {
         if(line[j] == DOLLAR_CH)
         {
-            envkey_len = get_envkey_len(line);
-            envvalue_len = get_envvalue_len(line, envkey_len);
-            copy_env(&buffer[i], line);
+            envkey_len = get_envkey_len(&line[j]);
+            envvalue_len = get_envvalue_len(&line[j], envkey_len);
+            copy_env(&buffer[i], &line[j]);
             i += (int)envvalue_len;
             j += (int)envkey_len - 1;
         }
@@ -128,12 +128,12 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     }
 }
 
-static char	*get_shellarg(char **line, size_t *arg_len)
+static char	*get_shellarg(char *line, size_t *arg_len)
 {
     char    *buffer;
 
-	buffer = get_argbuf(*line, arg_len);
-	copy_arg(*line, *arg_len, buffer);
+	buffer = get_argbuf(line, arg_len);
+	copy_arg(line, *arg_len, buffer);
     return (buffer);
 }
 
@@ -147,7 +147,7 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
     {
 	    arg_len = 0;
 	    skip_spasech(&line);
-	    arg = get_shellarg(&line, &arg_len);
+	    arg = get_shellarg(line, &arg_len);
 	    sep_len = get_sepch(&line[arg_len], cmdl);
         if (!cmdl->pathname)
             cmdl->pathname = ft_strdup(arg);
