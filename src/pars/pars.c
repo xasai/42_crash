@@ -114,7 +114,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     j = 0;
     while (j < arg_len)
     {
-        if(line[i] == DOLLAR_CH)
+        if(line[j] == DOLLAR_CH)
         {
             envkey_len = get_envkey_len(line);
             envvalue_len = get_envvalue_len(line, envkey_len);
@@ -148,7 +148,6 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
 	    arg_len = 0;
 	    skip_spasech(&line);
 	    arg = get_shellarg(&line, &arg_len);
-        skip_spasech(&line);
 	    sep_len = get_sepch(&line[arg_len], cmdl);
         if (!cmdl->pathname)
             cmdl->pathname = ft_strdup(arg);
@@ -157,6 +156,7 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
             cmdl = add_newl(cmdl);
         //DEBUG("arg_len = %d\n", (int)arg_len);
         line += arg_len + sep_len;
+        skip_spasech(&line);
 	}
 }
 
