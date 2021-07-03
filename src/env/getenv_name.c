@@ -13,7 +13,5 @@ char	*getenv_name(char *varstr)
 	while (ft_isalnum(varstr[size]) || varstr[size] == '_')
 		size++;
 	name = ft_substr(varstr, 0, size);
-	if (NULL == name)
-		print_errno("crash: ");
 	return (name);
 }

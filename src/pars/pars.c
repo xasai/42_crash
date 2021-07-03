@@ -13,8 +13,7 @@ static void wq_fc(char *ch, bool *flag)
 size_t get_envvalue_len(char *line, size_t envkey_len)
 {
     size_t  envvalue_len;
-    char    *envvalue;
-    char    *envkey;
+    char    *envvalue; char    *envkey;
 
     envkey = ft_substr(line, 1, envkey_len - 1);
     if (envkey == NULL)
@@ -128,7 +127,7 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
     }
 }
 
-static char	*get_shellarg(char *line, size_t *arg_len)
+char	*get_shellarg(char *line, size_t *arg_len)
 {
     char    *buffer;
 
@@ -148,15 +147,16 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
 	    arg_len = 0;
 	    skip_spasech(&line);
 	    arg = get_shellarg(line, &arg_len);
-	    sep_len = get_sepch(&line[arg_len], cmdl);
+        line += arg_len;
+        skip_spasech(&line);
+	    sep_len = get_sepch(line, cmdl);
         if (!cmdl->pathname)
             cmdl->pathname = ft_strdup(arg);
         cmdl->args = lineptrjoin(cmdl->args, arg);
-        if (sep_len)
+        if (cmdl->sepch)
             cmdl = add_newl(cmdl);
         //DEBUG("arg_len = %d\n", (int)arg_len);
-        line += arg_len + sep_len;
-        skip_spasech(&line);
+        line += sep_len;
 	}
 }
 

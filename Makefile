@@ -28,36 +28,32 @@ INC := -Iinclude/ -Ilib/libft/include
 #| |__| | | |____  | |____ 
  #\_____|  \____|  \_____|
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror --std=c99 -D_POSIX_SOURCE -MMD -MP
+CFLAGS := -Wall -Wextra -Werror -MMD -MP#--std=c99 -D_POSIX_SOURCE 
 CFLAGS += -g3
 #CFLAGS += -Ofast
-#CLFAGS += -fsanitize=address 
+CLFAGS += -fsanitize=address 
 ############################################################################################
 
-all: $(NAME)
-
-echo:
-	echo $(DEPPATH)
-
-$(NAME): $(OBJPATH) $(LIBFT) $(OBJ)
-	@echo -n $(GREEN)
-	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
-	@echo "\n===========>\t$(NAME) Successfully compiled [+]"
-	@echo -n $(RESET)
+all: 
+	$(MAKE) -j8 $(NAME)
 
 ifeq ($(MAKECMDGOALS),clean)
-# doing clean, so dont make deps.
+DEPFILES=
+else ifeq ($(MAKECMDGOALS),fclean)
 DEPFILES=
 else
 DEPFILES := $(OBJ:.o=.d)
 -include $(DEPFILES)
 endif
 
+$(NAME): $(OBJPATH) $(LIBFT) $(OBJ)
+	@echo -n $(GREEN)
+	$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
+	@echo $(RESET) "\n===========>\t$(NAME) Successfully compiled [+]"
+
 $(OBJPATH)/%.o: %.c
 	@echo -n $(GREEN)
 	$(CC) $(INC) $(CFLAGS) -c $< -o $@ 
-	@echo $(RESET)
-
 
 $(OBJPATH):
 	@echo -n $(GREEN)

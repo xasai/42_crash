@@ -3,22 +3,22 @@
 
 //PATH:	execute/
 
-/*				exec.c					*/
+/*			exec.c					*/
 void		cmdline_exec(t_cmdlst *cmdlst);
 
-/*				pipeline.c				*/
+/*			pipeline.c				*/
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl);
 
-/*				redirect.c				*/
-void		redirect_ctl(t_cmdlst *cmdl);
+/*			redirect.c				*/
+bool		redirect_ctl(t_cmdlst *cmdl);
 
-/*				path.c					*/
+/*			path.c					*/
 char		*get_path(char *pathname);
 
-/*				rebuild_path.c			*/
+/*			rebuild_path.c			*/
 void		rebuild_path(void);
 
-/*				wrappers/wrappers.c		*/
+/*			wrappers/wrappers.c		*/
 void		_wait(int pid);
 char		*_getcwd(void);
 

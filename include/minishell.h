@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include <termios.h> //FIXME
+
 # include "debug.h"
 # include "struct/s_shell.h"
 # include "struct/s_cmdlst.h"
@@ -43,27 +45,33 @@ void			rl_replace_line (const char *text, int clear_undo);
 
 extern t_shell	*g_sh;
 
-/* 			init.c				*/
+/* 				init.c				*/
+
 void			init_sh(char **envp);
 
-/*			interact.c			*/
+/*				interact.c			*/
+
 int				interact(void);
 
-/*			crash_readline.c	*/
+/*				crash_readline.c	*/
+
 char			*crash_readline(void);
 
-/*			env.c				*/
+/*				env.c				*/
+
 int				getenv_idx(char *name);
 char			*getenv_name(char *varstr);
 char			*crash_getenv(char *name);
 void			crash_setenv(char *name, char *value);
 void			crash_unsetenv(char *name);
 
-/*			free.c				*/
+/*				free.c				*/
+
 void			cmdlst_free(t_cmdlst *cmdl);
 void			rlst_free(void); //TODO
 
-/*			exit.c				*/
+/*				exit.c				*/
+
 void			exit_message(char *message, uint8_t code);
 void			print_errno(char *message);
 void			xuinya(void);
