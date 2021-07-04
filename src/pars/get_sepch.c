@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 char *get_stopname(char *line, size_t *arg_len)
 {
@@ -50,13 +50,14 @@ size_t	_get_redirection(char *line, t_cmdlst *cmdl)
 	len = 1;
 	if (type == '+' || type == '-')
 		len++;
+	len += get_spasecount(&line[len]);
     line += len;
-	len += get_spasecount(line);
 	rlst = append_rlst(&cmdl->rlst, type);
 	if (type == '-')
         rlst->filename = get_hdoc(get_stopname(line, &filename_len));
 	else
 	    rlst->filename = get_shellarg(line, &filename_len);//TODO check this value
+	DEBUG("line: \"%s\" filename \"%s\"\n", line, rlst->filename);
 	len += get_spasecount(&line[filename_len]);
 	return (filename_len + len);
 }
