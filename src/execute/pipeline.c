@@ -56,17 +56,14 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 	if (fpid == 0)
 	{
 		if (write_end != -1)
-			dup2(write_end, STDOUT_FILENO); //TODO check dup2
+			dup2(write_end, STDOUT_FILENO);
 		if (read_end != -1)
 			dup2(read_end, STDIN_FILENO);
 		_close(fd_to_close);
 		return (fpid);
 	}
 	else if (fpid == -1)
-	{
 		print_errno("crash: fork()");
-		return (-1);//TODO KILL all childs or no
-	}
 	_close(read_end);
 	_close(write_end);
 	return (fpid);

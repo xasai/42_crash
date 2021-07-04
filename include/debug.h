@@ -35,7 +35,9 @@
 			fprintf(stderr, "], **envp)");\
 			while (l->rlst)\
 			{\
-				fprintf(stderr, " %c %s", l->rlst->type, l->rlst->filename);\
+				fprintf(stderr, " %c ", l->rlst->type);\
+				if (l->rlst->filename)\
+					fprintf(stderr, "'%s'", l->rlst->filename);\
 				l->rlst = l->rlst->next;\
 			}\
 			fprintf(stderr, "\n");\

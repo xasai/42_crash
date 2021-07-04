@@ -21,7 +21,7 @@ char *get_stopname(char *line, size_t *arg_len)
             quot_flagchange(&line[*arg_len], &qout_flag[0]);
         ++*arg_len;
     }
-    buffer = calloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
+    buffer = ft_calloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
 	//Привет сега если память не саллочилась. 
 	//Напиши свой xmalloc для такого
     while (j < *arg_len)
