@@ -50,16 +50,15 @@ size_t	_get_redirection(char *line, t_cmdlst *cmdl)
 	len = 1;
 	if (type == '+' || type == '-')
 		len++;
-	while(ft_isspace(line[len]))
-	    ++len;
     line += len;
+	len += get_spasecount(line);
 	rlst = append_rlst(&cmdl->rlst, type);
 	if (type == '-')
         rlst->filename = get_hdoc(get_stopname(line, &filename_len));
 	else
 	    rlst->filename = get_shellarg(line, &filename_len);//TODO check this value
+	len += get_spasecount(&line[filename_len]);
 	return (filename_len + len);
-	
 }
 
 size_t	get_sepch(char *line, t_cmdlst *cmdl)
@@ -70,9 +69,10 @@ size_t	get_sepch(char *line, t_cmdlst *cmdl)
 	if (*line == '|')
 	{
 		cmdl->sepch = *line;
-		return (1); 
+		return (1);
 	}
-	else if (*line == '>' || *line == '<')
-		len = _get_redirection(line, cmdl);
+	else
+	    while(line[len] == '>' || line[len] == '<')
+		    len += _get_redirection(&line[len], cmdl);
 	return (len);
 }

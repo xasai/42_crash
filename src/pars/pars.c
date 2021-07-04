@@ -8,6 +8,7 @@
  ls $PATH >1 | a  =  args{"ls", "/path/bin...", ""} пустой аргумент
 
  ls -la >1 >>2 >>3 >4  >5
+  ls -l >1 -a>>2 >>3 >4  >5
 execve("/usr/bin/ls", ["ls", "-la", "", "", "", "", ""], **envp)
 redirects : > 1 + 2 + 3 > 4 > 5
 
@@ -174,6 +175,7 @@ t_cmdlst *ft_line_analyz(char *line)
 
 	cmdlst = new_cmdlst(NULL);
 	line_pars(cmdlst, line);
+    print_this_shit(cmdlst);
 	//validate_cmdl();
 	return (cmdlst);
 }

@@ -19,6 +19,8 @@ char		**lineptrjoin(char **ptr, char *line);
 
 void        skip_spasech(char **line);
 
+size_t      get_spasecount(char *line);
+
 
 char        *get_shellarg(char *line, size_t *arg_len);
 
@@ -26,18 +28,21 @@ size_t      get_qoutcount(char *line, size_t arg_len);
 
 size_t      get_envkey_len(char *line);
 
-
 void	   	quot_flagchange(char *ch, bool *flag);
+
+void        print_this_shit(t_cmdlst *l);
 
 char		*get_hdoc(char *delim);
 
 bool		validate_cmd(t_cmdlst *cmdl);
+
 /*			redirect_lst.c					*/
 t_redir_lst	*append_rlst(t_redir_lst **head, char type);
 void		redir_lst_free(t_redir_lst *head);
 
 /*			cmdlst.c						*/
 t_cmdlst	*new_cmdlst(t_cmdlst *curr);
+
 void		cmdlst_free(t_cmdlst *cmdlst);
 
 #endif /* PARS_H */
