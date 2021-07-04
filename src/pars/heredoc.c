@@ -37,6 +37,7 @@ static char *_write_hdoc(char *delim)
 		return (NULL);
 	}
 	str = readline(">");
+	DEBUG("DELIM is \"%s\"\n", delim);
 	while (str)
 	{
 		DEBUG("STR is \"%s\"\n", str);
