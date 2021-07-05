@@ -34,8 +34,8 @@ CFLAGS += -g3
 CLFAGS += -fsanitize=address 
 ############################################################################################
 
-all: 
-	$(MAKE) -j8 $(NAME)
+MAKEFLAGS=-j8
+all:  $(NAME)
 
 ifeq ($(MAKECMDGOALS),clean)
 DEPFILES=

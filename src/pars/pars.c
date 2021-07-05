@@ -175,7 +175,7 @@ t_cmdlst *ft_line_analyz(char *line)
 
 	cmdlst = new_cmdlst(NULL);
 	line_pars(cmdlst, line);
-    print_this_shit(cmdlst);
+//    print_this_shit(cmdlst);
 	//validate_cmdl();
 	return (cmdlst);
 }

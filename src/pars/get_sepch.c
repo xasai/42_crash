@@ -22,8 +22,6 @@ char *get_stopname(char *line, size_t *arg_len)
         ++*arg_len;
     }
     buffer = ft_calloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
-	//Привет сега если память не саллочилась. 
-	//Напиши свой xmalloc для такого
     while (j < *arg_len)
     {
         if(!ft_strchr((char [2]) {QUOT_CH, DQUOT_CH}, line[j]))

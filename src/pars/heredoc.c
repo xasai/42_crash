@@ -22,11 +22,11 @@ static	char *_get_hdoc_filename(void)
 
 static	char *_hdoc_expand_str(char *str)
 {
-//TODO
-return (str);
+	//TODO
+	return (str);
 }
 
-static char *_read_n_write_hdoc(char *delim, int hdoc_fd, bool expand_env)
+static char *_read_n_write_hdoc(char *delim, int hdoc_fd)
 {
 	char	*str;
 	size_t	str_len;
@@ -45,8 +45,7 @@ static char *_read_n_write_hdoc(char *delim, int hdoc_fd, bool expand_env)
 			str_len = delim_len;
 		if (!ft_strncmp(delim, str, str_len))
 			break ;
-		if (expand_env)
-			str = _hdoc_expand_str(str);
+		str = _hdoc_expand_str(str);
 		putendl_fd(str, hdoc_fd);
 		str = readline(">");
 	}
@@ -57,8 +56,9 @@ char	*get_hdoc(char *delim)
 {	
 	int		hdoc_fd;
 	char	*filename;
-	bool	env_expand;
 
+	if (!ft_strlen(delim))
+		return (NULL);		
 	filename = _get_hdoc_filename();
 	hdoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0600);
 	if (-1 == hdoc_fd)
@@ -68,8 +68,7 @@ char	*get_hdoc(char *delim)
 		free(filename);
 		return (NULL);
 	}
-	env_expand = true;//TODO
-	_read_n_write_hdoc(delim, hdoc_fd, env_expand);
+	_read_n_write_hdoc(delim, hdoc_fd);
 	close(hdoc_fd);
 	free(delim);
 	return (filename);
