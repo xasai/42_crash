@@ -21,7 +21,7 @@ char *get_stopname(char *line, size_t *arg_len)
             quot_flagchange(&line[*arg_len], &qout_flag[0]);
         ++*arg_len;
     }
-    buffer = ft_calloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
+    buffer = xalloc(*arg_len - get_qoutcount(line,*arg_len) + 1, sizeof(char));
     while (j < *arg_len)
     {
         if(!ft_strchr((char [2]) {QUOT_CH, DQUOT_CH}, line[j]))

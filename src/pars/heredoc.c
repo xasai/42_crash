@@ -22,8 +22,16 @@ static	char *_get_hdoc_filename(void)
 
 static	char *_hdoc_expand_str(char *str)
 {
-	//TODO
-	return (str);
+    size_t  i;
+    size_t  buf_len;
+    char    *buffer;
+
+    i = 0;
+    buf_len = get_strbufflen(str, &i);
+    buffer = xalloc(buf_len, sizeof(char));
+    copy_arg(str, i, buffer);
+    free(str);
+	return (buffer);
 }
 
 static char *_read_n_write_hdoc(char *delim, int hdoc_fd)

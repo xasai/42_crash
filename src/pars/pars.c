@@ -2,18 +2,6 @@
 
 #define SHOW_DEBUG 1
 
-
-/* FIXME
-
- ls $PATH >1 | a  =  args{"ls", "/path/bin...", ""} пустой аргумент
-
- ls -la >1 >>2 >>3 >4  >5
-  ls -l >1 -a>>2 >>3 >4  >5
-execve("/usr/bin/ls", ["ls", "-la", "", "", "", "", ""], **envp)
-redirects : > 1 + 2 + 3 > 4 > 5
-
-*/
-
 void    quot_flagchange(char *ch, bool *flag)
 {
 	*ch *= -1;
@@ -29,12 +17,40 @@ size_t get_envvalue_len(char *line, size_t envkey_len)
     envkey = ft_substr(line, 1, envkey_len - 1);
     if (envkey == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
+    else if (*envkey == '?' || *envkey == 0)
+    {
+        free(envkey);
+        return (1);
+    }
     envvalue = crash_getenv(envkey);
+    free(envkey);
     if (envvalue == NULL)
         return (0);
     envvalue_len = ft_strlen(envvalue);
-    free(envkey);
     return (envvalue_len);
+}
+
+size_t get_strbufflen(char *str, size_t *str_len)
+{
+    size_t  tmp;
+    size_t  envkey_len;
+    size_t  envvalue_len;
+
+    envkey_len = 0;
+    envvalue_len = 0;
+    while(str[*str_len])
+    {
+        if (str[*str_len] == '$')
+        {
+            str[*str_len] = DOLLAR_CH;
+            tmp = get_envkey_len(&str[*str_len]);
+            envkey_len += tmp;
+            envvalue_len += get_envvalue_len(&str[*str_len], tmp);
+            *str_len += tmp - 1;
+        }
+        ++*str_len;
+    }
+    return ((*str_len + envvalue_len) - envkey_len);
 }
 
 size_t get_argbuflen_withquot(char *line, size_t *arg_len)
@@ -96,7 +112,7 @@ static char *get_argbuf(char *line, size_t *arg_len)
     return (buffer);
 }
 
-void copy_env(char *buffer, char *line)
+void    expand_env(char *buffer, char *line)
 {
     size_t  envkey_len;
     char    *envvalue;
@@ -106,14 +122,19 @@ void copy_env(char *buffer, char *line)
     envkey = ft_substr(line, 1, envkey_len - 1);
     if(envkey == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
-    envvalue = crash_getenv(envkey);
+    else if (*envkey == '?')
+        envvalue = "?";
+    else if (*envkey == '\0')
+        envvalue = "$";
+    else
+        envvalue = crash_getenv(envkey);
+    free(envkey);
     if(envvalue == NULL)
         return;
     ft_memmove(buffer, envvalue, ft_strlen(envvalue));
-    free(envkey);
 }
 
-void copy_arg(char *line, size_t arg_len, char *buffer)
+void    copy_arg(char *line, size_t arg_len, char *buffer)
 {
     size_t  envkey_len;
     size_t  envvalue_len;
@@ -128,13 +149,12 @@ void copy_arg(char *line, size_t arg_len, char *buffer)
         {
             envkey_len = get_envkey_len(&line[j]);
             envvalue_len = get_envvalue_len(&line[j], envkey_len);
-            copy_env(&buffer[i], &line[j]);
-            i += (int)envvalue_len;
-            j += (int)envkey_len - 1;
+            expand_env(&buffer[i], &line[j]);
+            i += envvalue_len;
+            j += envkey_len - 1;
         }
         else if(!ft_strchr((char [3]) {DOLLAR_CH, QUOT_CH, DQUOT_CH}, line[j]))
             buffer[i++] = line[j];
-		//condition on unitilized value in ft_strchr ?? 
         ++j;
     }
 }
