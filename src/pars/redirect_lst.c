@@ -40,6 +40,8 @@ void	redir_lst_free(t_redir_lst *head)
 	while (head)
 	{
 		next = head->next;
+		if (head->type == '-')
+			unlink(head->filename);
 		free(head->filename);
 		free(head);
 		head = next;

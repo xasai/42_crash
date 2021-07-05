@@ -14,12 +14,13 @@ bool	_validate_rlst(t_redir_lst *rlst)
 {
 	while (rlst)
 	{
-		if (rlst->type && !rlst->filename)		
+		if (rlst->type && (!rlst->filename || !ft_strlen(rlst->filename)))		
 			return (RETURN_FAILURE);
 		rlst = rlst->next; 
 	}
 	return (RETURN_SUCCESS);
 }
+
 bool	validate_cmd(t_cmdlst *cmdl)
 {
 

@@ -20,32 +20,33 @@ static	char *_get_hdoc_filename(void)
 	return (filename);
 }
 
+static	char *_hdoc_expand_str(char *str)
+{
+//TODO
+return (str);
+}
+
 static char *_read_n_write_hdoc(char *delim, int hdoc_fd, bool expand_env)
 {
 	char	*str;
-	char	*tmp;
 	size_t	str_len;
+	size_t	delim_len;
+
+	DEBUG("DELIM is \"%s\"\n", delim);
+	delim_len = ft_strlen(delim);
 
 	str = readline(">");
-	DEBUG("DELIM is \"%s\"\n", delim);
 	while (str)
 	{
-		if (expand_env)
-		{
-			tmp = str;
-			str = cat_lines_tab((char *[4]){"\"", str, "\"", NULL});
-			free(tmp);
-			if (!str)
-				exit_message("Memory allocation failure", SYS_ERROR);
-			tmp = str;
-			str = get_shellarg(str, &str_len);
-		}
 		DEBUG("STR is \"%s\"\n", str);
 		str_len = ft_strlen(str);
+		if (str_len < delim_len)
+			str_len = delim_len;
 		if (!ft_strncmp(delim, str, str_len))
 			break ;
-		write(hdoc_fd, str, str_len);
-		write(hdoc_fd, "\n", 1);
+		if (expand_env)
+			str = _hdoc_expand_str(str);
+		putendl_fd(str, hdoc_fd);
 		str = readline(">");
 	}
 	return (NULL);
