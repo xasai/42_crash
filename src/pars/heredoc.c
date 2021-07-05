@@ -9,9 +9,7 @@ static	char *_get_hdoc_filename(void)
 	char			*part2;
 	char			*filename;
 	
-	num++;
-	if (num < 0)
-		num = 0;
+	num++; if (num < 0) num = 0;
 	part2 = ft_itoa(num);
 	filename = ft_strjoin(part1, part2);
 	free(part2);
@@ -34,30 +32,26 @@ static	char *_hdoc_expand_str(char *str)
 	return (buffer);
 }
 
-static char *_read_n_write_hdoc(char *delim, int hdoc_fd)
+static void _read_n_write_hdoc(char *delim, int hdoc_fd)
 {
 	char	*str;
-	size_t	str_len;
-	size_t	delim_len;
 
 	DEBUG("DELIM is \"%s\"\n", delim);
-	delim_len = ft_strlen(delim);
-	if (!delim_len)
-		return (NULL);
+	if (!ft_strlen(delim))
+		return ;
 	str = readline(">");
 	while (str)
 	{
 		DEBUG("STR is \"%s\"\n", str);
-		str_len = ft_strlen(str);
-		if (str_len < delim_len)
-			str_len = delim_len;
-		if (!ft_strncmp(delim, str, str_len))
-			break ;
+		
+		if (!ft_strcmp(delim, str))
+			return ;
 		str = _hdoc_expand_str(str);
 		putendl_fd(str, hdoc_fd);
 		str = readline(">");
 	}
-	return (NULL);
+	printf("crash: warning: here-document"
+	" delimited by end-of-file (wanted `%s')\n", delim);
 }
 
 char	*get_hdoc(char *delim)

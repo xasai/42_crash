@@ -24,23 +24,15 @@ static	void	_set_sigdefault(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-/*
-** DESCRIPTION:
-**	Split $PATH environ variable on strings in **tab variable.
-**
-** RETURN VALUE:
-**	path tab: if allocation succeed.
-**	NULL: if allocation failed.
-*/
 char	*crash_readline(void)
 {
 	char		*line;
 	size_t		len;
 	static char	*prev_line = "";
 
+	_set_sigdefault();
 	_set_sighandlers();
 	line = readline(g_sh->prompt);
-	_set_sigdefault();
 	if (line == NULL)
 		exit_message("exit", EXIT_SUCCESS);
 	len = ft_strlen(line);

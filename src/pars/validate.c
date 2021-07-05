@@ -24,6 +24,8 @@ bool	_validate_rlst(t_redir_lst *rlst)
 bool	validate_cmd(t_cmdlst *cmdl)
 {
 
+	if (!cmdl)
+		return (RETURN_FAILURE);
 	while (cmdl)
 	{
 		if (cmdl->rlst && _validate_rlst(cmdl->rlst))

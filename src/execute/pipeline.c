@@ -11,6 +11,12 @@ inline static void	_close(int fd)
 		close(fd);
 }
 
+inline static void	*_ret_(void *pipes, void *cmdl)
+{
+	free(pipes);
+	return (cmdl);
+}
+
 static t_pipes get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
@@ -78,8 +84,8 @@ pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 **	fildes.
 **
 ** RETURN:
-**		It returns t_cmdlst* command in child processes,
-**		and NULL in parent proccess.
+**	It returns t_cmdlst* command in child processes,
+**	and NULL in parent proccess.
 */
 t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 {
@@ -93,15 +99,15 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 		if (NULL == cmdl->prev)
 		{// Первая команда меняет только stdout
 			if (!fork_n_dup(-1, pipes[cmd_idx][1], pipes[0][0]))
-				return (cmdl);
+				return (_ret_(pipes, cmdl));
 		}
 		else if (NULL == cmdl->next)
 		{// Последняя меняет только stdin
 			if (!fork_n_dup(pipes[cmd_idx - 1][0], -1, pipes[cmd_idx - 1][1]))
-				return (cmdl);
+				return (_ret_(pipes, cmdl));
 		}// Все остальные меняют и stdin и stdout
 		else if (!fork_n_dup(pipes[cmd_idx - 1][0], pipes[cmd_idx][1], -1))
-			return (cmdl);
+			return (_ret_(pipes, cmdl));
 		cmd_idx++;
 		cmdl = cmdl->next;
 	}

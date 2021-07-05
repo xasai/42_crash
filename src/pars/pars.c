@@ -3,8 +3,7 @@
 #define SHOW_DEBUG 1
 
 void    quot_flagchange(char *ch, bool *flag)
-{
-	*ch *= -1;
+{ *ch *= -1;
 	*flag ^= true;
 }
 
@@ -157,7 +156,7 @@ void    copy_arg(char *line, size_t arg_len, char *buffer)
             i += envvalue_len;
             j += envkey_len - 1;
         }
-        else if(!ft_strchr((char [3]) {DOLLAR_CH, QUOT_CH, DQUOT_CH}, line[j]))
+        else if(!ft_strchr((char [4]){DOLLAR_CH, QUOT_CH, DQUOT_CH, '\0'}, line[j]))
             buffer[i++] = line[j];
         ++j;
     }
@@ -193,13 +192,14 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
 	}
 }
 
+
 t_cmdlst *ft_line_analyz(char *line)
 {
 	t_cmdlst *cmdlst;
-
+	
+	if (ft_isempty_str(line))
+		return (NULL);
 	cmdlst = new_cmdlst(NULL);
 	line_pars(cmdlst, line);
-//    print_this_shit(cmdlst);
-	//validate_cmdl();
 	return (cmdlst);
 }
