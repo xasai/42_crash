@@ -34,7 +34,8 @@ static char *_read_n_write_hdoc(char *delim, int hdoc_fd, bool expand_env)
 
 	DEBUG("DELIM is \"%s\"\n", delim);
 	delim_len = ft_strlen(delim);
-
+	if (!delim_len)
+		return (NULL);
 	str = readline(">");
 	while (str)
 	{
@@ -70,5 +71,6 @@ char	*get_hdoc(char *delim)
 	env_expand = true;//TODO
 	_read_n_write_hdoc(delim, hdoc_fd, env_expand);
 	close(hdoc_fd);
+	free(delim);
 	return (filename);
 }
