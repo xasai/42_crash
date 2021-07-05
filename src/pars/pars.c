@@ -123,15 +123,19 @@ void    expand_env(char *buffer, char *line)
     if(envkey == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
     else if (*envkey == '?')
-        envvalue = "?";
+    {
+        envvalue = ft_itoa(g_sh->exit_status);
+        if(envvalue == NULL)
+            exit_message("Memory allocation failure", SYS_ERROR);
+    }
     else if (*envkey == '\0')
         envvalue = "$";
     else
         envvalue = crash_getenv(envkey);
-    free(envkey);
-    if(envvalue == NULL)
-        return;
     ft_memmove(buffer, envvalue, ft_strlen(envvalue));
+    if (*envkey == '?')
+        free(envvalue);
+    free(envkey);
 }
 
 void    copy_arg(char *line, size_t arg_len, char *buffer)
