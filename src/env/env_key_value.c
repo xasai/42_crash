@@ -26,7 +26,7 @@ size_t	get_envvalue_len(char *line, size_t envkey_len)
 	else if (*envkey == '?' || *envkey == 0)
 	{
 		free(envkey);
-		return (1);
+		return (ft_intwid(g_sh->exit_status, 10));
 	}
 	envvalue = crash_getenv(envkey);
 	free(envkey);
