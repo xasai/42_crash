@@ -34,8 +34,13 @@ CFLAGS += -g3
 #CLFAGS += -fsanitize=address 
 ############################################################################################
 
-MAKEFLAGS=-j2
-all:  $(NAME)
+ifeq ($(MAKECMDGOALS),re)
+MAKEFLAGS=
+else
+MAKEFLAGS=-j4
+endif
+
+all: $(NAME)
 
 ifeq ($(MAKECMDGOALS),clean)
 DEPFILES=
@@ -77,7 +82,9 @@ fclean: clean
 	rm -rf $(NAME)
 	@echo -n $(RESET)
 
-re: fclean all
+re: 
+	$(MAKE) fclean
+	$(MAKE) all
 
 .PHONY: run re fclean clean all
 

@@ -24,7 +24,7 @@ uint8_t	exit_builtin(t_cmdlst *cmd)
 		{
 			putstr_fd("g_sh: exit: ", STDERR_FILENO);
 			putstr_fd(arg, STDERR_FILENO);
-			exit_message(": numeric argument required", BUILTIN_FAILURE);
+			exit_message(": numeric argument required\n", BUILTIN_FAILURE);
 		}		
 		if (cmd->args[2])
 		{
