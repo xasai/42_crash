@@ -1,7 +1,6 @@
 #include "minishell.h"
 
 #define SHOW_DEBUG 0
-
 inline static void	_set_sighandlers(void (*sighandler)(int))
 {
 	signal(SIGINT, sighandler);
@@ -44,7 +43,7 @@ static void	_execve_nofork(t_cmdlst *cmdl)
 		exit(BUILTIN_FAILURE);
 	if (cmdl->args == NULL || builtin_exec(cmdl))
 	{
-		cmdlst_free(cmdl);
+		//cmdlst_free(cmdl);
 		exit(g_sh->exit_status);
 	}
 	cmdl->pathname = get_path(cmdl->args[0]);

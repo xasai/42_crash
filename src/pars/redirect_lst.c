@@ -35,8 +35,6 @@ void	redir_lst_free(t_redir_lst *head)
 {
 	t_redir_lst	*next;
 
-	if (!head)
-		return ;
 	while (head)
 	{
 		next = head->next;
