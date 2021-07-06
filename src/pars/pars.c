@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 void	copy_arg(char *line, size_t arg_len, char *buffer)
 {
@@ -38,6 +38,7 @@ static char	*get_argbuf(char *line, size_t *arg_len)
 	qout_count = get_qoutcount(line, *arg_len);
 	if (argbuflen_withqout == 0 && qout_count == 0)
 		return (NULL);
+	DEBUG("argbuff_len = %lu\n", argbuflen_withqout);
 	buffer = ft_calloc(argbuflen_withqout - qout_count + 1, sizeof(char));
 	if (buffer == NULL)
 		exit_message("Memory allocation failure", SYS_ERROR);

@@ -18,8 +18,7 @@ char		*get_path(char *pathname);
 /*			rebuild_path.c			*/
 void		rebuild_path(void);
 
-/*			wrappers/wrappers.c		*/
+/*			wait.c		*/
 void		_wait(int pid);
-char		*_getcwd(void);
 
 #endif /* EXEC_H */

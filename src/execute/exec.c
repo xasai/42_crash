@@ -10,7 +10,8 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 void	_sig_wait(int signum)
 {
 	_set_sighandlers(_sig_wait);
-	_wait(0);
+	wait(NULL);
+	DEBUG("SIGNALED\n");
 	g_sh->exit_status = 0x80 + signum;
 }
 
@@ -39,10 +40,12 @@ static void	_execve_fork(t_cmdlst *cmdl)
 
 static void	_execve_nofork(t_cmdlst *cmdl)
 {
-	if (redirect_ctl(cmdl) == RETURN_FAILURE)
-		exit(BUILTIN_FAILURE);
-	if (cmdl->args == NULL || builtin_exec(cmdl))
+	if (cmdl->args == NULL
+		|| redirect_ctl(cmdl) || builtin_exec(cmdl))
+	{
+		cmdlst_free(cmdl);
 		exit(g_sh->exit_status);
+	}
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
 		exit(g_sh->exit_status);
@@ -69,7 +72,7 @@ void	cmdline_exec(t_cmdlst *cmdl)
 		_execve(cmdl);
 	_set_sighandlers(SIG_DFL);
 	if (g_sh->exit_status == SIGQUIT + 0x80)
-		putstr_fd("^Quit\n", STDOUT_FILENO);
+		putstr_fd("^\\Quit\n", STDOUT_FILENO);
 	else if (g_sh->exit_status == SIGINT + 0x80)
 		putstr_fd("^C\n", STDOUT_FILENO);
 	dup2(g_sh->saved_stdin, STDIN_FILENO);

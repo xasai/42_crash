@@ -28,7 +28,8 @@ static char	*_hdoc_expand_str(char *str)
 
 	i = 0;
 	buf_len = get_strbufflen(str, &i);
-	buffer = xalloc(buf_len, sizeof(char));
+	DEBUG("BUF_LEN %lu\n", buf_len);
+	buffer = xalloc(buf_len + 1, sizeof(char));
 	copy_arg(str, i, buffer);
 	free(str);
 	return (buffer);
@@ -71,8 +72,8 @@ char	*get_hdoc(char *delim)
 	if (-1 == hdoc_fd)
 	{
 		print_errno("crash");
-		putstr_fd("Can't open /tmp directory\n", STDOUT_FILENO);
 		free(filename);
+		free(delim);
 		return (NULL);
 	}
 	_read_n_write_hdoc(delim, hdoc_fd);

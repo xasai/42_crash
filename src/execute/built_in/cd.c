@@ -3,7 +3,7 @@
 uint8_t	_error(char *message)
 {
 	putstr_fd("crash: cd: ", STDERR_FILENO);
-	print_errno(message);
+	putendl_fd(message, STDERR_FILENO);
 	return (RETURN_FAILURE);
 }
 
@@ -24,6 +24,9 @@ uint8_t	cd_builtin(t_cmdlst *cmd)
 		}
 	}
 	if (chdir(path) < 0)
-		return (_error(path));
+	{
+		print_errno(path);	
+		putchar_fd('\n', STDERR_FILENO);
+	}
 	return (RETURN_SUCCESS);
 }

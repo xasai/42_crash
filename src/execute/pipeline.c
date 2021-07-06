@@ -112,6 +112,6 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 		cmdl = cmdl->next;
 	}
 	while (cmd_idx--)
-		_wait(0);
+		_wait(-1);
 	return (_ret_(pipes, NULL));
 }
