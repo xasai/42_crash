@@ -26,12 +26,13 @@
 		{\
 			i = 0;\
 			fprintf(stderr, "execve(\"%s\", [", l->pathname);\
-			while (l->args[i])\
-			{\
-				if (i)\
-					fprintf(stderr, ", ");\
-				fprintf(stderr, "\"%s\"", l->args[i++]);\
-			}\
+			if (l->args)\
+				while (l->args[i])\
+				{\
+					if (i)\
+						fprintf(stderr, ", ");\
+					fprintf(stderr, "\"%s\"", l->args[i++]);\
+				}\
 			fprintf(stderr, "], **envp)");\
 			while (l->rlst)\
 			{\

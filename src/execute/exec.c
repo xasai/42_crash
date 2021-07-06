@@ -19,7 +19,9 @@ static void	_execve_fork(t_cmdlst *cmdl)
 {
 	pid_t	pid;
 
-	if (builtin_exec(cmdl))
+	if (redirect_ctl(cmdl) == RETURN_FAILURE)
+		return ;
+	if (cmdl->args == NULL || builtin_exec(cmdl))
 		return ;
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
@@ -29,9 +31,7 @@ static void	_execve_fork(t_cmdlst *cmdl)
 		print_errno("crash: fork()");
 	else if (pid == 0)
 	{	
-		if (redirect_ctl(cmdl) == RETURN_FAILURE)
-			exit(BUILTIN_FAILURE);
-		else if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
+		if (execve(cmdl->pathname, cmdl->args, g_sh->envp))
 			exit_message(cmdl->pathname, SYS_ERROR);
 	}
 	else
@@ -40,13 +40,13 @@ static void	_execve_fork(t_cmdlst *cmdl)
 
 static void	_execve_nofork(t_cmdlst *cmdl)
 {
-	if (builtin_exec(cmdl))
+	if (redirect_ctl(cmdl) == RETURN_FAILURE)
+		exit(BUILTIN_FAILURE);
+	if (cmdl->args == NULL || builtin_exec(cmdl))
 	{
 		cmdlst_free(cmdl);
 		exit(g_sh->exit_status);
 	}
-	if (redirect_ctl(cmdl) == RETURN_FAILURE)
-		exit(BUILTIN_FAILURE);
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
 		exit(g_sh->exit_status);
