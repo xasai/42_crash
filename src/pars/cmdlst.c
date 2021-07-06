@@ -2,7 +2,7 @@
 
 t_cmdlst	*new_cmdlst(t_cmdlst *curr)
 {
-	t_cmdlst *new_l;
+	t_cmdlst	*new_l;
 
 	new_l = malloc(sizeof(t_cmdlst));
 	if (!new_l)

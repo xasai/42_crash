@@ -2,14 +2,16 @@
 
 #define SHOW_DEBUG 1
 
-static	char *_get_hdoc_filename(void)
+static char	*_get_hdoc_filename(void)
 {
-	static int		num = 0;
-	const char		*part1= "/tmp/hdoc";
 	char			*part2;
 	char			*filename;
-	
-	num++; if (num < 0) num = 0;
+	static int		num = 0;
+	const char		*part1 = "/tmp/hdoc";
+
+	num++;
+	if (num < 0)
+		num = 0;
 	part2 = ft_itoa(num);
 	filename = ft_strjoin(part1, part2);
 	free(part2);
@@ -18,21 +20,21 @@ static	char *_get_hdoc_filename(void)
 	return (filename);
 }
 
-static	char *_hdoc_expand_str(char *str)
+static char	*_hdoc_expand_str(char *str)
 {
-    size_t  i;
-    size_t  buf_len;
-    char    *buffer;
+	size_t	i;
+	size_t	buf_len;
+	char	*buffer;
 
-    i = 0;
-    buf_len = get_strbufflen(str, &i);
-    buffer = xalloc(buf_len, sizeof(char));
-    copy_arg(str, i, buffer);
-    free(str);
+	i = 0;
+	buf_len = get_strbufflen(str, &i);
+	buffer = xalloc(buf_len, sizeof(char));
+	copy_arg(str, i, buffer);
+	free(str);
 	return (buffer);
 }
 
-static void _read_n_write_hdoc(char *delim, int hdoc_fd)
+static void	_read_n_write_hdoc(char *delim, int hdoc_fd)
 {
 	char	*str;
 
@@ -43,7 +45,6 @@ static void _read_n_write_hdoc(char *delim, int hdoc_fd)
 	while (str)
 	{
 		DEBUG("STR is \"%s\"\n", str);
-		
 		if (!ft_strcmp(delim, str))
 			return ;
 		str = _hdoc_expand_str(str);
@@ -51,7 +52,7 @@ static void _read_n_write_hdoc(char *delim, int hdoc_fd)
 		str = readline(">");
 	}
 	printf("crash: warning: here-document"
-	" delimited by end-of-file (wanted `%s')\n", delim);
+		" delimited by end-of-file (wanted `%s')\n", delim);
 }
 
 char	*get_hdoc(char *delim)
@@ -60,7 +61,7 @@ char	*get_hdoc(char *delim)
 	char	*filename;
 
 	if (!ft_strlen(delim))
-		return (NULL);		
+		return (NULL);
 	filename = _get_hdoc_filename();
 	hdoc_fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0600);
 	if (-1 == hdoc_fd)

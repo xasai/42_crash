@@ -2,7 +2,7 @@
 
 static t_redir_lst	*new_rlst(char type)
 {
-	t_redir_lst *new; 
+	t_redir_lst	*new;
 
 	new = malloc(sizeof(*new));
 	if (!new)
@@ -13,15 +13,15 @@ static t_redir_lst	*new_rlst(char type)
 
 t_redir_lst	*append_rlst(t_redir_lst **head, char type)
 {
-	t_redir_lst *new;
-	t_redir_lst *cur_rlst;
-	
+	t_redir_lst	*new;
+	t_redir_lst	*cur_rlst;
+
 	new = new_rlst(type);
 	if (NULL == new)
 		exit_message("Memory allocation failure", SYS_ERROR);
 	if (!*head)
 		*head = new;
-	else	
+	else
 	{
 		cur_rlst = *head;
 		while (cur_rlst->next != NULL)
