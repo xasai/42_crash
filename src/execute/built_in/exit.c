@@ -22,17 +22,17 @@ uint8_t	exit_builtin(t_cmdlst *cmd)
 	{
 		if (!is_numeric_arg(arg))
 		{
-			putstr_fd("g_sh: exit: ", STDERR_FILENO);
+			putstr_fd("crash: exit: ", STDERR_FILENO);
 			putstr_fd(arg, STDERR_FILENO);
 			exit_message(": numeric argument required\n", BUILTIN_FAILURE);
 		}		
 		if (cmd->args[2])
 		{
-			putstr_fd("g_sh: exit: too many arguments\n", STDERR_FILENO);
+			putstr_fd("crash: exit: too many arguments\n", STDERR_FILENO);
 			return (BUILTIN_FAILURE);
 		}		
 		exit_code = ft_atoi(cmd->args[1]);
 	}
-	exit_message("exit", exit_code);
+	exit_message("exit\n", exit_code);
 	return (exit_code);
 }
