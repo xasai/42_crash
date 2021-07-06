@@ -22,10 +22,8 @@ int	interact(void)
 		{
 			cmd = ft_line_analyz(line);
 			if (!validate_cmd(cmd))
-			{
 				cmdline_exec(cmd);
-				DEBUG_CMDL(cmd);
-			}
+			DEBUG_CMDL(cmd);
 			cmdlst_free(cmd);
 		}
 	}

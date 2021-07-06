@@ -21,6 +21,7 @@
 	{\
 		size_t	i;\
 		t_cmdlst *l = x;\
+		t_redir_lst *rlst;\
 		fprintf(stderr,"%s\tDEBUG:\n", GREEN);\
 		while(l)\
 		{\
@@ -34,12 +35,13 @@
 					fprintf(stderr, "\"%s\"", l->args[i++]);\
 				}\
 			fprintf(stderr, "], **envp)");\
-			while (l->rlst)\
+			rlst = l->rlst;\
+			while (rlst)\
 			{\
-				fprintf(stderr, " %c ", l->rlst->type);\
-				if (l->rlst->filename)\
-					fprintf(stderr, "'%s'", l->rlst->filename);\
-				l->rlst = l->rlst->next;\
+				fprintf(stderr, " %c ", rlst->type);\
+				if (rlst->filename)\
+					fprintf(stderr, "'%s'", rlst->filename);\
+				rlst = rlst->next;\
 			}\
 			fprintf(stderr, "\n");\
 			if (l->sepch == '|')\
