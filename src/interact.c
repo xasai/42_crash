@@ -12,8 +12,8 @@
 */
 int	interact(void)
 {
-	char *line;
-	t_cmdlst *cmd;
+	char		*line;
+	t_cmdlst	*cmd;
 
 	while (true)
 	{

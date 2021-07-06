@@ -7,16 +7,16 @@ inline static bool	_error(char *filename)
 	putstr_fd("crash: ", STDERR_FILENO);
 	print_errno(filename);
 	putchar_fd('\n', STDERR_FILENO);
-	g_sh->exit_status = BUILTIN_FAILURE; 
+	g_sh->exit_status = BUILTIN_FAILURE;
 	return (RETURN_FAILURE);
 }
 
-static int _output_dup(char *filename, bool append)
+static int	_output_dup(char *filename, bool append)
 {
-	int		flags;
-	int		out_fd;	
-	const mode_t perm = 0644;
-	
+	int				flags;
+	int				out_fd;	
+	const mode_t	perm = 0644;
+
 	if (append)
 		flags = O_CREAT | O_WRONLY | O_APPEND;
 	else
@@ -27,7 +27,7 @@ static int _output_dup(char *filename, bool append)
 	return (dup2(out_fd, STDOUT_FILENO) == -1);
 }
 
-static	int _input_dup(char *filename)
+static int	_input_dup(char *filename)
 {
 	int			input_fd;
 
@@ -42,8 +42,8 @@ bool	redirect_ctl(t_cmdlst *cmd)
 	int			err;
 	char		type;
 	char		*filename;
-	t_redir_lst *redir_lst;
-	
+	t_redir_lst	*redir_lst;
+
 	redir_lst = cmd->rlst;
 	while (redir_lst)
 	{

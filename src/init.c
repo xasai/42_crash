@@ -2,12 +2,15 @@
 
 t_shell	*g_sh;
 
-static void setup_term(void) {
-    struct termios t;
-    tcgetattr(0, &t);
-    t.c_lflag &= ~ECHOCTL;
-    tcsetattr(0, TCSANOW, &t);
+static void	setup_term(void)
+{
+	struct termios	t;
+
+	tcgetattr(0, &t);
+	t.c_lflag &= ~ECHOCTL;
+	tcsetattr(0, TCSANOW, &t);
 }
+
 /*
 **=================================================
 ** DESCRIPTION:

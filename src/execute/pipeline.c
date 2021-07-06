@@ -4,7 +4,6 @@
 
 typedef int (*t_pipes)[2];
 
-
 inline static void	_close(int fd)
 {
 	if (fd != -1)
@@ -17,7 +16,7 @@ inline static void	*_ret_(void *pipes, void *cmdl)
 	return (cmdl);
 }
 
-static t_pipes get_pipes(t_cmdlst *cmdl)
+static t_pipes	get_pipes(t_cmdlst *cmdl)
 {
 	size_t	idx;
 	size_t	count;
@@ -41,6 +40,7 @@ static t_pipes get_pipes(t_cmdlst *cmdl)
 	}
 	return (pipes);
 }
+
 /*
 **=================================================
 ** DESCRIPTION:
@@ -54,7 +54,7 @@ static t_pipes get_pipes(t_cmdlst *cmdl)
 **		PID of forked process in parent.
 **		0 in child
 */
-pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
+static pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 {
 	pid_t	fpid;
 
@@ -97,15 +97,15 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 	while (cmdl && (cmdl->sepch == '|' || cmdl->prev->sepch == '|'))
 	{
 		if (NULL == cmdl->prev)
-		{// Первая команда меняет только stdout
+		{
 			if (!fork_n_dup(-1, pipes[cmd_idx][1], pipes[0][0]))
 				return (_ret_(pipes, cmdl));
 		}
 		else if (NULL == cmdl->next)
-		{// Последняя меняет только stdin
+		{
 			if (!fork_n_dup(pipes[cmd_idx - 1][0], -1, pipes[cmd_idx - 1][1]))
 				return (_ret_(pipes, cmdl));
-		}// Все остальные меняют и stdin и stdout
+		}
 		else if (!fork_n_dup(pipes[cmd_idx - 1][0], pipes[cmd_idx][1], -1))
 			return (_ret_(pipes, cmdl));
 		cmd_idx++;
@@ -113,6 +113,5 @@ t_cmdlst	*pipe_ctl(t_cmdlst *cmdl)
 	}
 	while (cmd_idx--)
 		_wait(0);
-	free(pipes);
-	return (NULL);
+	return (_ret_(pipes, NULL));
 }
