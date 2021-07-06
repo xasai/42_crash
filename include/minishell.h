@@ -64,6 +64,9 @@ char			*getenv_name(char *varstr);
 char			*crash_getenv(char *name);
 void			crash_setenv(char *name, char *value);
 void			crash_unsetenv(char *name);
+size_t			get_envkey_len(char *line);
+size_t			get_envvalue_len(char *line, size_t envkey_len);
+void			expand_env(char *buffer, char *line);
 
 /*				free.c				*/
 

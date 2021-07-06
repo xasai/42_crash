@@ -2,7 +2,7 @@
 
 #define SHOW_DEBUG 0
 
-char	*get_stopname(char *line, size_t *arg_len)
+static char	*get_stopname(char *line, size_t *arg_len)
 {
 	size_t	j;
 	size_t	i;
@@ -31,7 +31,7 @@ char	*get_stopname(char *line, size_t *arg_len)
 	return (buffer);
 }
 
-size_t	_get_redirection(char *line, t_cmdlst *cmdl)
+static size_t	_get_redirection(char *line, t_cmdlst *cmdl)
 {
 	t_redir_lst		*rlst;
 	char			type;

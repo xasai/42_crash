@@ -1,17 +1,17 @@
 #include "pars.h"
 
-void skip_spasech(char **line)
+void	skip_spasech(char **line)
 {
-    while(ft_isspace(**line))
-        ++*line;
+	while (ft_isspace(**line))
+		++*line;
 }
 
-size_t get_spasecount(char *line)
+size_t	get_spasecount(char *line)
 {
-    size_t count;
+	size_t	count;
 
-    count = 0;
-    while (ft_isspace(*line++))
-        ++count;
-    return (count);
+	count = 0;
+	while (ft_isspace(*line++))
+		++count;
+	return (count);
 }
