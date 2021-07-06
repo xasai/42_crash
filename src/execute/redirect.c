@@ -4,9 +4,9 @@
 
 inline static bool	_error(char *filename)
 {
-	print_errno("crash");
-	putchar_fd(' ', STDERR_FILENO);
-	putendl_fd(filename, STDERR_FILENO);
+	putstr_fd("crash: ", STDERR_FILENO);
+	print_errno(filename);
+	putchar_fd('\n', STDERR_FILENO);
 	g_sh->exit_status = BUILTIN_FAILURE; 
 	return (RETURN_FAILURE);
 }
@@ -22,7 +22,7 @@ static int _output_dup(char *filename, bool append)
 	else
 		flags = O_CREAT | O_WRONLY | O_TRUNC;
 	out_fd = open(filename, flags, perm);
-	if (!out_fd)
+	if (out_fd == -1)
 		return (RETURN_FAILURE);
 	return (dup2(out_fd, STDOUT_FILENO) == -1);
 }
@@ -32,7 +32,7 @@ static	int _input_dup(char *filename)
 	int			input_fd;
 
 	input_fd = open(filename, O_RDONLY);
-	if (!input_fd)
+	if (input_fd == -1)
 		return (RETURN_FAILURE);
 	return (dup2(input_fd, STDIN_FILENO) == -1);
 }

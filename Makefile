@@ -31,10 +31,10 @@ CC := gcc
 CFLAGS := -Wall -Wextra -Werror -MMD -MP#--std=c99 -D_POSIX_SOURCE 
 CFLAGS += -g3
 #CFLAGS += -Ofast
-CLFAGS += -fsanitize=address 
+#CLFAGS += -fsanitize=address 
 ############################################################################################
 
-MAKEFLAGS=-j8
+MAKEFLAGS=-j2
 all:  $(NAME)
 
 ifeq ($(MAKECMDGOALS),clean)
