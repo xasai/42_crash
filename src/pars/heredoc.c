@@ -46,9 +46,13 @@ static void	_read_n_write_hdoc(char *delim, int hdoc_fd)
 	{
 		DEBUG("STR is \"%s\"\n", str);
 		if (!ft_strcmp(delim, str))
+		{
+			free(str);
 			return ;
+		}
 		str = _hdoc_expand_str(str);
 		putendl_fd(str, hdoc_fd);
+		free(str);
 		str = readline(">");
 	}
 	printf("crash: warning: here-document"
