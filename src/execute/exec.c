@@ -42,10 +42,7 @@ static void	_execve_nofork(t_cmdlst *cmdl)
 	if (redirect_ctl(cmdl) == RETURN_FAILURE)
 		exit(BUILTIN_FAILURE);
 	if (cmdl->args == NULL || builtin_exec(cmdl))
-	{
-		//cmdlst_free(cmdl);
 		exit(g_sh->exit_status);
-	}
 	cmdl->pathname = get_path(cmdl->args[0]);
 	if (NULL == cmdl->pathname)
 		exit(g_sh->exit_status);
