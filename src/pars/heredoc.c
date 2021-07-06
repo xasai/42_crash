@@ -4,10 +4,10 @@
 
 static char	*_get_hdoc_filename(void)
 {
-	char			*part2;
-	char			*filename;
-	static int		num = 0;
-	const char		*part1 = "/tmp/hdoc";
+	char		*part2;
+	char		*filename;
+	static int	num = 0;
+	const char	*part1 = "/tmp/hdoc";
 
 	num++;
 	if (num < 0)
@@ -21,7 +21,7 @@ static char	*_get_hdoc_filename(void)
 }
 
 static char	*_hdoc_expand_str(char *str)
-{//FIXME valgrind 
+{//FIXME valgrind
 	size_t	i;
 	size_t	buf_len;
 	char	*buffer;
@@ -52,11 +52,11 @@ static void	_read_n_write_hdoc(char *delim, int hdoc_fd)
 		str = readline(">");
 	}
 	printf("crash: warning: here-document"
-		" delimited by end-of-file (wanted `%s')\n", delim);
+		   " delimited by end-of-file (wanted `%s')\n", delim);
 }
 
 char	*get_hdoc(char *delim)
-{	
+{
 	int		hdoc_fd;
 	char	*filename;
 

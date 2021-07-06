@@ -6,6 +6,14 @@ void	quot_flagchange(char *ch, bool *flag)
 	*flag ^= true;
 }
 
+static void	set_flag(char *ch, bool *flag)
+{
+	if (*ch == '\'')
+		quot_flagchange(ch, &flag[0]);
+	else
+		quot_flagchange(ch, &flag[1]);
+}
+
 size_t	get_argbuflen_withquot(char *line, size_t *arg_len)
 {
 	size_t	envvalue_len;
@@ -19,10 +27,9 @@ size_t	get_argbuflen_withquot(char *line, size_t *arg_len)
 	while ((line[*arg_len] && (qout_flag[0] || qout_flag[1]))
 		   || !ft_strchr("<>| \t", line[*arg_len]))
 	{
-		if (line[*arg_len] == '\"' && !qout_flag[0])
-			quot_flagchange(&line[*arg_len], &qout_flag[1]);
-		else if (line[*arg_len] == '\'' && !qout_flag[1])
-			quot_flagchange(&line[*arg_len], &qout_flag[0]);
+		if ((line[*arg_len] == '\"' && !qout_flag[0])
+			|| (line[*arg_len] == '\'' && !qout_flag[1]))
+			set_flag(&line[*arg_len], qout_flag);
 		else if (line[*arg_len] == '$' && !qout_flag[0])
 		{
 			line[*arg_len] = DOLLAR_CH;

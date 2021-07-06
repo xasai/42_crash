@@ -7,7 +7,7 @@ static	void	_int_handler(int signum)
 	signal(signum, _int_handler);
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	//rl_replace_line("", 0);
 	rl_redisplay();
 	g_sh->exit_status = 0x80 + signum;
 }

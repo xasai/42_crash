@@ -2,9 +2,9 @@
 
 void	expand_env(char *buffer, char *line)
 {
-	size_t envkey_len;
-	char *envvalue;
-	char *envkey;
+	size_t	envkey_len;
+	char	*envvalue;
+	char	*envkey;
 
 	envkey_len = get_envkey_len(line);
 	envkey = ft_substr(line, 1, envkey_len - 1);
