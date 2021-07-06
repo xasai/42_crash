@@ -116,7 +116,7 @@ char	**_path(void)
 void	init_sh(char **envp)
 {
 	setup_term();
-	g_sh = ft_calloc(sizeof(*g_sh));
+	g_sh = ft_calloc(sizeof(*g_sh), 1);
 	if (NULL == g_sh)
 		exit_message("Memory allocation failure", SYS_ERROR);
 	g_sh->path = _path();
