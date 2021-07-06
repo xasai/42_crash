@@ -3,7 +3,8 @@
 #define SHOW_DEBUG 1
 
 void    quot_flagchange(char *ch, bool *flag)
-{ *ch *= -1;
+{
+    *ch *= -1;
 	*flag ^= true;
 }
 
@@ -105,6 +106,8 @@ static char *get_argbuf(char *line, size_t *arg_len)
 
     argbuflen_withqout = get_argbuflen_withquot(line, arg_len);
     qout_count = get_qoutcount(line, *arg_len);
+    if (argbuflen_withqout == 0 && qout_count == 0)
+        return (NULL);
     buffer = ft_calloc(argbuflen_withqout - qout_count + 1, sizeof(char));
     if (buffer == NULL)
         exit_message("Memory allocation failure", SYS_ERROR);
@@ -131,7 +134,8 @@ void    expand_env(char *buffer, char *line)
         envvalue = "$";
     else
         envvalue = crash_getenv(envkey);
-    ft_memmove(buffer, envvalue, ft_strlen(envvalue));
+    if (envvalue != NULL)
+        ft_memmove(buffer, envvalue, ft_strlen(envvalue));
     if (*envkey == '?')
         free(envvalue);
     free(envkey);
@@ -185,7 +189,8 @@ static void	line_pars(t_cmdlst *cmdl, char *line)
         line += arg_len;
         skip_spasech(&line);
 	    sep_len = get_sepch(line, cmdl);
-        cmdl->args = lineptrjoin(cmdl->args, arg);
+	    if (arg != NULL)
+            cmdl->args = lineptrjoin(cmdl->args, arg);
         if (cmdl->sepch)
             cmdl = new_cmdlst(cmdl);
         line += sep_len;
