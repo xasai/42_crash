@@ -10,9 +10,7 @@ inline static void	_set_sighandlers(void (*sighandler)(int))
 void	_sig_wait(int signum)
 {
 	_set_sighandlers(_sig_wait);
-	wait(NULL);
-	DEBUG("SIGNALED\n");
-	g_sh->exit_status = 0x80 + signum;
+	(void)signum;
 }
 
 static void	_execve_fork(t_cmdlst *cmdl)
@@ -35,7 +33,10 @@ static void	_execve_fork(t_cmdlst *cmdl)
 			exit_message(cmdl->pathname, SYS_ERROR);
 	}
 	else
+	{
+		g_sh->exit_status_pid = pid;
 		_wait(pid);
+	}
 }
 
 static void	_execve_nofork(t_cmdlst *cmdl)
