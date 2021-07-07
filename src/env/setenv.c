@@ -16,7 +16,7 @@ void	crash_setenv(char *name, char *value)
 
 	size = 0;
 	idx = getenv_idx(name);
-	if (idx > 0)
+	if (idx >= 0)
 	{
 		change_value(name, value, idx);
 		return ;

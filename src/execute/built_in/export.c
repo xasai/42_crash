@@ -12,6 +12,12 @@ static bool	is_valid_name(char *name)
 			i++;
 		if (name[i] == '=')
 			return (true);
+		else if (name[i] == '\0')
+		{
+			putstr_fd("crash: export: doesn't work with shell enviroment\n", \
+						STDERR_FILENO);
+			return (false);
+		}
 	}
 	putstr_fd("crash: export: '", STDERR_FILENO);
 	putstr_fd(name, STDERR_FILENO);
