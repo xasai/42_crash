@@ -65,6 +65,7 @@ char	*get_hdoc(char *delim)
 	int		hdoc_fd;
 	char	*filename;
 
+	signal(SIGINT, SIG_IGN);
 	if (!ft_strlen(delim))
 		return (NULL);
 	filename = _get_hdoc_filename();
