@@ -4,6 +4,8 @@ static bool	is_numeric_arg(char *arg)
 {
 	while (ft_isspace(*arg))
 		arg++;
+	if (*arg == '-')
+		arg++;
 	while (ft_isdigit(*arg))
 		arg++;
 	while (ft_isspace(*arg))
