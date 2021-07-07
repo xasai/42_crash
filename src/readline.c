@@ -33,7 +33,10 @@ char	*crash_readline(void)
 	_set_sighandlers();
 	line = readline(g_sh->prompt);
 	if (line == NULL)
-		exit_message("exit", EXIT_SUCCESS);
+	{
+		write(1, "exit\n", 5); 
+		exit(g_sh->exit_status);
+	}
 	if (!ft_isempty_str(line) && (!prev_line || ft_strcmp(line, prev_line)))
 		add_history(line);
 	if (prev_line)

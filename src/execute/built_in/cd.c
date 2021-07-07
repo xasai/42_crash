@@ -25,7 +25,7 @@ uint8_t	cd_builtin(t_cmdlst *cmd)
 	}
 	if (chdir(path) < 0)
 	{
-		print_errno(path);	
+		print_errno(path);
 		putchar_fd('\n', STDERR_FILENO);
 	}
 	return (RETURN_SUCCESS);

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-#define SHOW_DEBUG 1
+#define SHOW_DEBUG 0
 
 static char	*_get_hdoc_filename(void)
 {
@@ -21,7 +21,7 @@ static char	*_get_hdoc_filename(void)
 }
 
 static char	*_hdoc_expand_str(char *str)
-{//FIXME valgrind
+{
 	size_t	i;
 	size_t	buf_len;
 	char	*buffer;
