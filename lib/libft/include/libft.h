@@ -109,10 +109,6 @@ int					ft_skip_atoi(char **s);
 int					ft_isempty_str(char *str);
 char				*cat_lines_tab(char **tab);
 void				free_tab(void **tab);
-char				*strjoin_free(const char *s1, const char *s2,
-						char free_flag);
-char				**split_with_brckt(char const *line,
-						   char const *sep);
 
 /*
 **============================================================
