@@ -12,6 +12,7 @@ typedef struct s_shell
 	int		saved_stdin;
 	int		saved_stdout;
 	uint8_t	exit_status;
+	int		exit_status_pid;
 	bool	is_signaled;
 }			t_shell;
 

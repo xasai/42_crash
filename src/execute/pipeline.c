@@ -72,6 +72,7 @@ static pid_t	fork_n_dup(int read_end, int write_end, int fd_to_close)
 		print_errno("crash: fork()");
 	_close(read_end);
 	_close(write_end);
+	g_sh->exit_status_pid = fpid;
 	return (fpid);
 }
 

@@ -34,7 +34,7 @@ char	*crash_readline(void)
 	line = readline(g_sh->prompt);
 	if (line == NULL)
 		exit_message("exit", EXIT_SUCCESS);
-	if (!ft_isempty_str(line) && prev_line && ft_strcmp(line, prev_line))
+	if (!ft_isempty_str(line) && (!prev_line || ft_strcmp(line, prev_line)))
 		add_history(line);
 	if (prev_line)
 		free(prev_line);
