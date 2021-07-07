@@ -84,8 +84,7 @@ t_cmdlst	*ft_line_analyz(char *line)
 		return (NULL);
 	if (isunclosedquotes(line))
 	{
-		print_errno("Error: unclosed quotes");
-		write(1, "\n", 1);
+		write(1, "Error: unclosed quotes\n", 23);
 		return (NULL);
 	}
 	cmdlst = new_cmdlst(NULL);
