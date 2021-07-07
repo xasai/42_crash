@@ -40,7 +40,7 @@
 # define PROMPT "crash$: "
 
 # ifdef __APPLE__
-void			rl_replace_line (const char *text, int clear_undo);
+void			rl_replace_line(const char *text, int clear_undo);
 # endif /* __APPLE__ */
 
 extern t_shell	*g_sh;

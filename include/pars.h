@@ -49,4 +49,7 @@ void		redir_lst_free(t_redir_lst *head);
 t_cmdlst	*new_cmdlst(t_cmdlst *curr);
 void		cmdlst_free(t_cmdlst *cmdlst);
 
+/*			cmdlst.c						*/
+bool		isunclosedquotes(char *line);
+
 #endif /* PARS_H */

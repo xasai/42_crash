@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	getenv_idx(char *name)	
+int	getenv_idx(char *name)
 {
 	char	**envp;
 	size_t	env_idx;

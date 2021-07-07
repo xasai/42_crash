@@ -82,6 +82,12 @@ t_cmdlst	*ft_line_analyz(char *line)
 
 	if (ft_isempty_str(line))
 		return (NULL);
+	if (isunclosedquotes(line))
+	{
+		print_errno("Error: unclosed quotes");
+		write(1, "\n", 1);
+		return (NULL);
+	}
 	cmdlst = new_cmdlst(NULL);
 	line_pars(cmdlst, line);
 	return (cmdlst);

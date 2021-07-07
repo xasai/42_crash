@@ -42,7 +42,7 @@ bool	builtin_exec(t_cmdlst *cmd)
 	int8_t			builtin_idx;	
 	static	uint8_t	(*builtin_func[])(t_cmdlst *) = \
 	{echo_builtin, cd_builtin, pwd_builtin, env_builtin,
-	export_builtin, unset_builtin, 	exit_builtin};
+	export_builtin, unset_builtin, exit_builtin};
 
 	builtin_idx = is_builtin(cmd->args[0]);
 	if (builtin_idx >= 0)
