@@ -1,7 +1,7 @@
 #ifndef S_CMDLST_H
 # define S_CMDLST_H
 
-#include "s_redir_lst.h"
+# include "s_redir_lst.h"
 
 typedef struct s_cmdlst
 {

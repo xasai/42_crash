@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <termios.h> //FIXME
+# include <termios.h> //FIXME
 
 # include "debug.h"
 # include "struct/s_shell.h"
